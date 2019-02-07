@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Norican" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.18/chance.min.js"></script>
+        <style>
+            body {
+                background-image:url(" http://www.babudesertsafaripushkar.com/wp-content/uploads/2016/09/babu-desert-safari.jpg");
+                background-size:cover;
+            }
+            #home {
+                width: 12%;
+                height: 5%;
+                background-color: navajowhite;
+                color:coral;
+                text-shadow: .85px .85px black;
+                border-radius: 12px 12px 12px 12px;
+                border: 3%;
+                font-size: 20px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+            #generate {
+                width: 28%;
+                height: 10%;
+                background-color: navajowhite;
+                color:coral;
+                text-shadow: 1.5px 1.5px black;
+                border-radius: 20px 20px 20px 20px;
+                border: 3%;
+                font-size: 35px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+            #display {
+                color: cornsilk;
+                text-shadow: 2px 2px indianred;
+                font-size: 60px;
+                padding: 3%;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+
+            }
+
+        </style>
+    </head>
+        <body>
+            <button id="home">Home</button>
+            <button id="generate">Generate a Desert Animal</button>
+            <div>
+                <div id="display"></div>
+            </div>
+            <script>
+                let generate = document.querySelector('#generate')
+                let display = document.querySelector('#display')
+                let home = document.querySelector('#home')
+
+                onkeypress = function (e) {
+                if (e.key == "Enter") {
+                    generate.onclick()
+                }
+            }
+            generate.onclick = function() {
+                desert_creature = chance.animal({type: 'desert'})
+                display.innerText = desert_creature
+            }
+            home.onclick = function redirector(){
+                let new_window = 'http://localhost:63342/class_iguana/Code/nathan/javascript/animal_gen_homepage.html?_ijt=psbkb40jn1ejc3el6edba4fc7j'
+                return window.location.assign(new_window)
+                }
+            </script>
+        </body>
+</html>
