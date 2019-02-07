@@ -1,0 +1,124 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Norican" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.18/chance.min.js"></script>
+        <style>
+            body {
+                background-image:url("http://onsafari.com/wp-content/uploads/2018/02/ron-dauphin-503289.jpg");
+                background-size:cover;
+            }
+            #redirect_forest {
+                width: 24%;
+                height: 8%;
+                background-color:rgba(34,139,34,.7);
+                color:ivory;
+                text-shadow: 1.5px 1.5px black;
+                border-radius: 20px 20px 20px 20px;
+                border: 3%;
+                font-size: 32px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+            #redirect_ocean {
+                width: 24%;
+                height: 8%;
+                background-color:rgba(127, 255, 212,.7);
+                color:ivory;
+                text-shadow: 1.5px 1.5px black;
+                border-radius: 20px 20px 20px 20px;
+                border: 3%;
+                font-size: 32px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+            #redirect_desert {
+                width: 24%;
+                height: 8%;
+                background-color:rgba(255,222,173,.7);
+                color:ivory;
+                text-shadow: 1.5px 1.5px black;
+                border-radius: 20px 20px 20px 20px;
+                border: 3%;
+                font-size: 32px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+            #display {
+                color: cornsilk;
+                text-shadow: 2px 2px indianred;
+                font-size: 60px;
+                padding: 3%;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+
+            }
+            h1 {
+                width: 32%;
+                height: 12%;
+                padding: 1.5%;
+                background-color:rgba(189,183,107,.7);
+                color:ivory;
+                text-shadow: 3px 3px black;
+                border-radius: 20px 20px 20px 20px;
+                border: 3%;
+                font-size: 65px;
+                margin: 0 auto;
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                flex-wrap:wrap;
+                justify-content:space-evenly;
+                font-family: 'Norican', cursive;
+            }
+
+        </style>
+    </head>
+        <body>
+            <div>
+                <h1>Animal Kingdom</h1>
+            </div>
+            <button id="redirect_forest">Forest</button>
+            <button id="redirect_ocean">Ocean</button>
+            <button id="redirect_desert">Desert</button>
+            <script>
+                let redirect_forest = document.querySelector('#redirect_forest')
+                let redirect_ocean = document.querySelector('#redirect_ocean')
+                let redirect_desert = document.querySelector('#redirect_desert')
+
+                redirect_forest.onclick = function redirector(){
+                    let new_window = 'http://localhost:63342/class_iguana/Code/nathan/javascript/forest_animal.generator.html?_ijt=mfl5u4rkq0j3hbco8m75j0vb3l'
+                        return window.location.assign(new_window)
+                }
+                redirect_ocean.onclick = function redirector(){
+                    let new_window = 'http://localhost:63342/class_iguana/Code/nathan/javascript/sea_creature_generator.html?_ijt=mfl5u4rkq0j3hbco8m75j0vb3l'
+                        return window.location.assign(new_window)
+                }
+                redirect_desert.onclick = function redirector(){
+                    let new_window = 'http://localhost:63342/class_iguana/Code/nathan/javascript/desert_animal_gen.html?_ijt=avtoqnu55kslrci2g7flrqrkkv'
+                        return window.location.assign(new_window)
+                }
+
+
+            </script>
+        </body>
+</html>
