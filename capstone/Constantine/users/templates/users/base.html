@@ -1,0 +1,25 @@
+{% load static %}
+<html>
+    <head>
+        <title>⚓⚓⚓</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'users/css/main.css' %}">
+    </head>
+<body>
+    {% include 'users/nav_redirect.html' %}
+    <div class="flex_boat">
+        <img id="boat" src="https://ya-webdesign.com/images/caravel-drawing-big-boat-5.png">
+    </div>
+    <span id="constantine">Constantine</span>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
