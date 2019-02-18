@@ -19,6 +19,7 @@ body{
 .log_form{
     display: flex;
     background-color:rgba(240,255,255, 0.2);
+    background-image:url("boat3.png");
     font-size: 120%;
     font-family: 'Parisienne', cursive;
     justify-content: center;
@@ -95,12 +96,11 @@ a{
 }
 
 #constantine {
-      text-shadow: 1.5px 1.5px rgba(240,255,240,10);
+    text-shadow: 1.5px 1.5px rgba(240,255,240,10);
     font-size: 266%;
     font-family: 'Parisienne', cursive;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom:1%
-
 }

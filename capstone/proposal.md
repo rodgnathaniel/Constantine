@@ -9,16 +9,16 @@ true.
 Named in loving memory of my good friend Constantine Gorbachev who passed away this 
 last November. 
 
-# Overview #
+# Overview + Functionality #
 
 For my Capstone project I plan to manipulate the speech to text web-kits through
 JavaScript in order to create a simulated boat that can be controlled with 
 verbal commands. There will be a Django registration / login system to keep track of
 users account information, including their user-names, high scores, and personal  in
 game achievements. 
-
-# Functionality #
-
+ 
+ ...
+ 
 Have you ever played a relaxing puzzle game and enjoyed it?
 Sick and tired of 'shoot-em-up' violence and fast paced nonsense?
 ...
