@@ -1,0 +1,92 @@
+
+
+
+{% extends "users/base.html" %}
+{% block content %}
+
+        <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
+        <div id="box" class="hello">
+            <span id="result"></span>
+         </div>
+        <input class="flex_boat" id="selconst" type="checkbox">
+        <span id="q">Can you build the flag of Armenia?</span>
+        <span id="top" class="top"></span>
+        <span id="middle" class="middle"></span>
+        <span id="bottom" class="bottom"></span>
+        <span id="display"></span>
+
+        <button id="button" class="btn">Oi</button>
+
+        <button class="btn" onclick="startConverting()">Microphone</button>
+        <script type="text/javascript">
+
+            var r = document.getElementById('result');
+            var top = document.querySelector('#top');
+            var middle = document.querySelector('#middle');
+            var bottom = document.querySelector('#bottom');
+            var display = document.querySelector('#display');
+
+            function startConverting () {
+                if('webkitSpeechRecognition' in window){
+                    var speechRecognizer = new webkitSpeechRecognition();
+                    speechRecognizer.continuous = true;
+                    speechRecognizer.interimResults = true;
+                    speechRecognizer.lang = 'en-US';
+                    speechRecognizer.start();
+
+                    var finalTranscripts = '';
+
+                speechRecognizer.onresult = function(event) {
+                var last = event.results.length - 1;
+                var command = event.results[last][0].transcript;
+                result.textContent = 'Voice Input: ' + command + '.';
+
+                if(command.toLowerCase() === 'select conch'){
+                    document.querySelector('#selconst').checked = true;
+                }
+                else if(command.toLowerCase() === 'deselect conch'){
+                    document.querySelector('#selconst').checked = false;
+                }
+                else if(command.toLowerCase() === 'conch'){
+                    document.getElementById("button").classList.remove("btn");
+                    document.getElementById("button").classList.add("btn_2");
+                }
+                else if(command.toLowerCase() === 'no conch'){
+                    document.getElementById("button").classList.remove("btn_2");
+                    document.getElementById("button").classList.add("btn");
+                }
+                else if(command.toLowerCase() === 'yes'){
+                    document.getElementById("body").classList.remove("body_");
+                    document.getElementById("body").classList.add("body_2");
+                }
+                else if(command.toLowerCase() === 'no'){
+                    document.getElementById("body").classList.remove("body_2");
+                    document.getElementById("body").classList.add("body_");
+                }
+                else if(command.toLowerCase() === 'top red'){
+                    top.classList.remove("top");
+                    top.classList.add("top_2");
+                }
+                 else if(command.toLowerCase() === 'middle blue'){
+                    middle.classList.remove("middle");
+                    middle.classList.add("middle_2");
+                }
+                  else if(command.toLowerCase() === 'bottom yellow'){
+                    bottom.classList.remove("bottom");
+                    bottom.classList.add("bottom_2");
+                }
+
+            };
+            if (top.classlist.value === "top_2" && middle.classlist.value === "middle_2" && middle.classlist.value === "bottom_2"){
+                display.innerText = 'Good Job'
+            }
+                    speechRecognizer.onerror = function (event) {
+
+                    };
+                }else{
+                    r.innerHTML = 'browser not supported'
+                }
+            }
+        </script>
+{% endblock %}
+

@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css?family=Parisienne');
+
+.body_{
+    background-color: rgba(176,224,230,10);
+}
+.body_2{
+    background-color: rgba(176,124,130,10);
+}
+.reg_form {
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    background-color:rgba(255,255,240, .6);
+    padding: 25px;
+    text-color:black;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0% 16% 0% 16%;
+    text-align:left;
+}
+
+.log_form{
+    display: flex;
+    background-color:rgba(255,255,240, .6);
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0% 16% 0% 16%;
+    text-align:center;
+}
+
+.btn{
+    display: flex;
+    font-size: 100%;
+    font-family: 'Parisienne', cursive;
+    background-color:rgba(255,255,240, .6);
+    border-radius: 8px 8px 8px 8px;
+    width: 8%;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5% 16% 0% 45.6%;
+    text-align:center;
+}
+.btn_2{
+    display: flex;
+    font-size: 100%;
+    font-family: 'Parisienne', cursive;
+    background-color:rgba(255,127,80, .6);
+    border-radius: 8px 8px 8px 8px;
+    width: 8%;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5% 16% 0% 45.6%;
+    text-align:center;
+}
+
+
+.nav{
+    background-color:rgba(255,255,240, .6);
+    border-radius: 20px 20px 20px 20px;
+    display: flex;
+    margin: 0% 15% 0% 37%;
+    justify-content:space-evenly;
+    flex-wrap: wrap;
+    width:25%;
+    height: 10%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+
+#users_nav {
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    position: -webkit-sticky;
+    position: sticky;
+    padding: 25px;
+    text-color:black;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0% 16% 0% 16%;
+    text-align:center;
+}
+
+a{
+   color:black;
+}
+
+
+
+
+.flex_boat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 3% 15% 0% 45%;
+}
+
+#boat {
+    width: 28%;
+}
+
+.goodbye {
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.hello {
+    background-color:rgba(255,255,240, .6);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 1% 15% 0% 37%;
+    flex-wrap: wrap;
+    width:25%;
+    height: 10%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+.hello_2 {
+    background-color:rgba(255,127,80, .6);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 1% 15% 0% 37%;
+    flex-wrap: wrap;
+    width:25%;
+    height: 10%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+
+#constantine {
+    text-shadow: 1.5px 1.5px rgba(255,255,240, .7);
+    font-size: 266%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom:1%
+}
+#q{
+    font-size: 160%;
+    font-family: 'Parisienne', cursive;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.top{
+    background-color:rgba(230,230,250, .6);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
+.top_2{
+    background-color:rgba(220,20,60,1);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
+.middle{
+    background-color:rgba(230,230,250, .6);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
+.middle_2{
+    background-color:rgba(30,144,255,1);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
+.bottom{
+    background-color:rgba(230,230,250, .6);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
+.bottom_2{
+    background-color:rgba(255,215,0,1);
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 0% 15% 0% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 5%;
+}
