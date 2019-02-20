@@ -1,11 +1,29 @@
+/* #####################################################
+    -FONTS-
+#####################################################*/
+
 @import url('https://fonts.googleapis.com/css?family=Parisienne');
+
+
+
+/* #####################################################
+    -BODY-
+#####################################################*/
 
 .body_{
     background-color: rgba(176,224,230,10);
 }
+
 .body_2{
     background-color: rgba(176,124,130,10);
 }
+
+
+
+/* #####################################################
+    -FORMS-
+#####################################################*/
+
 .reg_form {
     font-size: 120%;
     font-family: 'Parisienne', cursive;
@@ -17,6 +35,7 @@
     flex-wrap: wrap;
     margin: 0% 16% 0% 16%;
     text-align:left;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
 
 .log_form{
@@ -28,7 +47,14 @@
     flex-wrap: wrap;
     margin: 0% 16% 0% 16%;
     text-align:center;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
+
+
+
+/* #####################################################
+    -BUTTONS-
+#####################################################*/
 
 .btn{
     display: flex;
@@ -39,9 +65,11 @@
     width: 8%;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 1.5% 16% 0% 45.6%;
+    margin: 1.5% 16% 0% 46.5%;
     text-align:center;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
+
 .btn_2{
     display: flex;
     font-size: 100%;
@@ -56,10 +84,17 @@
 }
 
 
+
+/* #####################################################
+    -NAVIGATION BAR-
+#####################################################*/
+
 .nav{
     background-color:rgba(255,255,240, .6);
     border-radius: 20px 20px 20px 20px;
     display: flex;
+    position: -webkit-sticky;
+    position: sticky;
     margin: 0% 15% 0% 37%;
     justify-content:space-evenly;
     flex-wrap: wrap;
@@ -71,11 +106,10 @@
 #users_nav {
     font-size: 120%;
     font-family: 'Parisienne', cursive;
+    padding: 25px;
+    display: flex;
     position: -webkit-sticky;
     position: sticky;
-    padding: 25px;
-    text-color:black;
-    display: flex;
     justify-content: center;
     flex-wrap: wrap;
     margin: 0% 16% 0% 16%;
@@ -88,6 +122,19 @@ a{
 
 
 
+/* #####################################################
+    -TITLE and IMAGE-
+#####################################################*/
+
+#constantine {
+    text-shadow: 1.5px 1.5px rgba(255,255,240, .7);
+    font-size: 266%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom:1%
+}
 
 .flex_boat {
     display: flex;
@@ -100,6 +147,12 @@ a{
 #boat {
     width: 28%;
 }
+
+
+
+/* #####################################################
+    -RANDOM TEXT-
+#####################################################*/
 
 .goodbye {
     text-align: center;
@@ -122,6 +175,7 @@ a{
     height: 10%;
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
+
 .hello_2 {
     background-color:rgba(255,127,80, .6);
     text-align: center;
@@ -136,15 +190,6 @@ a{
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
 
-#constantine {
-    text-shadow: 1.5px 1.5px rgba(255,255,240, .7);
-    font-size: 266%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom:1%
-}
 #q{
     font-size: 160%;
     font-family: 'Parisienne', cursive;
@@ -152,8 +197,27 @@ a{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    margin: 1% 0% 1% 0%;
 }
-.top{
+
+
+
+/* #####################################################
+    -CANVAS-
+#####################################################*/
+
+#cnv{
+    border: 1px solid black;
+    margin: 1% 9% 1% 9%;
+}
+
+
+
+/* #####################################################
+    -FLAG-
+#####################################################*/
+
+.top_{
     background-color:rgba(230,230,250, .6);
     text-align: center;
     font-size: 120%;
@@ -177,7 +241,7 @@ a{
     width:20%;
     height: 5%;
 }
-.middle{
+.middle_{
     background-color:rgba(230,230,250, .6);
     text-align: center;
     font-size: 120%;
@@ -201,7 +265,7 @@ a{
     width:20%;
     height: 5%;
 }
-.bottom{
+.bottom_{
     background-color:rgba(230,230,250, .6);
     text-align: center;
     font-size: 120%;
@@ -224,4 +288,55 @@ a{
     flex-wrap: wrap;
     width:20%;
     height: 5%;
+}
+
+
+
+
+/* Dropdown Button */
+.dropbtn {
+    background-color:rgba(255,255,240, .6);
+    border-radius: 12px 12px 12px 12px;
+    color: black;
+    font-family: 'Parisienne', cursive;
+    font-size: 120%;
+    border: none;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color:rgba(255,255,240, .6);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+      background-color:rgba(255,255,240, .6);
+    }
+
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {display: block;}
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+      background-color:rgba(255,255,240, .6);
 }

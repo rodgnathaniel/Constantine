@@ -3,90 +3,206 @@
 
 {% extends "users/base.html" %}
 {% block content %}
+{% load static %}
 
-        <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
-        <div id="box" class="hello">
-            <span id="result"></span>
-         </div>
-        <input class="flex_boat" id="selconst" type="checkbox">
-        <span id="q">Can you build the flag of Armenia?</span>
-        <span id="top" class="top"></span>
-        <span id="middle" class="middle"></span>
-        <span id="bottom" class="bottom"></span>
-        <span id="display"></span>
+    <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
+    <div id="box" class="hello">
+        <span id="result"></span>
+        </div>
 
-        <button id="button" class="btn">Oi</button>
+    <canvas id="cnv" width="1000" height="375"></canvas>
 
-        <button class="btn" onclick="startConverting()">Microphone</button>
-        <script type="text/javascript">
+    <div class="dropdown">
+            <button class="dropbtn">Select A Boat</button>
+            <div class="dropdown-content">
+            <button id="classic">Classic</button>
+            <button id="longboat">Longboat</button>
+            <button id="Simple">Simple</button>
+            <button id="Warship">Warship</button>
+            <button id="Airship">Airship</button>
+            <button id="Cruiseship">Cruiseship</button>
+            <button id="Fiberglass" onclick="classic()">Fiberglass</button>
+            </div>
+        </div>
 
-            var r = document.getElementById('result');
-            var top = document.querySelector('#top');
-            var middle = document.querySelector('#middle');
-            var bottom = document.querySelector('#bottom');
-            var display = document.querySelector('#display');
+    <span id="q">Can you build the flag of Armenia?</span>
+    <span id="top" class="top_"></span>
+    <span id="middle" class="middle_"></span>
+    <span id="bottom" class="bottom_"></span>
+    <span id="display"></span>
 
-            function startConverting () {
-                if('webkitSpeechRecognition' in window){
-                    var speechRecognizer = new webkitSpeechRecognition();
-                    speechRecognizer.continuous = true;
-                    speechRecognizer.interimResults = true;
-                    speechRecognizer.lang = 'en-US';
-                    speechRecognizer.start();
+    <image id="classic" src="{% static 'boat/classic.png' %}" style="display:none"/>
+    <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
+    <button id="button" class="btn">Oi</button>
 
-                    var finalTranscripts = '';
+    <button id="start" class="btn">Microphone</button>
+    <script type="text/javascript">
+
+        let cnv = document.querySelector('#cnv');
+        let ctx = cnv.getContext('2d');
+        var long_boat = document.querySelector("#long_boat");
+        var classic = document.querySelector("#classic");
+
+        
+
+        var r = document.querySelector('#result');
+        var start = document.querySelector('#start');
+
+        let button = document.querySelector('#button');
+
+        let width = cnv.width
+        let height = cnv.height
+        let ball = {
+            radius: 4,
+            // px: cnv.width/2,
+            px: 15,
+            py: 250,
+            // py: cnv.height,
+            vx: 0, //(2*Math.random()-1)*5,
+            vy: 0 // (2*Math.random()-1)*5
+        };
+
+//         base_image = new Image();
+//   base_image.src = 'img/base.png';
+//   base_image.onload = function(){
+//     context.drawImage(base_image, 0, 0);
+        function classic() {
+            long_boat = classic
+        }
+        function drawBall() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height)
+            ctx.drawImage(long_boat, ball.px, ball.py, 120, 120);
+            // ctx.beginPath();
+            // ctx.arc(ball.px, ball.py, 15, 0, 2 * Math.PI);
+            //ctx.fillStyle = 'rgba(245,255,250,0.1)';
+            // ctx.stroke()
+ctx.fill();
+                
+        }
+
+        drawBall()
+2
+
+        function main_loop() {
+            // ball.vy += .1 // gravity
+
+            ball.px += ball.vx
+            ball.py += ball.vy
+
+            // if (ball.px >= 750 || ball.px <= 0){
+            //         ball.vx *= 0.99
+            //         ball.vx *= -1
+            // }
+            // if(ball.py >= 750 || ball.py <= 0){
+            //         ball.vy *= 0.99
+            //         ball.vy *= -1
+            // }
+
+            drawBall()
+
+
+            window.requestAnimationFrame(main_loop);
+        }
+        window.requestAnimationFrame(main_loop);
+
+
+        start.onclick = function () {
+            if ('webkitSpeechRecognition' in window) {
+                var speechRecognizer = new webkitSpeechRecognition();
+                speechRecognizer.continuous = true;
+                speechRecognizer.interimResults = true;
+                speechRecognizer.lang = 'en-US';
+                speechRecognizer.start();
 
                 speechRecognizer.onresult = function(event) {
-                var last = event.results.length - 1;
-                var command = event.results[last][0].transcript;
-                result.textContent = 'Voice Input: ' + command + '.';
+                    var last = event.results.length - 1;
+                    var command = event.results[last][0].transcript;
+                    result.textContent = 'Voice Input: ' + command + '.';
 
-                if(command.toLowerCase() === 'select conch'){
-                    document.querySelector('#selconst').checked = true;
-                }
-                else if(command.toLowerCase() === 'deselect conch'){
-                    document.querySelector('#selconst').checked = false;
-                }
-                else if(command.toLowerCase() === 'conch'){
-                    document.getElementById("button").classList.remove("btn");
-                    document.getElementById("button").classList.add("btn_2");
-                }
-                else if(command.toLowerCase() === 'no conch'){
-                    document.getElementById("button").classList.remove("btn_2");
-                    document.getElementById("button").classList.add("btn");
-                }
-                else if(command.toLowerCase() === 'yes'){
-                    document.getElementById("body").classList.remove("body_");
-                    document.getElementById("body").classList.add("body_2");
-                }
-                else if(command.toLowerCase() === 'no'){
-                    document.getElementById("body").classList.remove("body_2");
-                    document.getElementById("body").classList.add("body_");
-                }
-                else if(command.toLowerCase() === 'top red'){
-                    top.classList.remove("top");
-                    top.classList.add("top_2");
-                }
-                 else if(command.toLowerCase() === 'middle blue'){
-                    middle.classList.remove("middle");
-                    middle.classList.add("middle_2");
-                }
-                  else if(command.toLowerCase() === 'bottom yellow'){
-                    bottom.classList.remove("bottom");
-                    bottom.classList.add("bottom_2");
-                }
+                    command = command.toLowerCase()
 
-            };
-            if (top.classlist.value === "top_2" && middle.classlist.value === "middle_2" && middle.classlist.value === "bottom_2"){
-                display.innerText = 'Good Job'
+
+                    if (command === 'north' || command[0] == 'n') {
+                        //ball.py -= 10
+                        ball.vy = -0.18
+                        drawBall()
+                        start.onclick()
+                    } 
+                    else if (command === 'south' || command[0] == 's') {
+                        ball.vy = 0.18
+                        drawBall()
+                        start.onclick()
+                    }
+                    else if (command === 'west' || command[0] == 'w') {
+                        ball.vx = -0.18
+                        drawBall()
+                        start.onclick()
+                    }
+                    else if (command === 'east' || command[0] == 'e') {
+                        ball.vx = 0.18
+                        drawBall()
+                        start.onclick()
+                    }
+                    else if (command === 'faster' || command[0] == 'f') {
+                        if (ball.vy || ball.vx < 0) {
+                            ball.vx + -0.1
+                            ball.vy + -0.1
+                        }
+                        else {
+                            ball.vy + 0.1
+                            ball.vx + 0.1
+                        }
+                    }
+                    else if (command === 'halt' || command[0] == 'h') {
+                        ball.vx = 0
+                        ball.vy = 0
+                        drawBall()
+                        start.onclick()
+                    }
+
+                    else if(command === 'button'){
+                        button.classList.remove("btn");
+                        button.classList.add("btn_2");
+                        start.onclick()
+                    }
+                    else if(command === 'no button'){
+                        button.classList.remove("btn_2");
+                        button.classList.add("btn");
+                        start.onclick()
+                    }
+                    else if(command === 'yes'){
+                        document.body.classList.remove("body_");
+                        document.body.classList.add("body_2");
+                        start.onclick()
+                    }
+                    else if(command === 'no'){
+                        document.body.classList.remove("body_2");
+                        document.body.classList.add("body_");
+                        start.onclick()
+                    }
+                    else if(command.toLowerCase() === 'top red'){
+                        document.getElementById("top").classList.remove("top_");
+                        document.getElementById("top").classList.add("top_2");
+                        start.onclick()
+                    }
+                    else if(command.toLowerCase() === 'middle blue'){
+                        document.getElementById("middle").classList.remove("middle_");
+                        document.getElementById("middle").classList.add("middle_2");
+                        start.onclick()
+                    }
+                    else if(command.toLowerCase() === 'bottom yellow'){
+                        document.getElementById("bottom").classList.remove("bottom_");
+                        document.getElementById("bottom").classList.add("bottom_2");
+                        start.onclick()
+                    }
+                    else {
+                        start.onclick()
+                    }
+                }
             }
-                    speechRecognizer.onerror = function (event) {
+        };
 
-                    };
-                }else{
-                    r.innerHTML = 'browser not supported'
-                }
-            }
-        </script>
+        start.onclick()
+    </script>
 {% endblock %}
 
