@@ -10,6 +10,21 @@
         <span id="result"></span>
     </div>
 
+    <!-- Manual button to start game -->
+    <button id="start_game" class="btn">Start Game</button>
+    <button id="start" style="display:none"></button>
+
+    <!-- display clock -->
+    <div id="stopwatch">
+        <button id="start_clock" style="display:none"><ion-icon name="arrow-dropright-circle"></ion-icon></button>
+        <button id="stop_clock" style="display:none"><ion-icon name="close"></ion-icon></button>
+        <div id="display_minutes"></div>
+            <span>:</span>
+        <div id="display_seconds"></div>
+            <span>:</span>
+        <div id="display_millisec"></div>
+    </div>
+
     <!-- Setting up canvas -->
     <canvas id="cnv" width="1000" height="375"></canvas>
 
@@ -36,23 +51,33 @@
     <image id="classic" src="{% static 'boat/classic.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
 
-    <!-- Manual button to start speech recognition -->
-    <button id="start" class="btn">Microphone</button>
-
 <script type="text/javascript">
 
         // declare speech recognition results and start button 
         var r = document.querySelector('#result');
+        var start_game = document.querySelector('#start_game');
         var start = document.querySelector('#start');
+
+
+        // declare clock
+        let display_minutes = document.querySelector('#display_minutes')
+        let display_seconds = document.querySelector('#display_seconds')
+        let display_millisec = document.querySelector('#display_millisec')
+        let date = new Date()
+        date.setHours(0, 0, 0, 0)
+        let stopwatch_interval = null
+
 
         // declare canvas and objects in canvas 
         let cnv = document.querySelector('#cnv');
+        cnv.backgroundColor = 'red';
         let width = cnv.width
         let height = cnv.height
         let ctx = cnv.getContext('2d');
-        let ctx2 = cnv.getContext('2d');
-        let ctx3 = cnv.getContext('2d');
-        let ctx4 = cnv.getContext('2d');
+        // let ctx2 = cnv.getContext('2d');
+        // let ctx3 = cnv.getContext('2d');
+        // let ctx4 = cnv.getContext('2d');
+
 
         // declare boat images 
         var long_boat = document.querySelector("#long_boat");
@@ -82,13 +107,17 @@
             px: 50,
             py: 125,
             vx: 0.8,
-            vy: 0
+            vy: 0,
+            width: 120,
+            height: 120
         };
 
         // define an enemy boat (loss scenario)
         let enemy2 = {
             px: 0,
-            py: 0
+            py: 0,
+            width: 120,
+            height: 120
         };
         
         // perametric function for enemy boats
@@ -107,29 +136,28 @@
             ctx.clearRect(0, 0, cnv.width, cnv.height)
 
             //draw user boat, enemy boats, and land
-            if (boat.vx > 0) {
-                ctx.translate(width, 0);
-                ctx.scale(-1, 1);
-                ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
-            } else{
-                ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
-            }   
-            ctx2.drawImage(long_boat, enemy.px, enemy.py, 120, 120);
+            // if (boat.vx > 0) {
+            //     ctx.translate(width, 0);
+            //     ctx.scale(-1, 1);
+            //     ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
+            // } else{
+            //     ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
+            // }   
+            ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
 
-            ctx3.beginPath();
-            ctx3.arc(land.px, land.py, 25, 0, 2 * Math.PI);
-            ctx3.lineWidth = 5;
-            ctx3.strokeStyle = 'rgb(143,188,143)';
-            ctx3.stroke()
+            ctx.drawImage(long_boat, enemy.px, enemy.py, enemy.width, enemy.height);
+
+            ctx.beginPath();
+            ctx.arc(land.px, land.py, 25, 0, 2 * Math.PI);
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'rgb(143,188,143)';
+            ctx.stroke()
 
             t += 0.006
             let p = get_position(t)
             enemy2.px = p.x
             enemy2.py = p.y
-            ctx4.drawImage(long_boat, enemy2.px, enemy2.py, 120, 120);
-
-
-  
+            ctx.drawImage(long_boat, enemy2.px, enemy2.py, enemy2.width, enemy2.height);                      
         }
         draw()
 
@@ -178,6 +206,52 @@
         }
         window.requestAnimationFrame(main_loop);
 
+    
+        check_collision = function() {
+            
+        }
+
+
+
+
+
+        //stop watch function 
+        start_clock.onclick = function() {
+            if(stopwatch_interval === null){
+            stopwatch_interval = setInterval(function() {
+                date.setMilliseconds(date.getMilliseconds() + 100)
+                let millis = date.getMilliseconds()
+                if (millis == 0) {
+                    millis = '000'
+                }
+                display_millisec.innerText = millis
+                display_seconds.innerText = date.getSeconds()
+                display_minutes.innerText = date.getMinutes()
+            }, 100)
+         }
+        }
+
+        stop_clock.onclick = function() {
+            if(stopwatch_interval != null){
+             clearInterval(stopwatch_interval);
+             stopwatch_interval = null
+            }
+            display_millisec.innerText = 000
+            display_seconds.innerText = 0
+            display_minutes.innerText = 0
+         }
+
+
+
+
+
+
+        //start game button triggers clock and speech recognition 
+        start_game.onclick = function() {
+                start_clock.onclick()
+                start.onclick()
+        }
+        
         //speech recognition function
         start.onclick = function () {
             if ('webkitSpeechRecognition' in window) {
@@ -261,8 +335,6 @@
                 }
             }
         };
-
-        start.onclick()
 </script>
 {% endblock %}
 

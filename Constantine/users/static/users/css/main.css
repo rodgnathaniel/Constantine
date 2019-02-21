@@ -11,7 +11,7 @@
 #####################################################*/
 
 .body_{
-    background-color: rgba(176,224,230,10);
+    background-color: rgba(255,218,185,10);
 }
 
 .body_2{
@@ -104,23 +104,23 @@
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
   
-  /* The container <div> - needed to position the dropdown content */
+/* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
     display: inline-block;
 }
   
-  /* Dropdown Content (Hidden by Default) */
+/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color:rgba(255,255,240, .6);
+    background-color:rgba(255,255,240,.6);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
   
-  /* Links inside the dropdown */
+/* Links inside the dropdown */
 .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -130,13 +130,13 @@
 
 }
   
-  /* Change color of dropdown links on hover */
+/* Change color of dropdown links on hover */
 .dropdown-content a:hover {
     background-color:rgba(255,255,240, .6);
 
 }
 
-  /* Show the dropdown menu on hover */
+/* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
@@ -179,6 +179,22 @@ a{
 }
 
 
+
+/* #####################################################
+    -STOP WATCH-
+#####################################################*/
+#stopwatch {
+    color: black;
+    background-color: rgba(255,218,185,10);
+    background-size:auto;
+    display: flex;
+    align-items:center;
+    flex-direction:row;
+    justify-content:center;
+    font-family: 'VT323', monospace;
+    /* padding: 1%; */
+    
+}
 
 /* #####################################################
     -RANDOM TEXT-
@@ -238,7 +254,7 @@ a{
 
 #cnv{
     border: 1px solid black;
-    margin: 1% 9% 1% 9%;
+    margin: .05% 9% 1% 9%;
 }
 
 
