@@ -1,15 +1,16 @@
-
-
-
 {% extends "users/base.html" %}
 {% block content %}
 {% load static %}
 
+    <!-- Display who is logged in -->
     <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
+
+    <!-- Speech Recognition Results -->
     <div id="box" class="hello">
         <span id="result"></span>
-        </div>
+    </div>
 
+    <!-- Setting up canvas -->
     <canvas id="cnv" width="1000" height="375"></canvas>
 
     <!-- <div class="dropdown">
@@ -31,36 +32,43 @@
     <span id="bottom" class="bottom_"></span>
     <span id="display"></span> -->
 
+    <!-- Load boat images (invisible) to be drawn in canvas -->
     <image id="classic" src="{% static 'boat/classic.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
-    <!-- <button id="button" class="btn">Oi</button> -->
 
+    <!-- Manual button to start speech recognition -->
     <button id="start" class="btn">Microphone</button>
-    <script type="text/javascript">
 
+<script type="text/javascript">
+
+        // declare speech recognition results and start button 
+        var r = document.querySelector('#result');
+        var start = document.querySelector('#start');
+
+        // declare canvas and objects in canvas 
         let cnv = document.querySelector('#cnv');
+        let width = cnv.width
+        let height = cnv.height
         let ctx = cnv.getContext('2d');
         let ctx2 = cnv.getContext('2d');
         let ctx3 = cnv.getContext('2d');
         let ctx4 = cnv.getContext('2d');
 
+        // declare boat images 
         var long_boat = document.querySelector("#long_boat");
         var classic = document.querySelector("#classic");
         
-        var r = document.querySelector('#result');
-        var start = document.querySelector('#start');
-        let button = document.querySelector('#button');
-        let width = cnv.width
-        let height = cnv.height
-
-        let ball = {
-            radius: 4,
-            px: 880,
-            py: 250,
+        // define the voice controlled boat 
+        let boat = {
+            px: 850,
+            py: 220,
             vx: 0,
-            vy: 0 
+            vy: 0,
+            width: 120,
+            height: 120
         };
 
+        // define the land (win scenario)
         let land = {
             radius: 4,
             px: 35,
@@ -69,77 +77,93 @@
             vy: 0
         };
 
+        // define an enemy boat (loss scenario)
         let enemy = {
-            radius: 4,
             px: 50,
             py: 125,
             vx: 0.8,
             vy: 0
         };
+
+        // define an enemy boat (loss scenario)
         let enemy2 = {
             px: 0,
             py: 0
         };
+        
+        // perametric function for enemy boats
         let t = 0
-
         let get_position = function(t) {
             let cx = 400
             let cy = 120
             let x = cx + 120*Math.cos(t)
             let y = cy + 120*Math.sin(t)
             return {x: x, y: y}
-}
-        function drawBall() {
+        }
+
+        //function for drawing objects on canvas
+        function draw() {
+            //clear canvas each time function is called
             ctx.clearRect(0, 0, cnv.width, cnv.height)
-            ctx.drawImage(classic, ball.px, ball.py, 120, 120);
+
+            //draw user boat, enemy boats, and land
+            if (boat.vx > 0) {
+                ctx.translate(width, 0);
+                ctx.scale(-1, 1);
+                ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
+            } else{
+                ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
+            }   
             ctx2.drawImage(long_boat, enemy.px, enemy.py, 120, 120);
-            ctx4.drawImage(long_boat, enemy2.px, enemy2.py, 120, 120);
 
             ctx3.beginPath();
-                ctx3.arc(land.px, land.py, 25, 0, 2 * Math.PI);
-                ctx3.lineWidth = 5;
-                ctx3.strokeStyle = 'rgb(143,188,143)';
-                ctx3.stroke()
+            ctx3.arc(land.px, land.py, 25, 0, 2 * Math.PI);
+            ctx3.lineWidth = 5;
+            ctx3.strokeStyle = 'rgb(143,188,143)';
+            ctx3.stroke()
 
             t += 0.006
             let p = get_position(t)
             enemy2.px = p.x
             enemy2.py = p.y
             ctx4.drawImage(long_boat, enemy2.px, enemy2.py, 120, 120);
-            
-    
-                
+
+
+  
         }
-        drawBall()
+        draw()
 
         function main_loop() {
-            // ball.vy += .1 // gravity
-            ball.px += ball.vx
-            ball.py += ball.vy
+            //update position of objects in canvas
+            boat.px += boat.vx
+            boat.py += boat.vy
+
             enemy.px += enemy.vx
             enemy.py += enemy.vy
         
             land.py += land.vy
             land.px += land.vx
-            if (ball.px >= 1000) {
-                ball.px -= 5
-                ball.vx = 0
-                ball.vy = 0
+
+            //set boundaries for objects in canvas
+            if (boat.px + boat.width >= cnv.width) {
+                boat.px = cnv.width - boat.width - 5
+                boat.vx = 0
+                boat.vy = 0
             }
-            if (ball.px <= 0) {
-                ball.px += 10
-                ball.vx = 0
-                ball.vy = 0
+            if (boat.px <= 0) {
+                boat.px = 5
+                boat.vx = 0
+                boat.vy = 0
             }
-            if (ball.py >= 375) {
-                ball.py -= 5
-                ball.vx = 0
-                ball.vy = 0
+            if (boat.py + boat.height >= cnv.height) {
+                boat.py = cnv.height - boat.height - 5
+                boat.vx = 0
+                boat.vy = 0
             } 
-            if (ball.py <= 0) {
-                ball.py += 5
-                ball.vx = 0
-                ball.vy = 0
+            if (boat.py <= 0) {
+                boat.py = 5
+                boat.vx = 0
+                boat.vy = 0
             }
             if (enemy.px >= 220 || enemy.px <= 0){
                     enemy.vx *= -1
@@ -149,77 +173,69 @@
                     enemy.vx = -1
                     enemy.vy = 0
             }
-            drawBall()
+            draw()
             window.requestAnimationFrame(main_loop);
         }
         window.requestAnimationFrame(main_loop);
+
+        //speech recognition function
         start.onclick = function () {
             if ('webkitSpeechRecognition' in window) {
                 var speechRecognizer = new webkitSpeechRecognition();
+
+                //set rules for speech recognition 
                 speechRecognizer.continuous = true;
                 speechRecognizer.interimResults = true;
                 speechRecognizer.lang = 'en-US';
+
+                //start speech recognition function 
                 speechRecognizer.start();
+
+                //function to process speech recognition results 
                 speechRecognizer.onresult = function(event) {
                     var last = event.results.length - 1;
                     var command = event.results[last][0].transcript;
+
+                    //display results on screen 
                     result.textContent = 'Voice Input: ' + command + '.';
+
+                    //dom manipulation based on commands 
                     command = command.toLowerCase()
                     if (command === 'north' || command[0] == 'n') {
                         //ball.py -= 10
-                        ball.vy = -0.84
-                        drawBall()
+                        boat.vy = -0.84
+                        draw()
                         start.onclick()
-                    } 
-                    else if (command === 'south' || command[0] == 's') {
-                        ball.vy = 0.84
-                        drawBall()
+                    } else if (command === 'south' || command[0] == 's') {
+                        boat.vy = 0.84
+                        draw()
                         start.onclick()
-                    }
-                    else if (command === 'west' || command[0] == 'w') {
-                        ball.vx = -0.84
-                        drawBall()
+                    } else if (command === 'west' || command[0] == 'w') {
+                        boat.vx = -0.84
+                        draw()
                         start.onclick()
-                    }
-                    else if (command === 'east' || command[0] == 'e') {
-                        ball.vx = 0.84
-                        drawBall()
+                    } else if (command === 'east' || command[0] == 'e') {
+                        boat.vx = 0.84
+                        draw()
                         start.onclick()
-                    }
-                    else if (command === 'faster' || command[0] == 'f') {
-                        if (ball.vy || ball.vx < 0) {
-                            ball.vx + -0.2
-                            ball.vy + -0.2
+                    } else if (command === 'faster' || command[0] == 'f') {
+                        if (boat.vy || boat.vx < 0) {
+                            boat.vx + -0.2
+                            boat.vy + -0.2
+                        } else {
+                            boat.vy + 0.2
+                            boat.vx + 0.2
                         }
-                        else {
-                            ball.vy + 0.2
-                            ball.vx + 0.2
-                        }
-                    }
-                    else if (command === 'halt' || command[0] == 'h') {
-                        ball.vx = 0
-                        ball.vy = 0
-                        drawBall()
+                    } else if (command === 'halt' || command[0] == 'h') {
+                        boat.vx = 0
+                        boat.vy = 0
+                        draw()
                         start.onclick()
-                    }
-
-
-                    else if(command === 'button'){
-                        button.classList.remove("btn");
-                        button.classList.add("btn_2");
-                        start.onclick()
-                    }
-                    else if(command === 'no button'){
-                        button.classList.remove("btn_2");
-                        button.classList.add("btn");
-                        start.onclick()
-                    }
-                    else if(command === 'yes'){
+                    } else if(command === 'yes'){
                         document.body.classList.remove("body_");
                         document.body.classList.add("body_2");
                         start.onclick()
-                    }
-                    else if(command === 'no'){
+                    } else if(command === 'no'){
                         document.body.classList.remove("body_2");
                         document.body.classList.add("body_");
                         start.onclick()
@@ -247,6 +263,6 @@
         };
 
         start.onclick()
-    </script>
+</script>
 {% endblock %}
 
