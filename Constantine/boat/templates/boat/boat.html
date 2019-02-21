@@ -12,7 +12,7 @@
 
     <canvas id="cnv" width="1000" height="375"></canvas>
 
-    <div class="dropdown">
+    <!-- <div class="dropdown">
         <button class="dropbtn">Select A Boat</button>
             <div class="dropdown-content">
                 <button class="boat_sel"id="classic">Classic</button>
@@ -23,16 +23,16 @@
                 <button class="boat_sel" id="Cruiseship">Cruiseship</button>
                 <button class="boat_sel" id="Fiberglass" onclick="classic()">Fiberglass</button>
             </div>
-    </div>
-
+    </div> -->
+<!-- 
     <span id="q">Can you build the flag of Armenia?</span>
     <span id="top" class="top_"></span>
     <span id="middle" class="middle_"></span>
     <span id="bottom" class="bottom_"></span>
-    <span id="display"></span>
+    <span id="display"></span> -->
 
     <image id="classic" src="{% static 'boat/classic.png' %}" style="display:none"/>
-    <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
+    <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
     <button id="button" class="btn">Oi</button>
 
     <button id="start" class="btn">Microphone</button>
@@ -40,72 +40,119 @@
 
         let cnv = document.querySelector('#cnv');
         let ctx = cnv.getContext('2d');
+        let ctx2 = cnv.getContext('2d');
+        let ctx3 = cnv.getContext('2d');
+        let ctx4 = cnv.getContext('2d');
+
         var long_boat = document.querySelector("#long_boat");
         var classic = document.querySelector("#classic");
-
         
-
         var r = document.querySelector('#result');
         var start = document.querySelector('#start');
-
         let button = document.querySelector('#button');
-
         let width = cnv.width
         let height = cnv.height
+
         let ball = {
             radius: 4,
-            // px: cnv.width/2,
-            px: 15,
+            px: 880,
             py: 250,
-            // py: cnv.height,
-            vx: 0, //(2*Math.random()-1)*5,
-            vy: 0 // (2*Math.random()-1)*5
+            vx: 0,
+            vy: 0 
         };
 
-//         base_image = new Image();
-//   base_image.src = 'img/base.png';
-//   base_image.onload = function(){
-//     context.drawImage(base_image, 0, 0);
-        function classic() {
-            long_boat = classic
-        }
+        let land = {
+            radius: 4,
+            px: 35,
+            py: 35,
+            vx: 0,
+            vy: 0
+        };
+
+        let enemy = {
+            radius: 4,
+            px: 50,
+            py: 125,
+            vx: 0.8,
+            vy: 0
+        };
+        let enemy2 = {
+            px: 0,
+            py: 0
+        };
+        let t = 0
+
+        let get_position = function(t) {
+            let cx = 400
+            let cy = 120
+            let x = cx + 120*Math.cos(t)
+            let y = cy + 120*Math.sin(t)
+            return {x: x, y: y}
+}
         function drawBall() {
             ctx.clearRect(0, 0, cnv.width, cnv.height)
-            ctx.drawImage(long_boat, ball.px, ball.py, 120, 120);
-            // ctx.beginPath();
-            // ctx.arc(ball.px, ball.py, 15, 0, 2 * Math.PI);
-            //ctx.fillStyle = 'rgba(245,255,250,0.1)';
-            // ctx.stroke()
-ctx.fill();
+            ctx.drawImage(classic, ball.px, ball.py, 120, 120);
+            ctx2.drawImage(long_boat, enemy.px, enemy.py, 120, 120);
+            ctx4.drawImage(long_boat, enemy2.px, enemy2.py, 120, 120);
+
+            ctx3.beginPath();
+                ctx3.arc(land.px, land.py, 25, 0, 2 * Math.PI);
+                ctx3.lineWidth = 5;
+                ctx3.strokeStyle = 'rgb(143,188,143)';
+                ctx3.stroke()
+
+            t += 0.006
+            let p = get_position(t)
+            enemy2.px = p.x
+            enemy2.py = p.y
+            ctx4.drawImage(long_boat, enemy2.px, enemy2.py, 120, 120);
+            
+    
                 
         }
-
         drawBall()
-2
 
         function main_loop() {
             // ball.vy += .1 // gravity
-
             ball.px += ball.vx
             ball.py += ball.vy
-
-            // if (ball.px >= 750 || ball.px <= 0){
-            //         ball.vx *= 0.99
-            //         ball.vx *= -1
-            // }
-            // if(ball.py >= 750 || ball.py <= 0){
-            //         ball.vy *= 0.99
-            //         ball.vy *= -1
-            // }
-
+            enemy.px += enemy.vx
+            enemy.py += enemy.vy
+        
+            land.py += land.vy
+            land.px += land.vx
+            if (ball.px >= 1000) {
+                ball.px -= 5
+                ball.vx = 0
+                ball.vy = 0
+            }
+            if (ball.px <= 0) {
+                ball.px += 10
+                ball.vx = 0
+                ball.vy = 0
+            }
+            if (ball.py >= 375) {
+                ball.py -= 5
+                ball.vx = 0
+                ball.vy = 0
+            } 
+            if (ball.py <= 0) {
+                ball.py += 5
+                ball.vx = 0
+                ball.vy = 0
+            }
+            if (enemy.px >= 220 || enemy.px <= 0){
+                    enemy.vx *= -1
+                    enemy.vy *= 0
+            }
+            if(enemy.py >= 1000 || enemy.py <= 0){
+                    enemy.vx = -1
+                    enemy.vy = 0
+            }
             drawBall()
-
-
             window.requestAnimationFrame(main_loop);
         }
         window.requestAnimationFrame(main_loop);
-
-
         start.onclick = function () {
             if ('webkitSpeechRecognition' in window) {
                 var speechRecognizer = new webkitSpeechRecognition();
@@ -113,44 +160,40 @@ ctx.fill();
                 speechRecognizer.interimResults = true;
                 speechRecognizer.lang = 'en-US';
                 speechRecognizer.start();
-
                 speechRecognizer.onresult = function(event) {
                     var last = event.results.length - 1;
                     var command = event.results[last][0].transcript;
                     result.textContent = 'Voice Input: ' + command + '.';
-
                     command = command.toLowerCase()
-
-
                     if (command === 'north' || command[0] == 'n') {
                         //ball.py -= 10
-                        ball.vy = -0.18
+                        ball.vy = -0.84
                         drawBall()
                         start.onclick()
                     } 
                     else if (command === 'south' || command[0] == 's') {
-                        ball.vy = 0.18
+                        ball.vy = 0.84
                         drawBall()
                         start.onclick()
                     }
                     else if (command === 'west' || command[0] == 'w') {
-                        ball.vx = -0.18
+                        ball.vx = -0.84
                         drawBall()
                         start.onclick()
                     }
                     else if (command === 'east' || command[0] == 'e') {
-                        ball.vx = 0.18
+                        ball.vx = 0.84
                         drawBall()
                         start.onclick()
                     }
                     else if (command === 'faster' || command[0] == 'f') {
                         if (ball.vy || ball.vx < 0) {
-                            ball.vx + -0.1
-                            ball.vy + -0.1
+                            ball.vx + -0.2
+                            ball.vy + -0.2
                         }
                         else {
-                            ball.vy + 0.1
-                            ball.vx + 0.1
+                            ball.vy + 0.2
+                            ball.vx + 0.2
                         }
                     }
                     else if (command === 'halt' || command[0] == 'h') {
@@ -159,6 +202,7 @@ ctx.fill();
                         drawBall()
                         start.onclick()
                     }
+
 
                     else if(command === 'button'){
                         button.classList.remove("btn");
@@ -180,21 +224,21 @@ ctx.fill();
                         document.body.classList.add("body_");
                         start.onclick()
                     }
-                    else if(command.toLowerCase() === 'top red'){
-                        document.getElementById("top").classList.remove("top_");
-                        document.getElementById("top").classList.add("top_2");
-                        start.onclick()
-                    }
-                    else if(command.toLowerCase() === 'middle blue'){
-                        document.getElementById("middle").classList.remove("middle_");
-                        document.getElementById("middle").classList.add("middle_2");
-                        start.onclick()
-                    }
-                    else if(command.toLowerCase() === 'bottom yellow'){
-                        document.getElementById("bottom").classList.remove("bottom_");
-                        document.getElementById("bottom").classList.add("bottom_2");
-                        start.onclick()
-                    }
+                    // else if(command.toLowerCase() === 'top red'){
+                    //     document.getElementById("top").classList.remove("top_");
+                    //     document.getElementById("top").classList.add("top_2");
+                    //     start.onclick()
+                    // }
+                    // else if(command.toLowerCase() === 'middle blue'){
+                    //     document.getElementById("middle").classList.remove("middle_");
+                    //     document.getElementById("middle").classList.add("middle_2");
+                    //     start.onclick()
+                    // }
+                    // else if(command.toLowerCase() === 'bottom yellow'){
+                    //     document.getElementById("bottom").classList.remove("bottom_");
+                    //     document.getElementById("bottom").classList.add("bottom_2");
+                    //     start.onclick()
+                    // }
                     else {
                         start.onclick()
                     }

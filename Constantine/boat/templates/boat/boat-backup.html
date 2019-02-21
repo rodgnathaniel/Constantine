@@ -1,99 +1,90 @@
 
-<html>
-    <head>
-        <style>
-            body {
-                color:white;
-                background-image:url("https://www.moma.org/d/assets/W1siZiIsIjIwMTYvMDcvMDgveGk5ajc5N2JzXzU4NF8xOTY3X0NDQ1IuanBnIl0sWyJwIiwiY29udmVydCIsIi1yZXNpemUgMjAwMHgyMDAwXHUwMDNlIl1d/584_1967_CCCR.jpg?sha=760a4d515293c479");
-                background-size:cover;
-                font-size: 170%
-            }
-            h1 {
-                width: 24%;
-                height: 8%;
-                background-color:rgba(127, 255, 212,.7);
-                color:ivory;
-                text-shadow: 1.5px 1.5px black;
-                border-radius: 20px 20px 20px 20px;
-                border: 3%;
-                font-size: 175%;
-                margin: 0 auto;
-                display:flex;
-                flex-direction:row;
-                align-items:center;
-                flex-wrap:wrap;
-                justify-content:space-evenly;
-                font-family: 'Norican', cursive;
-            }
-            #result{
-                    height: 200px;
-                    border: 1px solid;
-                    padding: 10px;
-                    box-shadow: 0 0 10px 0 #bbb;
-                    margin-bottom: 30px;
-                    font-size: 14px;
-                    line-height: 25px;
-            }
-            button {
-                    width: 24%;
-                    height: 8%;
-                    background-color:rgba(127, 255, 212,.7);
-                    color:ivory;
-                    text-shadow: 1.5px 1.5px black;
-                    border-radius: 20px 20px 20px 20px;
-                    border: 3%;
-                    font-size: 175%;
-                    margin: 0 auto;
-                    display:flex;
-                    flex-direction:row;
-                    align-items:center;
-                    flex-wrap:wrap;
-                    justify-content:space-evenly;
-                    font-family: 'Norican', cursive;
-                }
-        </style>
-    </head>
-    <body>
-        <h1>Speech To Text</h1>
-        <div id="result"></div>
-        <button onclick="startConverting()">Microphone</button>
-        <script type="text/javascript">
+    <image id="long_boat" src="{% static 'longboat.png' %}" style="display:none"/>
+    <image id="classic" src="{% static 'classic.png' %}" style="display:none"/>
+    <button id="button" class="btn">Oi</button>
 
-            var r = document.getElementById('result')
-            // let mic = document.querySelector('#mic')
+    <button id="start" class="btn">Microphone</button>
+    <script type="text/javascript">
 
-            function startConverting () {
-                alert('webkitSpeechRecognition' in window)
-                if('webkitSpeechRecognition' in window){
-                    var speechRecognizer = new webkitSpeechRecognition();
-                    speechRecognizer.continuous = true;
-                    speechRecognizer.interimResults = true;
-                    speechRecognizer.lang = 'en-US';
-                    speechRecognizer.start();
+        let cnv = document.querySelector('#cnv');
+        let ctx = cnv.getContext('2d');
+        let ctx2 = cnv.getContext('2d');
+        var long_boat = document.querySelector("#long_boat");
+        var classic = document.querySelector("#classic");
 
-                    var finalTranscripts = '';
+        
 
-                    speechRecognizer.onresult = function(event){
-                        var interimTranscripts = '';
-                        for(var i = event.resultIndex; i < event.results.length; i++){
-                            var transcript = event.results[i][0].transcript;
-                            transcript.replace("\n", "<br>");
-                            if(event.results[i].isFinal){
-                                finalTranscripts += transcript;
-                            }else{
-                                interimTranscripts += transcript;
-                            }
-                        }
-                        r.innerHTML = finalTranscripts + '<span style="color:#999">' + interimTranscripts + '</span>';
-                    };
+        var r = document.querySelector('#result');
+        var start = document.querySelector('#start');
 
-                    speechRecognizer.onerror = function (event) {
+        let button = document.querySelector('#button');
 
-                    };
-                }else{
-                    r.innerHTML = 'browser not supported'
-                }
-            }
-            </script>
-    </body>
-</html>
+        let width = cnv.width
+        let height = cnv.height
+
+        let player = {
+            radius: 4,
+            px: 15,
+            py: 250,
+            vx: 0,
+            vy: 0
+        };
+        let enemy = {
+            radius: 4,
+            px: 900,
+            py: 150,
+            vx: -0.18,
+            vy: 0
+        };
+
+//         base_image = new Image();
+//   base_image.src = 'img/base.png';
+//   base_image.onload = function(){
+//     context.drawImage(base_image, 0, 0);
+        // function classic() {
+        //     long_boat = classic
+        // }
+
+
+        function draw() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height)
+            ctx.drawImage(classic, player.px, player.py, 120, 120);
+
+            ctx2.clearRect(0, 0, cnv.width, cnv.height)
+            ctx2.drawImage(long_boat, enemy.px, enemy.py, 120, 120);
+            // ctx.beginPath();
+            // ctx.arc(ball.px, ball.py, 15, 0, 2 * Math.PI);
+            //ctx.fillStyle = 'rgba(245,255,250,0.1)';
+            // ctx.stroke()
+            // ctx.fill();
+            // ctx2.fill();
+                
+        }
+
+        draw()
+2
+
+        function main_loop() {
+            // ball.vy += .1 // gravity
+
+            player.px += player.vx
+            player.py += player.vy
+            enemy.px = enemy.px + ball2.vx
+            enemy.py = enemy.py + ball2.vy
+
+            // if (ball.px >= 750 || ball.px <= 0){
+            //         ball.vx *= 0.99
+            //         ball.vx *= -1
+            // }
+            // if(ball.py >= 750 || ball.py <= 0){
+            //         ball.vy *= 0.99
+            //         ball.vy *= -1
+            // }
+
+            draw()
+
+
+            window.requestAnimationFrame(main_loop);
+        }
+        window.requestAnimationFrame(main_loop);
+
