@@ -6,7 +6,7 @@
     <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
 
     <!-- Speech Recognition Results -->
-    <div id="box" class="hello">
+    <div id="box" class="results">
         <span id="result"></span>
     </div>
 
@@ -14,10 +14,11 @@
     <button id="start_game" class="btn">Start Game</button>
     <button id="start" style="display:none"></button>
 
+    <!-- save game button -->
+    <button id="save_game" style="display:none"></button>
+
     <!-- display clock -->
     <div id="stopwatch">
-        <button id="start_clock" style="display:none"><ion-icon name="arrow-dropright-circle"></ion-icon></button>
-        <button id="stop_clock" style="display:none"><ion-icon name="close"></ion-icon></button>
         <div id="display_minutes"></div>
             <span>:</span>
         <div id="display_seconds"></div>
@@ -53,6 +54,11 @@
 
 <script type="text/javascript">
 
+        // information for database
+        var game_time = 0
+        var game_win = 0
+        var game_loss = 0
+
         // declare speech recognition results and start button 
         var r = document.querySelector('#result');
         var start_game = document.querySelector('#start_game');
@@ -74,9 +80,6 @@
         let width = cnv.width
         let height = cnv.height
         let ctx = cnv.getContext('2d');
-        // let ctx2 = cnv.getContext('2d');
-        // let ctx3 = cnv.getContext('2d');
-        // let ctx4 = cnv.getContext('2d');
 
 
         // declare boat images 
@@ -85,21 +88,22 @@
         
         // define the voice controlled boat 
         let boat = {
-            px: 850,
-            py: 220,
+            px: 900,
+            py: 270,
             vx: 0,
             vy: 0,
-            width: 100,
-            height: 120
+            width: 80,
+            height: 100
         };
 
         // define the land (win scenario)
         let land = {
-            radius: 4,
-            px: 35,
-            py: 35,
+            px: 5,
+            py: 5,
             vx: 0,
-            vy: 0
+            vy: 0,
+            width: 60,
+            height: 60
         };
 
         // define an enemy boat (loss scenario)
@@ -148,8 +152,8 @@
             ctx.drawImage(long_boat, enemy.px, enemy.py, enemy.width, enemy.height);
 
             ctx.beginPath();
-            ctx.arc(land.px, land.py, 25, 0, 2 * Math.PI);
-            ctx.lineWidth = 5;
+            ctx.rect(land.px, land.py, land.width, land.height);
+            ctx.lineWidth = 3;
             ctx.strokeStyle = 'rgb(143,188,143)';
             ctx.stroke()
 
@@ -161,13 +165,51 @@
         }
         draw()
 
+        function save_game(won) {
+            game_time = date.getMinutes()*60 + date.getSeconds()
+
+            axios.post("{% url 'boat:save_game' %}",
+                    {
+                        game_time: game_time,
+                        won: won
+                    }, {
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }
+                    }
+                ).then(function(response) {
+                    input_todo.value = ''
+                    get_todos()
+                })
+
+        }
+
         function main_loop() {
 
-            if (check_collision(boat, enemy) || check_collision(boat, enemy2)) {
-                boat.px = 850
-                boat.py = 220
+            if (check_collision(boat, enemy) || check_collision(boat, enemy2)) { // lose
+                boat.px = 900
+                boat.py = 270
                 boat.vx = 0
                 boat.vy = 0
+
+                game_loss += 1
+                save_game(false)
+
+                stop_clock()
+                date.setHours(0, 0, 0, 0)
+                result.textContent = 'TRY AGAIN'
+            } else if (check_collision(boat, land)) { // win
+                boat.px = 900
+                boat.py = 270
+                boat.vx = 0
+                boat.vy = 0
+    
+                game_win += 1
+                save_game(true)
+
+                stop_clock()
+                date.setHours(0, 0, 0, 0)
+                result.textContent = 'GREAT JOB'
             }
 
             //update position of objects in canvas
@@ -224,7 +266,7 @@
 
 
         //stop watch function 
-        start_clock.onclick = function() {
+        function start_clock() {
             if(stopwatch_interval === null){
             stopwatch_interval = setInterval(function() {
                 date.setMilliseconds(date.getMilliseconds() + 100)
@@ -239,7 +281,7 @@
          }
         }
 
-        stop_clock.onclick = function() {
+        function stop_clock() {
             if(stopwatch_interval != null){
              clearInterval(stopwatch_interval);
              stopwatch_interval = null
@@ -251,13 +293,14 @@
 
 
 
-
-
-
         //start game button triggers clock and speech recognition 
         start_game.onclick = function() {
-                start_clock.onclick()
-                start.onclick()
+            game_minutes = 0
+            game_seconds = 0
+            game_win = 0
+            game_loss = 0
+            start_clock()
+            start.onclick()
         }
         
         //speech recognition function
