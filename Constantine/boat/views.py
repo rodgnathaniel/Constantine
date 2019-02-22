@@ -13,6 +13,12 @@ def boat_view(request):
     return render(request, "boat/boat.html", {})
 
 
+def scores_view(request):
+    games = request.user.game_set.all()
+    context = {'games':games}
+    return render(request, "boat/scores.html", context)
+
+
 def save_game(request):
     
     data = json.loads(request.body)
