@@ -1,6 +1,11 @@
-from django.http import HttpResponse
 from django.shortcuts import render
-# from .models import Product
+
+from django.http import HttpResponse, JsonResponse
+
+from .models import Game
+
+import json
+
 
 
 def boat_view(request):

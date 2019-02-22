@@ -26,8 +26,11 @@
         <div id="display_millisec"></div>
     </div>
 
+    <!-- level -->
+    <span id="level_display"></span>
+
     <!-- Setting up canvas -->
-    <canvas id="cnv" width="1000" height="375"></canvas>
+    <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
 
     <!-- <div class="dropdown">
         <button class="dropbtn">Select A Boat</button>
@@ -49,7 +52,7 @@
     <span id="display"></span> -->
 
     <!-- Load boat images (invisible) to be drawn in canvas -->
-    <image id="classic" src="{% static 'boat/boat.png' %}" style="display:none"/>
+    <image id="classic_boat" src="{% static 'boat/boat.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
 
 <script type="text/javascript">
@@ -74,6 +77,12 @@
         let stopwatch_interval = null
 
 
+        //declare level display
+        let level_display = document.querySelector('#level_display')
+        level_display.textContent = 'Level 1'
+        
+
+
         // declare canvas and objects in canvas 
         let cnv = document.querySelector('#cnv');
         cnv.backgroundColor = 'red';
@@ -84,7 +93,7 @@
 
         // declare boat images 
         var long_boat = document.querySelector("#long_boat");
-        var classic = document.querySelector("#classic");
+        var classic_boat = document.querySelector("#classic_boat");
         
         // define the voice controlled boat 
         let boat = {
@@ -134,6 +143,8 @@
             return {x: x, y: y}
         }
 
+
+
         //function for drawing objects on canvas
         function draw() {
             //clear canvas each time function is called
@@ -147,15 +158,15 @@
             // } else{
             //     ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
             // }   
-            ctx.drawImage(classic, boat.px, boat.py, boat.width, boat.height);
+            ctx.drawImage(classic_boat, boat.px, boat.py, boat.width, boat.height);
 
             ctx.drawImage(long_boat, enemy.px, enemy.py, enemy.width, enemy.height);
 
             ctx.beginPath();
             ctx.rect(land.px, land.py, land.width, land.height);
             ctx.lineWidth = 3;
-            ctx.strokeStyle = 'rgb(143,188,143)';
-            ctx.stroke()
+            ctx.fillStyle = 'rgb(143,188,143)';
+            ctx.fill()
 
             t += 0.006
             let p = get_position(t)
@@ -163,7 +174,7 @@
             enemy2.py = p.y
             ctx.drawImage(long_boat, enemy2.px, enemy2.py, enemy2.width, enemy2.height);                      
         }
-        draw()
+        
 
         function save_game(won) {
             game_time = date.getMinutes()*60 + date.getSeconds()
@@ -178,8 +189,6 @@
                         }
                     }
                 ).then(function(response) {
-                    input_todo.value = ''
-                    get_todos()
                 })
 
         }
@@ -187,6 +196,9 @@
         function main_loop() {
 
             if (check_collision(boat, enemy) || check_collision(boat, enemy2)) { // lose
+                cnv.classList.remove("cnv");
+                cnv.classList.add("cnv_loss");
+
                 boat.px = 900
                 boat.py = 270
                 boat.vx = 0
@@ -199,6 +211,9 @@
                 date.setHours(0, 0, 0, 0)
                 result.textContent = 'TRY AGAIN'
             } else if (check_collision(boat, land)) { // win
+                cnv.classList.remove("cnv");
+                cnv.classList.add("cnv_win");
+
                 boat.px = 900
                 boat.py = 270
                 boat.vx = 0
@@ -254,7 +269,6 @@
             draw()
             window.requestAnimationFrame(main_loop);
         }
-        window.requestAnimationFrame(main_loop);
 
     
         function check_collision(rect1, rect2) {
@@ -295,12 +309,18 @@
 
         //start game button triggers clock and speech recognition 
         start_game.onclick = function() {
+            cnv.classList.remove("cnv_loss");
+            cnv.classList.remove("cnv_win");
+            cnv.classList.add("cnv");
             game_minutes = 0
             game_seconds = 0
             game_win = 0
             game_loss = 0
             start_clock()
             start.onclick()
+            draw()
+            window.requestAnimationFrame(main_loop);
+            this.disabled = true
         }
         
         //speech recognition function

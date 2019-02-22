@@ -12,7 +12,9 @@
 #####################################################*/
 
 .body_{
-    background-color: rgba(255,218,185,10);
+    background-color: rgba(176,224,230,10);
+    /* background-image:url(https://wallpapercave.com/wp/02IiKRa.jpg)   
+    } */
 }
 
 .body_2{
@@ -93,7 +95,7 @@
     position: sticky;
     justify-content:space-evenly;
     flex-wrap: wrap;
-    top: 4%;
+    top: 9%;
     margin-left: 9%;
 }
 /* Dropdown Button */
@@ -192,13 +194,13 @@ a{
 #####################################################*/
 #stopwatch {
     color: black;
-    background-color: rgba(255,218,185,10);
+    background-color: rgba(176,224,230,10);
     background-size:auto;
     display: flex;
     align-items:center;
     flex-direction:row;
     justify-content:center;
-    font-family: 'VT323', monospace;
+    font-family: 'Share Tech Mono', monospace;
     /* padding: 1%; */
     
 }
@@ -206,7 +208,15 @@ a{
 /* #####################################################
     -RANDOM TEXT-
 #####################################################*/
-
+#level_display {
+    text-align: center;
+    font-size: 90%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    margin: 0% 0% 0% 9%;
+}
 .goodbye {
     text-align: center;
     font-size: 120%;
@@ -279,7 +289,18 @@ a{
     -CANVAS-
 #####################################################*/
 
-#cnv{
+.cnv{
+    background-image:url(https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4472265.jpg);   
+    border: 1px solid black;
+    margin: .05% 9% 1% 9%;
+}
+.cnv_loss{
+    background-color:rgba(205,92,92,.7);  
+    border: 1px solid black;
+    margin: .05% 9% 1% 9%;
+}
+.cnv_win{
+    background-image:url(https://ae01.alicdn.com/kf/HTB1g.KlOFXXXXbNXVXXq6xXFXXXp/Uang-koin-emas-bajak-laut-peta-keberuntungan-Dekorasi-Rumah-Canvas-Poster-Cetak.jpg);   
     border: 1px solid black;
     margin: .05% 9% 1% 9%;
 }
