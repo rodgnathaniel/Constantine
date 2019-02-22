@@ -48,8 +48,8 @@
     <span id="display"></span> -->
 
     <!-- Load boat images (invisible) to be drawn in canvas -->
-    <image id="classic" src="{% static 'boat/classic.png' %}" style="display:none"/>
-    <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
+    <image id="classic" src="{% static 'boat/boat.png' %}" style="display:none"/>
+    <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
 
 <script type="text/javascript">
 
@@ -89,7 +89,7 @@
             py: 220,
             vx: 0,
             vy: 0,
-            width: 120,
+            width: 100,
             height: 120
         };
 
@@ -162,6 +162,14 @@
         draw()
 
         function main_loop() {
+
+            if (check_collision(boat, enemy) || check_collision(boat, enemy2)) {
+                boat.px = 850
+                boat.py = 220
+                boat.vx = 0
+                boat.vy = 0
+            }
+
             //update position of objects in canvas
             boat.px += boat.vx
             boat.py += boat.vy
@@ -207,12 +215,12 @@
         window.requestAnimationFrame(main_loop);
 
     
-        check_collision = function() {
-            
+        function check_collision(rect1, rect2) {
+            let x_overlap = Math.max(0, Math.min(rect1.px + rect1.width, rect2.px + rect2.width) - Math.max(rect1.px, rect2.px))
+            let y_overlap = Math.max(0, Math.min(rect1.py + rect1.height, rect2.py + rect2.height) - Math.max(rect1.py, rect2.py))
+            let overlapArea = x_overlap * y_overlap
+            return overlapArea != 0
         }
-
-
-
 
 
         //stop watch function 
