@@ -1,21 +1,31 @@
 {% extends "users/base.html" %}
-{% block content %}
 {% load static %}
+{% block content %}
+
+
+<!--#################################################################################################################################
+--------------------------HTML------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+
 
     <!-- Display who is logged in -->
-    <span class="goodbye">Ahoy Captain {{ request.user }}!</span>
+    <span class="center_text">Ahoy Captain {{ request.user }}!</span>
+
 
     <!-- Speech Recognition Results -->
-    <div id="box" class="results">
-        <span id="result"></span>
+    <div class="speech_results">
+        <span id="speech_results"></span>
     </div>
+
 
     <!-- Manual button to start game -->
     <button id="start_game" class="btn">Start Game</button>
     <button id="start" style="display:none"></button>
 
+
     <!-- save game button -->
     <button id="save_game" style="display:none"></button>
+
 
     <!-- display clock -->
     <div id="stopwatch">
@@ -26,44 +36,33 @@
         <div id="display_millisec"></div>
     </div>
 
+
     <!-- level -->
     <span id="level_display"></span>
+
 
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
 
-    <!-- <div class="dropdown">
-        <button class="dropbtn">Select A Boat</button>
-            <div class="dropdown-content">
-                <button class="boat_sel"id="classic">Classic</button>
-                <button class="boat_sel" id="longboat">Longboat</button>
-                <button class="boat_sel" id="Simple">Simple</button>
-                <button class="boat_sel" id="Warship">Warship</button>
-                <button class="boat_sel" id="Airship">Airship</button>
-                <button class="boat_sel" id="Cruiseship">Cruiseship</button>
-                <button class="boat_sel" id="Fiberglass" onclick="classic()">Fiberglass</button>
-            </div>
-    </div> -->
-<!-- 
-    <span id="q">Can you build the flag of Armenia?</span>
-    <span id="top" class="top_"></span>
-    <span id="middle" class="middle_"></span>
-    <span id="bottom" class="bottom_"></span>
-    <span id="display"></span> -->
 
     <!-- Load boat images (invisible) to be drawn in canvas -->
     <image id="classic_boat" src="{% static 'boat/boat.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
 
+
+<!--#################################################################################################################################
+--------------------------JAVA-SCRIPT------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+
+
 <script type="text/javascript">
 
         // information for database
         var game_time = 0
-        var game_win = 0
-        var game_loss = 0
+
 
         // declare speech recognition results and start button 
-        var r = document.querySelector('#result');
+        var r = document.querySelector('#speech_results');
         var start_game = document.querySelector('#start_game');
         var start = document.querySelector('#start');
 
@@ -81,7 +80,6 @@
         let level_display = document.querySelector('#level_display')
         level_display.textContent = 'Level 1'
         
-
 
         // declare canvas and objects in canvas 
         let cnv = document.querySelector('#cnv');
@@ -144,6 +142,8 @@
         }
 
 
+//-----------------------JS-FUNCTIONS-------------------------------------------------------------------------------------------------------
+
 
         //function for drawing objects on canvas
         function draw() {
@@ -193,6 +193,8 @@
 
         }
 
+
+        // check for win/loss scenario, update position of objects in canvas & set boundaries
         function main_loop() {
 
             if (check_collision(boat, enemy) || check_collision(boat, enemy2)) { // lose
@@ -204,12 +206,11 @@
                 boat.vx = 0
                 boat.vy = 0
 
-                game_loss += 1
                 save_game(false)
 
                 stop_clock()
                 date.setHours(0, 0, 0, 0)
-                result.textContent = 'TRY AGAIN'
+                speech_results.textContent = 'TRY AGAIN'
             } else if (check_collision(boat, land)) { // win
                 cnv.classList.remove("cnv");
                 cnv.classList.add("cnv_win");
@@ -218,13 +219,12 @@
                 boat.py = 270
                 boat.vx = 0
                 boat.vy = 0
-    
-                game_win += 1
+
                 save_game(true)
 
                 stop_clock()
                 date.setHours(0, 0, 0, 0)
-                result.textContent = 'GREAT JOB'
+               speech_results.textContent = 'GREAT JOB'
             }
 
             //update position of objects in canvas
@@ -270,7 +270,7 @@
             window.requestAnimationFrame(main_loop);
         }
 
-    
+        // function for calculating the overlap between two rectangles
         function check_collision(rect1, rect2) {
             let x_overlap = Math.max(0, Math.min(rect1.px + rect1.width, rect2.px + rect2.width) - Math.max(rect1.px, rect2.px))
             let y_overlap = Math.max(0, Math.min(rect1.py + rect1.height, rect2.py + rect2.height) - Math.max(rect1.py, rect2.py))
@@ -342,7 +342,7 @@
                     var command = event.results[last][0].transcript;
 
                     //display results on screen 
-                    result.textContent = 'Voice Input: ' + command + '.';
+                    speech_results.textContent = 'Voice Input: ' + command + '.';
 
                     //dom manipulation based on commands 
                     command = command.toLowerCase()
@@ -376,30 +376,7 @@
                         boat.vy = 0
                         draw()
                         start.onclick()
-                    } else if(command === 'yes'){
-                        document.body.classList.remove("body_");
-                        document.body.classList.add("body_2");
-                        start.onclick()
-                    } else if(command === 'no'){
-                        document.body.classList.remove("body_2");
-                        document.body.classList.add("body_");
-                        start.onclick()
                     }
-                    // else if(command.toLowerCase() === 'top red'){
-                    //     document.getElementById("top").classList.remove("top_");
-                    //     document.getElementById("top").classList.add("top_2");
-                    //     start.onclick()
-                    // }
-                    // else if(command.toLowerCase() === 'middle blue'){
-                    //     document.getElementById("middle").classList.remove("middle_");
-                    //     document.getElementById("middle").classList.add("middle_2");
-                    //     start.onclick()
-                    // }
-                    // else if(command.toLowerCase() === 'bottom yellow'){
-                    //     document.getElementById("bottom").classList.remove("bottom_");
-                    //     document.getElementById("bottom").classList.add("bottom_2");
-                    //     start.onclick()
-                    // }
                     else {
                         start.onclick()
                     }

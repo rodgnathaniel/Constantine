@@ -11,14 +11,10 @@
     -BODY-
 #####################################################*/
 
-.body_{
+body{
     background-color: rgba(176,224,230,10);
     /* background-image:url(https://wallpapercave.com/wp/02IiKRa.jpg)   
     } */
-}
-
-.body_2{
-    background-color: rgba(176,124,130,10);
 }
 
 
@@ -27,7 +23,7 @@
     -FORMS-
 #####################################################*/
 
-.reg_form {
+#reg_form {
     font-size: 120%;
     font-family: 'Parisienne', cursive;
     background-color:rgba(255,255,240, .6);
@@ -41,7 +37,7 @@
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
 
-.log_form{
+#log_form{
     display: flex;
     background-color:rgba(255,255,240, .6);
     font-size: 120%;
@@ -58,6 +54,7 @@
 /* #####################################################
     -BUTTONS-
 #####################################################*/
+
 .btn{
     display: flex;
     font-size: 100%;
@@ -72,25 +69,13 @@
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
 
-.btn_2{
-    display: flex;
-    font-size: 100%;
-    font-family: 'Parisienne', cursive;
-    background-color:rgba(255,127,80, .6);
-    border-radius: 8px 8px 8px 8px;
-    width: 8%;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 1.5% 16% 0% 46%;
-    text-align:center;
-}
-
 
 
 /* #####################################################
     -NAVIGATION BAR-
 #####################################################*/
-.sticky {
+
+#menu_sticky {
     position: -webkit-sticky;
     position: sticky;
     justify-content:space-evenly;
@@ -165,7 +150,7 @@ a{
     -TITLE and IMAGE-
 #####################################################*/
 
-#constantine {
+#constantine_title {
     text-shadow: 1.5px 1.5px rgba(255,255,240, .7);
     font-size: 266%;
     font-family: 'Parisienne', cursive;
@@ -175,7 +160,7 @@ a{
     margin-bottom:1%
 }
 
-.flex_boat {
+#flex_boat {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -183,7 +168,7 @@ a{
     margin: 0% 15% 0% 45%;
 }
 
-#boat {
+#boat_image {
     width: 28%;
 }
 
@@ -192,6 +177,7 @@ a{
 /* #####################################################
     -STOP WATCH-
 #####################################################*/
+
 #stopwatch {
     color: black;
     background-color: rgba(176,224,230,10);
@@ -201,13 +187,12 @@ a{
     flex-direction:row;
     justify-content:center;
     font-family: 'Share Tech Mono', monospace;
-    /* padding: 1%; */
-    
 }
 
 /* #####################################################
     -RANDOM TEXT-
 #####################################################*/
+
 #level_display {
     text-align: center;
     font-size: 90%;
@@ -217,50 +202,14 @@ a{
     flex-wrap: wrap;
     margin: 0% 0% 0% 9%;
 }
-.goodbye {
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.hello {
-    background-color:rgba(255,255,240, .6);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 1% 15% 0% 37%;
-    flex-wrap: wrap;
-    width:25%;
-    height: 10%;
-    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
-}
 
-.hello_2 {
-    background-color:rgba(255,127,80, .6);
+.center_text {
     text-align: center;
     font-size: 120%;
     font-family: 'Parisienne', cursive;
     display: flex;
     justify-content: center;
-    margin: 1% 15% 0% 37%;
     flex-wrap: wrap;
-    width:25%;
-    height: 10%;
-    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
-}
-
-#q{
-    font-size: 160%;
-    font-family: 'Parisienne', cursive;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 1% 0% 1% 0%;
 }
 
 
@@ -269,7 +218,7 @@ a{
     -SPEECH RECOGNITION RESULTS-
 #####################################################*/
 
-.results {
+.speech_results {
     background-color:rgba(255,255,240, .6);
     text-align: center;
     font-size: 90%;
@@ -294,11 +243,13 @@ a{
     border: 1px solid black;
     margin: .05% 9% 1% 9%;
 }
+
 .cnv_loss{
     background-color:rgba(205,92,92,.7);  
     border: 1px solid black;
     margin: .05% 9% 1% 9%;
 }
+
 .cnv_win{
     background-image:url(https://ae01.alicdn.com/kf/HTB1g.KlOFXXXXbNXVXXq6xXFXXXp/Uang-koin-emas-bajak-laut-peta-keberuntungan-Dekorasi-Rumah-Canvas-Poster-Cetak.jpg);   
     border: 1px solid black;
@@ -308,91 +259,35 @@ a{
 
 
 /* #####################################################
-    -FLAG-
+    -INSTRUCIONS PAGE-
 #####################################################*/
-/* 
-.top_{
-    background-color:rgba(230,230,250, .6);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
-.top_2{
-    background-color:rgba(220,20,60,1);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
-.middle_{
-    background-color:rgba(230,230,250, .6);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
-.middle_2{
-    background-color:rgba(30,144,255,1);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
-.bottom_{
-    background-color:rgba(230,230,250, .6);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
-.bottom_2{
-    background-color:rgba(255,215,0,1);
-    text-align: center;
-    font-size: 120%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    margin: 0% 15% 0% 40%;
-    flex-wrap: wrap;
-    width:20%;
-    height: 5%;
-}
- */
 
-
-
-/* 
-.boat_sel {
-    color: black;
+#instructions {
     background-color:rgba(255,255,240, .6);
+    border-radius: 8px 8px, 8px 8px;
+    text-align: center;
+    font-size: 160%;
+    font-family: 'Parisienne', cursive;
     display: flex;
     justify-content: center;
+    margin: 1% 15% 1% 40%;
     flex-wrap: wrap;
-    width: 100%;
-} */
+    width:20%;
+    height: 5%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+
+#controls {
+    background-color:rgba(255,255,240, .6);
+    border-radius: 8px, 8px, 8px, 8px;
+    text-align: center;
+    font-size: 120%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    margin: 1% 15% 1% 40%;
+    flex-wrap: wrap;
+    width:20%;
+    height: 3.5%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}

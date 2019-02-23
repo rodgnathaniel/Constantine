@@ -3,8 +3,8 @@
 {% block content %}
 
 {% for game in games %}
-    <p>{{ game.won }}
-    <p>{{ game.time }}</p>
+    <p class="center_text">Game Win: {{ game.won }}</p>
+    <p class="center_text">Seconds: {{ game.time }}</p>
     <hr>
 {% endfor %}
 

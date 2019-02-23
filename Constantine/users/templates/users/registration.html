@@ -6,8 +6,8 @@
     <div>
         <form method="POST">
             {% csrf_token %}
-            <fieldset class="reg_form">
-                <legend class="goodbye">Join</legend>
+            <fieldset id="reg_form">
+                <legend class="center_text">Join</legend>
                 {{ form|crispy }}
             </fieldset>
             <div>

@@ -3,7 +3,7 @@
     <div>
         <form method="POST">
             {% csrf_token %}
-            <fieldset class="log_form">
+            <fieldset id="log_form">
                 <legend>Welcome</legend>
                 {{ form.as_p }}
             </fieldset>
