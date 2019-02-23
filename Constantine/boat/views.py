@@ -19,6 +19,11 @@ def scores_view(request):
     return render(request, "boat/scores.html", context)
 
 
+def instructions_view(request):
+
+    return render(request, "boat/instructions.html", {})
+
+
 def save_game(request):
     
     data = json.loads(request.body)
