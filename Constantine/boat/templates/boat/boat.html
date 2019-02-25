@@ -18,12 +18,12 @@
     </div>
 
 
-    <!-- Manual button to start game -->
+    <!-- Manual button to start game / voice recognition -->
     <button id="start_game" class="btn">Start Game</button>
-    <button id="start" style="display:none"></button>
+    <button id="start_listening" style="display:none"></button>
 
 
-    <!-- save game button -->
+    <!-- save game button --> 
     <button id="save_game" style="display:none"></button>
 
 
@@ -37,7 +37,7 @@
     </div>
 
 
-    <!-- level -->
+    <!-- display level -->
     <span id="level_display"></span>
 
 
@@ -45,7 +45,7 @@
     <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
 
 
-    <!-- Load boat images (invisible) to be drawn in canvas -->
+    <!-- Load boat images to be drawn in canvas -->
     <image id="classic_boat" src="{% static 'boat/boat.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
 
@@ -64,7 +64,7 @@
         // declare speech recognition results and start button 
         var r = document.querySelector('#speech_results');
         var start_game = document.querySelector('#start_game');
-        var start = document.querySelector('#start');
+        var start_listening = document.querySelector('#start_listening');
 
 
         // declare clock
@@ -142,7 +142,7 @@
         }
 
 
-//-----------------------JS-FUNCTIONS-------------------------------------------------------------------------------------------------------
+//-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
 
 
         //function for drawing objects on canvas
@@ -175,7 +175,7 @@
             ctx.drawImage(long_boat, enemy2.px, enemy2.py, enemy2.width, enemy2.height);                      
         }
         
-
+        //send users game data to database
         function save_game(won) {
             game_time = date.getMinutes()*60 + date.getSeconds()
 
@@ -317,14 +317,14 @@
             game_win = 0
             game_loss = 0
             start_clock()
-            start.onclick()
+            start_listening.onclick()
             draw()
             window.requestAnimationFrame(main_loop);
             this.disabled = true
         }
         
         //speech recognition function
-        start.onclick = function () {
+        start_listening.onclick = function () {
             if ('webkitSpeechRecognition' in window) {
                 var speechRecognizer = new webkitSpeechRecognition();
 
@@ -350,19 +350,19 @@
                         //ball.py -= 10
                         boat.vy = -0.84
                         draw()
-                        start.onclick()
+                        start_listening.onclick()
                     } else if (command === 'south' || command[0] == 's') {
                         boat.vy = 0.84
                         draw()
-                        start.onclick()
+                        start_listening.onclick()
                     } else if (command === 'west' || command[0] == 'w') {
                         boat.vx = -0.84
                         draw()
-                        start.onclick()
+                        start_listening.onclick()
                     } else if (command === 'east' || command[0] == 'e') {
                         boat.vx = 0.84
                         draw()
-                        start.onclick()
+                        start_listening.onclick()
                     } else if (command === 'faster' || command[0] == 'f') {
                         if (boat.vy || boat.vx < 0) {
                             boat.vx + -0.2
@@ -375,10 +375,10 @@
                         boat.vx = 0
                         boat.vy = 0
                         draw()
-                        start.onclick()
+                        start_listening.onclick()
                     }
                     else {
-                        start.onclick()
+                        start_listening.onclick()
                     }
                 }
             }
