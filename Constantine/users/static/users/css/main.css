@@ -239,7 +239,13 @@ a{
 #####################################################*/
 
 .cnv{
-    background-image:url(https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4472265.jpg);   
+    background-image:url(/static/mid_evil_map_5.png);   
+    border: 1px solid black;
+    margin: .05% 9% 1% 9%;
+}
+
+.cnv_2{
+    background-image:url(/static/blue_web.jpg);   
     border: 1px solid black;
     margin: .05% 9% 1% 9%;
 }

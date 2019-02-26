@@ -11,6 +11,13 @@ import json
 def boat_view(request):
 
     return render(request, "boat/boat.html", {})
+    
+
+def level_2_view(request):
+
+    return render(request, "boat/boat_level_2.html", {})
+
+
 
 
 def scores_view(request):
@@ -36,3 +43,5 @@ def save_game(request):
 
 
 
+# use .count with the django orm to count the number of wins and losses
+# calculate average play time?
