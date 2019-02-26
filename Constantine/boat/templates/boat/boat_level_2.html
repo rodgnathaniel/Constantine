@@ -1,4 +1,4 @@
-{% extends "users/home_base.html" %}
+{% extends "users/base.html" %}
 {% load static %}
 {% block content %}
 
@@ -6,89 +6,56 @@
 <!--#################################################################################################################################
 --------------------------HTML------------------------------------------------------------------------------------------------
 #####################################################################################################################################-->
- <!-- Display who is logged in -->
- <span class="center_text">Ahoy Captain {{ request.user }}!</span>
 
- <div class="flexboat">
-     <div id="boat">
-         <a href="{% url 'boat:home' %}">
-             <image id="title_image" src="{% static 'boat/constantine.png' %}"/>
-         </a>
-     </div>
+
+    <!-- Manual button to start game / voice recognition -->
+    <button id="start_listening" style="display:none"></button>   
+  
+
+    <!-- save game button --> 
+    <button id="save_game" style="display:none"></button>
+
 
      <!-- Speech Recognition Results -->
      <div class="speech_results">
-         <span id="speech_results"></span>
-     </div>
+        <span id="speech_results"></span>
+    </div>
+
+
+    <div id="level_start_clock">
+        <!-- display level -->
+        <span id="level_display"></span>
+
+        <!-- start game button -->
+        <button id="start_game" class="start_btn">Start Game</button>
+
+        <!-- display clock -->
+        <div id="stopwatch">
+            <div id="display_minutes"></div>
+                <span>:</span>
+            <div id="display_seconds"></div>
+                <span>:</span>
+            <div id="display_millisec"></div>
+        </div>
+    </div>
+
+
+    <!-- Setting up canvas -->
+    <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
+
+
+    <!-- Display user and scores -->
+    <div id="user_stats">
+        <p class="user_text">Ahoy Captain {{ request.user }}!</p>
+        <p class="user_text">Won: {{ wins }}</p>
+        <p class="user_text">Lost: {{ losses }}</p>
+        <p class="user_text">Average Time: {{ average_time }}</p>
+    </div>
  
-     <!-- Manual button to start game / voice recognition -->
-
-     <button id="start_listening" style="display:none"></button>
- 
- 
- 
-
-
-
- 
-   
- </div>
-   
-
-
-
-
- <!-- save game button --> 
- <button id="save_game" style="display:none"></button>
-
-
-
-
-
-
-
- <div id="level_start_clock">
-         
-     <!-- display level -->
-     <span id="level_display"></span>
-     <button id="start_game" class="start_btn">Start Game</button>
-     <!-- display clock -->
-     <div id="stopwatch">
-         
-         <div id="display_minutes"></div>
-             <span>:</span>
-         <div id="display_seconds"></div>
-             <span>:</span>
-         <div id="display_millisec"></div>
-     </div>
-
- </div>
-
-
-
-
- <!-- Setting up canvas -->
- <canvas id="cnv" class="cnv_2" width="1000" height="375"></canvas>
-
-
- <!-- Display users scores -->
- <div id="user_stats">
-     <p class="right_text">Won: {{ wins }}</p>
-     <p class="right_text">Lost: {{ losses }}</p>
-     <p class="right_text">Average Time: {{ average_time }}</p>
- </div>
-
-
 
    <!-- Load boat images to be drawn in canvas -->
    <image id="classic_boat" src="{% static 'boat/boat.png' %}" style="display:none"/>
    <image id="long_boat" src="{% static 'boat/steam_airship.png' %}" style="display:none"/>
-
-
-
- 
-
-
  
 
 
