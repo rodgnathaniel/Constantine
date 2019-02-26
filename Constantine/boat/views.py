@@ -37,6 +37,22 @@ def instructions_view(request):
     return render(request, "boat/instructions.html", {})
 
 
+def scores_view(request):
+    game_times = []
+    games = Game.objects.all()
+    for game in games:
+        game_times.append(game.time)
+    game_times = sorted(game_times)
+    fastest_game = game_times[8000]
+
+    context = {'fastest_game':fastest_game}
+
+    return render(request, "boat/scores.html", context)
+            
+
+
+
+
 def save_game(request):
     
     data = json.loads(request.body)
