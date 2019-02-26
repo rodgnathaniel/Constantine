@@ -1,11 +1,9 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-
-{% for game in games %}
-    <p class="center_text">Game Win: {{ game.won }}</p>
-    <p class="center_text">Seconds: {{ game.time }}</p>
+    <p class="center_text">Average Time: {{ average_time }}</p>
+    <p class="center_text">Games Won: {{ wins }}</p>
+    <p class="center_text">Games Lost: {{ losses }}</p>
     <hr>
-{% endfor %}
 
 {% endblock %}

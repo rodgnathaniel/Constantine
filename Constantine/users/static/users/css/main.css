@@ -18,6 +18,27 @@ body{
 }
 
 
+.flexboat{
+    display: flex;
+    align-items: flex-start;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+}
+.flexboat_2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#user_stats{
+    display: flex;
+    align-items: flex-start;
+    flex-direction:row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
 
 /* #####################################################
     -FORMS-
@@ -69,6 +90,15 @@ body{
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
 
+.start_btn{
+    font-size: 100%;
+    font-family: 'Parisienne', cursive;
+    background-color:rgba(255,255,240, .6);
+    border-radius: 8px 8px 8px 8px;
+    width: 8%;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+
 
 
 /* #####################################################
@@ -81,7 +111,7 @@ body{
     justify-content:space-evenly;
     flex-wrap: wrap;
     top: 5%;
-    margin-left: 9%;
+    margin-left: 86%;
 }
 /* Dropdown Button */
 .dropbtn {
@@ -150,26 +180,12 @@ a{
     -TITLE and IMAGE-
 #####################################################*/
 
-#constantine_title {
-    text-shadow: 1.5px 1.5px rgba(255,255,240, .7);
-    font-size: 266%;
-    font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom:1%
+#boat {
+    margin: 0% 1% 1% 11.7%;
 }
 
-#flex_boat {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 0% 15% 0% 45%;
-}
-
-#boat_image {
-    width: 28%;
+#title_image {
+    width: 50%;
 }
 
 
@@ -177,6 +193,14 @@ a{
 /* #####################################################
     -STOP WATCH-
 #####################################################*/
+#level_start_clock {
+    display: flex;
+    align-items: flex-start;
+    flex-direction:row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-bottom: 1%;
+}
 
 #stopwatch {
     color: black;
@@ -194,13 +218,8 @@ a{
 #####################################################*/
 
 #level_display {
-    text-align: center;
     font-size: 90%;
     font-family: 'Parisienne', cursive;
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
-    margin: 0% 0% 0% 9%;
 }
 
 .center_text {
@@ -212,6 +231,16 @@ a{
     flex-wrap: wrap;
 }
 
+.right_text {
+    text-align: right;
+    font-size: 90%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+}
+
+
 
 
 /* #####################################################
@@ -220,13 +249,14 @@ a{
 
 .speech_results {
     background-color:rgba(255,255,240, .6);
-    text-align: center;
+    /* text-align: center; */
     font-size: 90%;
     font-family: 'Share Tech Mono', monospace;
-    display: flex;
+    display: flex; 
     justify-content: center;
-    margin: 1% 15% 0% 37%;
-    flex-wrap: wrap;
+    align-content: flex-end; 
+    margin: 3% 20% 0% 0%;
+    /* flex-wrap: wrap; */
     width:25%;
     height: 3%;
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);

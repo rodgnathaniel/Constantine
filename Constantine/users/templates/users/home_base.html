@@ -8,15 +8,6 @@
     </head>
     <body>
         {% include 'users/nav_redirect.html' %}
-  
-        <div class="flexboat_2">
-            <div id="boat">
-                <a href="{% url 'boat:home' %}">
-                    <image id="title_image" src="{% static 'boat/constantine.png' %}"/>
-                </a>
-            </div>
-        </div>
-
 
         {% if messages %}
             {% for message in messages %}

@@ -9,22 +9,28 @@ import json
 
 
 def boat_view(request):
-
-    return render(request, "boat/boat.html", {})
+    wins = 0
+    losses = 0
+    average_time = 0
+    game_count = 0
+    if request.user.is_authenticated:
+        games = request.user.game_set.all()
+        for game in games:
+            game_count += 1
+            average_time += game.time
+            if game.won:
+                wins += 1
+            else:
+                losses +=1
+        average_time /= game_count
+    context = {'wins':wins, 'losses':losses, 'average_time':average_time}
+    return render(request, "boat/boat.html", context)
     
 
 def level_2_view(request):
 
     return render(request, "boat/boat_level_2.html", {})
-
-
-
-
-def scores_view(request):
-    games = request.user.game_set.all()
-    context = {'games':games}
-    return render(request, "boat/scores.html", context)
-
+    
 
 def instructions_view(request):
 

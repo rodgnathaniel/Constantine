@@ -1,4 +1,4 @@
-{% extends "users/base.html" %}
+{% extends "users/home_base.html" %}
 {% load static %}
 {% block content %}
 
@@ -8,41 +8,78 @@
 #####################################################################################################################################-->
 
 
-    <!-- Display who is logged in -->
+  <!-- Display who is logged in -->
     <span class="center_text">Ahoy Captain {{ request.user }}!</span>
 
+    <div class="flexboat">
+        <div id="boat">
+            <a href="{% url 'boat:home' %}">
+                <image id="title_image" src="{% static 'boat/constantine.png' %}"/>
+            </a>
+        </div>
 
-    <!-- Speech Recognition Results -->
-    <div class="speech_results">
-        <span id="speech_results"></span>
+        <!-- Speech Recognition Results -->
+        <div class="speech_results">
+            <span id="speech_results"></span>
+        </div>
+    
+        <!-- Manual button to start game / voice recognition -->
+
+        <button id="start_listening" style="display:none"></button>
+    
+    
+    
+
+
+   
+    
+      
     </div>
+      
 
-
-    <!-- Manual button to start game / voice recognition -->
-    <button id="start_game" class="btn">Start Game</button>
-    <button id="start_listening" style="display:none"></button>
+  
 
 
     <!-- save game button --> 
     <button id="save_game" style="display:none"></button>
 
+ 
 
-    <!-- display clock -->
-    <div id="stopwatch">
-        <div id="display_minutes"></div>
-            <span>:</span>
-        <div id="display_seconds"></div>
-            <span>:</span>
-        <div id="display_millisec"></div>
+
+
+ 
+
+    <div id="level_start_clock">
+            
+        <!-- display level -->
+        <span id="level_display"></span>
+        <button id="start_game" class="start_btn">Start Game</button>
+        <!-- display clock -->
+        <div id="stopwatch">
+            
+            <div id="display_minutes"></div>
+                <span>:</span>
+            <div id="display_seconds"></div>
+                <span>:</span>
+            <div id="display_millisec"></div>
+        </div>
+
     </div>
 
 
-    <!-- display level -->
-    <span id="level_display"></span>
 
 
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
+
+
+    <!-- Display users scores -->
+    <div id="user_stats">
+        <p class="right_text">Won: {{ wins }}</p>
+        <p class="right_text">Lost: {{ losses }}</p>
+        <p class="right_text">Average Time: {{ average_time }}</p>
+    </div>
+ 
 
 
     <!-- Load boat images to be drawn in canvas -->
@@ -152,7 +189,6 @@
                     }
                 ).then(function(response) {
                 })
-
         }
 
 
@@ -212,7 +248,7 @@
                 boat.py = 270
                 boat.vx = 0
                 boat.vy = 0
-
+                // if {% request.user.is_authenticated %}
                 save_game(false)
 
                 stop_clock()
