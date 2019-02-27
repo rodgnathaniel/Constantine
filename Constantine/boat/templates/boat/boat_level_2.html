@@ -41,7 +41,7 @@
 
 
     <!-- Setting up canvas -->
-    <canvas id="cnv" class="cnv" width="1000" height="375"></canvas>
+    <canvas id="cnv" class="cnv_2" width="1000" height="375"></canvas>
 
 
     <!-- Display user and scores -->
@@ -258,7 +258,16 @@
 
                 stop_clock()
                 date.setHours(0, 0, 0, 0)
-               speech_results.textContent = 'GREAT JOB'
+                speech_results.textContent = 'GREAT JOB'
+                setInterval(function() {
+                    if(time > 0) {
+                    time--;
+                    } else {
+                    location.href="{% url 'boat:level_3' %}"
+                    }
+                },1000)
+            }
+       
             }
 
 

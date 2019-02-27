@@ -6,7 +6,7 @@
 <!--#################################################################################################################################
 --------------------------HTML------------------------------------------------------------------------------------------------
 #####################################################################################################################################-->
-
+    <audio src="{% static 'boat/sound/pirates_.wav' %}" id="theme_song"></audio>
 
     <!-- Manual button to start game / voice recognition -->
     <button id="start_listening" style="display:none"></button>   
@@ -65,8 +65,14 @@
 
 <script type="text/javascript">
 
+
+
         // information for database
         var game_time = 0
+
+
+        //sound affects 
+        //var theme_song;
 
 
         // declare speech recognition results and start button 
@@ -162,7 +168,9 @@
                 })
         }
 
-
+        function preload() {
+            theme_song = loadSound("boat/test.mp3");
+        }
         //function for drawing objects on canvas
         function draw() {
             //clear canvas each time function is called
@@ -246,10 +254,7 @@
                     } else {
                     location.href="{% url 'boat:level_2' %}"
                     }
-
                 },1000)
-
-                lo
             }
        
 
@@ -338,6 +343,10 @@
 
         //start game button triggers clock and speech recognition 
         start_game.onclick = function() {
+            
+            let theme_song = document.querySelector('#theme_song')
+            theme_song.play()
+
             cnv.classList.remove("cnv_loss");
             cnv.classList.remove("cnv_win");
             cnv.classList.add("cnv");

@@ -30,6 +30,11 @@ def boat_view(request):
 def level_2_view(request):
 
     return render(request, "boat/boat_level_2.html", {})
+
+
+def level_3_view(request):
+
+    return render(request, "boat/boat_level_3.html", {})
     
 
 def instructions_view(request):
