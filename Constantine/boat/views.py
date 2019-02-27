@@ -21,8 +21,9 @@ def boat_view(request):
             if game.won:
                 wins += 1
             else:
-                losses +=1
-        average_time /= game_count
+                losses += 1
+        if average_time != 0:
+            average_time /= game_count
     context = {'wins':wins, 'losses':losses, 'average_time':average_time}
     return render(request, "boat/boat.html", context)
     

@@ -74,6 +74,8 @@
         //sound affects 
         //var theme_song;
 
+        let game_running = false
+
 
         // declare speech recognition results and start button 
         var r = document.querySelector('#speech_results');
@@ -220,6 +222,7 @@
         function main_loop() {
 
             if (check_collision(boat, enemy) || check_collision(boat, enemy2)) { // lose
+                game_running = false
                 cnv.classList.remove("cnv");
                 cnv.classList.add("cnv_loss");
 
@@ -233,6 +236,7 @@
                 stop_clock()
                 date.setHours(0, 0, 0, 0)
                 speech_results.textContent = 'TRY AGAIN'
+                start_game.disabled = false
             } else if (check_collision(boat, land)) { // win
                 cnv.classList.remove("cnv");
                 cnv.classList.add("cnv_win");
@@ -299,7 +303,9 @@
                     enemy.vy = 0
             }
             draw()
-            window.requestAnimationFrame(main_loop);
+            if (game_running) {
+                window.requestAnimationFrame(main_loop);
+            }
         }
 
 
@@ -357,6 +363,7 @@
             start_clock()
             start_listening.onclick()
             draw()
+            game_running = true
             window.requestAnimationFrame(main_loop);
             this.disabled = true
         }
