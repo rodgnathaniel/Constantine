@@ -1,0 +1,426 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<!--#################################################################################################################################
+--------------------------HTML------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+    <audio src="{% static 'boat/sound/pirates_.wav' %}" id="theme_song"></audio>
+
+    <!-- Manual button to start game / voice recognition -->
+    <button id="start_listening" style="display:none"></button>   
+  
+
+    <!-- save game button --> 
+    <button id="save_game" style="display:none"></button>
+
+
+     <!-- Speech Recognition Results -->
+     <div class="speech_results">
+        <span id="speech_results"></span>
+    </div>
+
+
+    <div id="level_start_clock">
+        <!-- display level -->
+        <span id="level_display"></span>
+
+        <!-- start game button -->
+        <button id="start_game" class="start_btn">Start Game</button>
+
+        <!-- display clock -->
+        <div id="stopwatch">
+            <div id="display_minutes"></div>
+                <span>:</span>
+            <div id="display_seconds"></div>
+                <span>:</span>
+            <div id="display_millisec"></div>
+        </div>
+    </div>
+
+
+    <!-- Setting up canvas -->
+    <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
+
+
+    <!-- Display user and scores -->
+    <div id="user_stats">
+        <span class="user_text">Ahoy Captain {{ request.user }}!</span>
+        <span class="user_text">Won: {{ wins }}</span>
+        <span class="user_text">Lost: {{ losses }}</span>
+        <span class="user_text">Average Time: {{ average_time }}</span>
+    </div>
+ 
+
+    <!-- Load boat images to be drawn in canvas -->
+    <image id="classic_boat" src="{% static 'boat/classic.png' %}" style="display:none"/>
+    <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
+
+
+<!--#################################################################################################################################
+--------------------------JAVA-SCRIPT------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+<script type="text/javascript">
+
+
+    // information for database
+    var game_time = 0
+
+
+    //sound affects 
+    //var theme_song;
+
+    let game_running = false
+
+
+    // declare speech recognition results and start button 
+    var r = document.querySelector('#speech_results');
+    var start_game = document.querySelector('#start_game');
+    var start_listening = document.querySelector('#start_listening');
+
+
+    // declare clock
+    let display_minutes = document.querySelector('#display_minutes')
+    let display_seconds = document.querySelector('#display_seconds')
+    let display_millisec = document.querySelector('#display_millisec')
+    let date = new Date()
+    date.setHours(0, 0, 0, 0)
+    let stopwatch_interval = null
+
+
+    //declare level display
+    let level_display = document.querySelector('#level_display')
+    level_display.textContent = 'Level 1'
+
+
+    let cnv = document.querySelector('#cnv');
+    cnv.backgroundColor = 'red';
+    let width = cnv.width
+    let height = cnv.height
+    let ctx = cnv.getContext('2d');
+
+    // declare boat images 
+    var long_boat = document.querySelector("#long_boat");
+    var classic_boat = document.querySelector("#classic_boat");
+
+
+    let player = {
+        px: 325,
+        py: 550,
+        vx: 0,
+        vy: 0,
+        width: 20,
+        height: 20
+    };
+
+    let left_wall = {
+        px: 0,
+        py: -9000,
+        vx: 0,
+        vy: 0,
+        width: 150,
+        height: 10000
+    }
+
+    let right_wall = {
+        px: cnv.width - 150,
+        py: -9000,
+        vx: 0,
+        vy: .0,
+        width: 150,
+        height: 10000
+    }
+
+    let floor = {
+        px: 0,
+        py: 610,    
+        vx: 0,
+        vy: 0,
+        width: 650,
+        height: 40
+    }
+
+
+
+//-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
+
+
+    //send users game data to database
+    function save_game(won) {
+        game_time = date.getMinutes()*60 + date.getSeconds()
+
+        axios.post("{% url 'boat:save_game' %}",
+                {
+                    game_time: game_time,
+                    won: won
+                }, {
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    }
+                }
+            ).then(function(response) {
+            })
+    }
+
+    function create_block() {
+        let random_px = chance.integer({ min: 150, max: 470 })
+        let random_vy = chance.floating({ min: .5, max: 1.2 })
+        let new_block = {
+            px: random_px,
+            py: 1,
+            vx: 0,
+            vy: random_vy,
+            width: 30,
+            height: 30,
+        }
+        return new_block
+    }
+
+    let blocks = []
+    let time = 1000000
+    let spawn_rate = 3000
+    setInterval(function() {
+        if(time > 0) {
+            time--;
+        }
+        blocks.push(create_block())
+    },spawn_rate)
+
+    let level = 0
+
+
+
+
+    //function for drawing objects on canvas
+    function draw() {
+        //clear canvas each time function is called
+        //ctx.clearRect(0, 0, cnv.width, cnv.height)
+        
+        ctx.fillStyle = `hsl(128,100%,${level*10}%)`
+        ctx.fillRect(0, 0, cnv.width, cnv.height)
+
+        
+                        
+        ctx.beginPath();
+        ctx.rect(left_wall.px, left_wall.py, left_wall.width, left_wall.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgb(160,82,45)';
+        ctx.fill()
+        
+        ctx.beginPath();
+        ctx.rect(right_wall.px, right_wall.py, right_wall.width, right_wall.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgb(160,82,45)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(player.px, player.py, player.width, player.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgb(102,205,170)';
+        ctx.fill()
+
+        for (let i=0; i<blocks.length; i++) {
+            ctx.beginPath();
+            ctx.rect(blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
+            ctx.lineWidth = 3;
+            ctx.fillStyle = 'rgb(70,130,180)';
+            ctx.fill()
+        }
+        ctx.beginPath();
+        ctx.rect(floor.px, floor.py, floor.width, floor.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgb(188,143,143)';
+        ctx.fill()
+
+    }
+    function main_loop() {
+
+        if (check_collision(player, right_wall)) { 
+
+            player.px -= 1
+            player.vx = 0
+            player.vy = 0
+        }
+        if (check_collision(player, left_wall)) {
+
+            player.px += 1
+            player.vx = 0
+            player.vy = 0
+
+        }
+        if (check_collision(player, floor)) {
+
+            player.py -= 25
+            player.vy = -4.3
+        }
+        for (let i=0; i<blocks.length; i++) {
+            if (check_collision(player, blocks[i])) {
+                player.vx = 0
+                player.vy = 0
+                player.px = 325
+                player.py = 550
+                level = 0
+                blocks = [] 
+
+            }
+        }
+
+                
+
+        //update position of objects in canvas
+        player.vy += .065
+
+        player.px += player.vx
+        player.py += player.vy
+
+        left_wall.px += left_wall.vx
+        left_wall.py += left_wall.vy
+
+        right_wall.px += right_wall.vx
+        right_wall.py += right_wall.vy
+        
+        for (let i=0; i<blocks.length; i++) {
+            blocks[i].px += blocks[i].vx
+            blocks[i].py += blocks[i].vy
+        }
+
+
+        if (player.py >= 600) {
+        
+            cnv.classList.remove("cnv2");
+            cnv.classList.add("cnv");
+            player.py -= 550
+            right_wall.py -= 550
+            left_wall.py -= 550
+            floor.py -= 550
+            level -= 1
+            if (level < 0) {
+                level = 0
+            }
+        }
+        if (player.py <= 0) {
+            
+            cnv.classList.remove("cnv");
+            cnv.classList.add("cnv2");
+            player.py += 550
+            right_wall.py += 550
+            left_wall.py += 550
+            floor.py += 550
+            level += 1
+            if (spawn_rate > 1500) {
+                spawn_rate -= 500
+            }
+
+            
+            blocks = []
+        }
+
+
+        draw()
+        window.requestAnimationFrame(main_loop);
+    }
+    window.requestAnimationFrame(main_loop);
+
+
+    // function for calculating the overlap between two rectangles
+    function check_collision(rect1, rect2) {
+        let x_overlap = Math.max(0, Math.min(rect1.px + rect1.width, rect2.px + rect2.width) - Math.max(rect1.px, rect2.px))
+        let y_overlap = Math.max(0, Math.min(rect1.py + rect1.height, rect2.py + rect2.height) - Math.max(rect1.py, rect2.py))
+        let overlapArea = x_overlap * y_overlap
+        return overlapArea != 0
+    }
+
+    //stop watch function 
+    function start_clock() {
+        if(stopwatch_interval === null){
+        stopwatch_interval = setInterval(function() {
+            date.setMilliseconds(date.getMilliseconds() + 100)
+            let millis = date.getMilliseconds()
+            if (millis == 0) {
+                millis = '000'
+            }
+            display_millisec.innerText = millis
+            display_seconds.innerText = date.getSeconds()
+            display_minutes.innerText = date.getMinutes()
+        }, 100)
+        }
+    }
+
+        function stop_clock() {
+            if(stopwatch_interval != null){
+             clearInterval(stopwatch_interval);
+             stopwatch_interval = null
+            }
+            display_millisec.innerText = 000
+            display_seconds.innerText = 0
+            display_minutes.innerText = 0
+         }
+
+    document.body.onkeyup = function(e) {
+
+        // detect space bar hit, call create_block, push the block onto the new array
+        if (e.keyCode == 32) {
+            player.vy = -4.3
+        }
+        if (player.vx == 0){
+            if (e.keyCode == 65) {
+                player.vx = -4.3
+            } else if (e.keyCode == 68) {
+                player.vx = 4.3
+            }
+        }
+    }
+
+    // //speech recognition function
+    // start_listening.onclick = function () {
+    //     if ('webkitSpeechRecognition' in window) {
+    //         var speechRecognizer = new webkitSpeechRecognition();
+
+    //         //set rules for speech recognition 
+    //         speechRecognizer.continuous = true;
+    //         speechRecognizer.interimResults = true;
+    //         speechRecognizer.lang = 'en-US';
+
+    //         //start speech recognition function 
+    //         speechRecognizer.start();
+
+    //         //function to process speech recognition results 
+    //         speechRecognizer.onresult = function(event) {
+    //             var last = event.results.length - 1;
+    //             var command = event.results[last][0].transcript;
+
+    //             //display results on screen 
+    //             speech_results.textContent = 'Voice Input: ' + command + '.';
+
+    //             //dom manipulation based on commands 
+    //             command = command.toLowerCase()
+    //             if (command === 'north' || command[0] == 'n') {
+    //                 boat.vy = -1
+    //                 draw()
+    //                 start_listening.onclick()
+    //             } else if (command === 'south' || command[0] == 's') {
+    //                 boat.vy = 1
+    //                 draw()
+    //                 start_listening.onclick()
+    //             } else if (command === 'west' || command[0] == 'w') {
+    //                 boat.vx = -1
+    //                 draw()
+    //                 start_listening.onclick()
+    //             } else if (command === 'east' || command[0] == 'e') {
+    //                 boat.vx = 1
+    //                 draw()
+    //                 start_listening.onclick()
+    //             } else if (command === 'halt' || command[0] == 'h') {
+    //                 boat.vx = 0
+    //                 boat.vy = 0
+    //                 draw()
+    //                 start_listening.onclick()
+    //             }else {
+    //                 start_listening.onclick()
+    //             }
+    //         }
+    //     }
+    // };
+</script>
+{% endblock %}

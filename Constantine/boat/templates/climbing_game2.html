@@ -4,22 +4,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.18/chance.min.js"></script>
         <style>
             .cnv {
-                background-color:rgb(139,0,0);
-                border: 1px solid black;
-                margin: .05% 9% 1% 23%;
-            }
-            .cnv2 {
-                background-color:rgb(178,34,34);
-                border: 1px solid black;
-                margin: .05% 9% 1% 23%;
-            }
-            .cnv3 {
-                background-color:rgb(220,20,60);
-                border: 1px solid black;
-                margin: .05% 9% 1% 23%;
-            }
-            .cnv4 {
-                background-color:rgb(205,92,92);
                 border: 1px solid black;
                 margin: .05% 9% 1% 23%;
             }
@@ -162,6 +146,19 @@
                     player.py -= 25
                     player.vy = -4.3
                 }
+                for (let i=0; i<blocks.length; i++) {
+                    if (check_collision(player, blocks[i])) {
+                        player.vx = 0
+                        player.vy = 0
+                        player.px = 325
+                        player.py = 550
+                        level = 0
+                        blocks = [] 
+
+                    }
+                }
+
+                        
 
                 //update position of objects in canvas
                 player.vy += .065
@@ -240,9 +237,6 @@
                     }
                 }
             }
-      
-            
-
         </script>
     </body>
 </html>
