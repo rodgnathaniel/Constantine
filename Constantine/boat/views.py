@@ -72,10 +72,11 @@ def save_game(request):
     
     data = json.loads(request.body)
     game_time = data['game_time']
-    won = data['won']
+    game_level = data['game_level']
+    game_score = data['game_score']
     gold_collected = data['gold_collected']
     player = request.user
-    game = Game(gold=gold_collected, time=game_time, won=won, player=player)
+    game = Game(score=game_score, level=game_level, gold=gold_collected, time=game_time, player=player)
     game.save()
     return HttpResponse('ok')
 

@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 
 class Game(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE)
-    won = models.BooleanField()
-    gold = models.IntegerField()
     time = models.IntegerField() # the duration of the game in seconds
+    level = models.IntegerField()
+    gold = models.IntegerField()
+    score = models.IntegerField()
+
     timestamp = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
