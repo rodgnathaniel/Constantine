@@ -65,7 +65,7 @@
 <script type="text/javascript">
 
     // information for database
-    let level = 4
+    let level = 1
     var game_time = 0
     let gold = 0
     let current_score = document.querySelector('#current_score')
@@ -96,7 +96,7 @@
 
     //declare level display
     let level_display = document.querySelector('#level_display')
-    level_display.textContent = 'Level 1'
+
 
 
     //declare canvas
@@ -281,6 +281,7 @@
     }
     
     function main_loop() {
+        level_display.innerText = 'Level ' + level
 
         //equation to get players current score
         game_time = date.getMinutes()*60 + date.getSeconds()
@@ -374,8 +375,9 @@
                 gold_blocks[i].py -= 550
             }
             level -= 1
-            if (level < 4) {
-                level = 4
+            level_display.innerText = 'Level ' + level
+            if (level < 1) {
+                level = 1
             }
         }
         if (player.py <= 0) {
@@ -385,6 +387,7 @@
             left_wall.py += 550
             floor.py += 550
             level += 1
+            level_display.innerText = 'Level ' + level
 
             gold_blocks = []
             blocks = []
