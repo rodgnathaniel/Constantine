@@ -8,19 +8,20 @@ import json
 
 
 
-def boat_view(request):
+# def boat_view(request):
 
-    return render(request, "boat/boat.html", {})
+#     return render(request, "boat/boat.html", {})
     
 
-def level_2_view(request):
+# def level_2_view(request):
 
-    return render(request, "boat/boat_level_2.html", {})
+#     return render(request, "boat/boat_level_2.html", {})
 
 
-def level_3_view(request):
+# def level_3_view(request):
 
-    return render(request, "boat/boat_level_3.html", {})
+#     return render(request, "boat/boat_level_3.html", {})
+
 
 def boating_game_view(request):
         # wins = 0
@@ -44,8 +45,6 @@ def boating_game_view(request):
     context = {'average_time':average_time, 'gold':gold}
     return render(request, "boat/boating_game.html", context)
 
- 
-    
 
 def instructions_view(request):
 
@@ -64,9 +63,6 @@ def scores_view(request):
 
     return render(request, "boat/scores.html", context)
             
-
-
-
 
 def save_game(request):
     

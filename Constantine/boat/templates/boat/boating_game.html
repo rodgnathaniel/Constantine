@@ -54,7 +54,7 @@
  
 
     <!-- Load boat images to be drawn in canvas -->
-    <image id="classic_boat" src="{% static 'boat/classic.png' %}" style="display:none"/>
+    <image id="scorbunny" src="{% static 'boat/scorbun.png' %}" style="display:none"/>
     <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
 
 
@@ -105,7 +105,7 @@
 
     // declare boat images 
     var long_boat = document.querySelector("#long_boat");
-    var classic_boat = document.querySelector("#classic_boat");
+    var scorbunny = document.querySelector("#scorbunny");
 
 
     let player = {
@@ -113,8 +113,8 @@
         py: 550,
         vx: 0,
         vy: 0,
-        width: 20,
-        height: 20
+        width: 40,
+        height: 40
     };
 
     let left_wall = {
@@ -182,8 +182,8 @@
             py: 1,
             vx: 0,
             vy: random_vy,
-            width: 30,
-            height: 30,
+            width: 20,
+            height: 20,
         }
         return new_block
     }
@@ -210,7 +210,7 @@
             time--;
         }
         blocks.push(create_block())
-    },1250)
+    },1500)
 
     setInterval(function() {
         if(time > 0) {
@@ -229,7 +229,7 @@
         //clear canvas each time function is called
         //ctx.clearRect(0, 0, cnv.width, cnv.height)
         
-        ctx.fillStyle = `hsl(128,100%,${level*10}%)`
+        ctx.fillStyle = `hsl(128,100%,${level*3}%)`
         ctx.fillRect(0, 0, cnv.width, cnv.height)
 
         
@@ -246,11 +246,13 @@
         ctx.fillStyle = 'rgb(160,82,45)';
         ctx.fill()
 
-        ctx.beginPath();
-        ctx.rect(player.px, player.py, player.width, player.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgb(102,205,170)';
-        ctx.fill()
+        ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
+
+        // ctx.beginPath();
+        // ctx.rect(player.px, player.py, player.width, player.height);
+        // ctx.lineWidth = 3;
+        // ctx.fillStyle = 'rgb(102,205,170)';
+        // ctx.fill()
 
         for (let i=0; i<blocks.length; i++) {
             ctx.beginPath();
@@ -274,11 +276,16 @@
         ctx.fill()
 
     }
+    
     function main_loop() {
 
         //equation to get players current score
         game_time = date.getMinutes()*60 + date.getSeconds()
-        score = game_time * level * gold
+        if (gold != 0) {
+            score = game_time * level * gold
+        } else {
+            score = game_time * level
+        }
         current_score.innerText = score
         
 
@@ -307,7 +314,10 @@
         for (let i=0; i<blocks.length; i++) { 
             if (check_collision(player, blocks[i])) { //game lost
                 game_running = false
+                start_game.disabled = false 
                 save_game()
+                stop_clock()
+                date.setHours(0, 0, 0, 0)
                 player.vx = 0
                 player.vy = 0
                 player.px = 325
@@ -370,7 +380,10 @@
         }
 
         draw()
-        window.requestAnimationFrame(main_loop);
+        
+        if (game_running) {
+            window.requestAnimationFrame(main_loop);
+        }
     }
 
 
@@ -410,7 +423,7 @@
 
     //keyboard commands
     document.body.onkeyup = function(e) {
-        if (e.keyCode == 32 || e.keyCode == 38) {
+        if (e.keyCode == 32 || e.keyCode == 38 || e.keyCode == 87) {
             player.vy = -4.3
             console.log(gold)
         }
