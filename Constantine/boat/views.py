@@ -80,6 +80,3 @@ def save_game(request):
     return HttpResponse('ok')
 
 
-
-# use .count with the django orm to count the number of wins and losses
-# calculate average play time?
