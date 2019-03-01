@@ -54,8 +54,9 @@
  
 
     <!-- Load boat images to be drawn in canvas -->
-    <image id="scorbunny" src="{% static 'boat/scorbun.png' %}" style="display:none"/>
-    <image id="long_boat" src="{% static 'boat/longboat.png' %}" style="display:none"/>
+    <image id="scorbunny" src="{% static 'boat/scorbunny.png' %}" style="display:none"/>
+    <image id="grepa" src="{% static 'boat/grepa_berry.png' %}" style="display:none"/>
+    <image id="water" src="{% static 'boat/cutedroplet.png' %}" style="display:none"/>
 
 
 <!--#################################################################################################################################
@@ -106,8 +107,9 @@
     let ctx = cnv.getContext('2d');
 
     // declare boat images 
-    var long_boat = document.querySelector("#long_boat");
+    var grepa = document.querySelector("#grepa");
     var scorbunny = document.querySelector("#scorbunny");
+    var water = document.querySelector("#water");
 
     //user sprite
     let player = {
@@ -116,7 +118,7 @@
         vx: 0,
         vy: 0,
         width: 40,
-        height: 40
+        height: 60
     };
 
     //walls inside canvas
@@ -217,14 +219,14 @@
             time--;
         }
         blocks.push(create_block())
-    },1500)
+    },2200)
 
     setInterval(function() {
         if(time > 0) {
             time_2--;
         }
         gold_blocks.push(create_gold())
-    },3000)
+    },3200)
 
 
     //function for drawing objects on canvas
@@ -259,19 +261,16 @@
         // ctx.fill()
 
         for (let i=0; i<blocks.length; i++) {
-            ctx.beginPath();
-            ctx.rect(blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
-            ctx.lineWidth = 3;
-            ctx.fillStyle = 'rgb(102,51,153)';
-            ctx.fill()
+            ctx.drawImage(water, blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
+            // ctx.beginPath();
+            // ctx.rect(blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
+            // ctx.lineWidth = 3;
+            // ctx.fillStyle = 'rgb(102,51,153)';
+            // ctx.fill()
         }
 
         for (let i=0; i<gold_blocks.length; i++) {
-            ctx.beginPath();
-            ctx.rect(gold_blocks[i].px, gold_blocks[i].py, gold_blocks[i].width, gold_blocks[i].height);
-            ctx.lineWidth = 3;
-            ctx.fillStyle = 'rgb(255,215,0)';
-            ctx.fill()
+            ctx.drawImage(grepa, gold_blocks[i].px, gold_blocks[i].py, gold_blocks[i].width, gold_blocks[i].height);
         }
         ctx.beginPath();
         ctx.rect(floor.px, floor.py, floor.width, floor.height);
