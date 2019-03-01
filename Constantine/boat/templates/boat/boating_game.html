@@ -47,9 +47,9 @@
     <!-- Display user and scores -->
     <div id="user_stats">
         <span class="user_text">Ahoy Captain {{ request.user }}!</span>
-        <span class="user_text">Won: {{ wins }}</span>
-        <span class="user_text">Lost: {{ losses }}</span>
-        <span class="user_text">Average Time: {{ average_time }}</span>
+        <span id="current_score" class="user_text">Current Score</span>
+        <!-- <span class="user_text">Average Time: {{ average_time }}</span> -->
+        <span class="user_text">Gold: {{ gold }}</span>
     </div>
  
 
@@ -92,6 +92,8 @@
     //declare level display
     let level_display = document.querySelector('#level_display')
     level_display.textContent = 'Level 1'
+
+    let current_score = document.querySelector('#current_score')
 
 
     let cnv = document.querySelector('#cnv');
@@ -141,6 +143,8 @@
         height: 40
     }
 
+    let gold = 0
+
 
 
 //-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
@@ -149,11 +153,14 @@
     //send users game data to database
     function save_game(won) {
         game_time = date.getMinutes()*60 + date.getSeconds()
+        gold_collected = gold
 
         axios.post("{% url 'boat:save_game' %}",
                 {
                     game_time: game_time,
-                    won: won
+                    gold_collected: gold_collected,
+                    won: won,
+              
                 }, {
                     headers: {
                         "X-CSRFToken": "{{ csrf_token }}"
@@ -165,7 +172,7 @@
 
     function create_block() {
         let random_px = chance.integer({ min: 150, max: 470 })
-        let random_vy = chance.floating({ min: .5, max: 1.2 })
+        let random_vy = chance.floating({ min: .9, max: 2.1 })
         let new_block = {
             px: random_px,
             py: 1,
@@ -176,16 +183,37 @@
         }
         return new_block
     }
+    function create_gold() {
+        let random_px = chance.integer({ min: 150, max: 485 })
+        let random_vy = chance.floating({ min: .9, max: 2.1 })
+        let gold = {
+            px: random_px,
+            py: 1,
+            vx: 0,
+            vy: random_vy,
+            width: 15,
+            height: 15,
+        }
+        return gold
+    }
 
     let blocks = []
+    let gold_blocks = []
     let time = 1000000
-    let spawn_rate = 3000
+    let time_2 = 1000000
     setInterval(function() {
         if(time > 0) {
             time--;
         }
         blocks.push(create_block())
-    },spawn_rate)
+    },1250)
+
+    setInterval(function() {
+        if(time > 0) {
+            time--;
+        }
+        gold_blocks.push(create_gold())
+    },3000)
 
     let level = 0
 
@@ -227,6 +255,14 @@
             ctx.fillStyle = 'rgb(70,130,180)';
             ctx.fill()
         }
+
+        for (let i=0; i<gold_blocks.length; i++) {
+            ctx.beginPath();
+            ctx.rect(gold_blocks[i].px, gold_blocks[i].py, gold_blocks[i].width, gold_blocks[i].height);
+            ctx.lineWidth = 3;
+            ctx.fillStyle = 'rgb(255,215,0)';
+            ctx.fill()
+        }
         ctx.beginPath();
         ctx.rect(floor.px, floor.py, floor.width, floor.height);
         ctx.lineWidth = 3;
@@ -256,15 +292,27 @@
         }
         for (let i=0; i<blocks.length; i++) {
             if (check_collision(player, blocks[i])) {
+                game_running = false
+                save_game(true)
                 player.vx = 0
                 player.vy = 0
                 player.px = 325
                 player.py = 550
                 level = 0
                 blocks = [] 
+                gold_blocks = []
+                // gold = 0
 
             }
         }
+        for (let i=0; i<gold_blocks.length; i++) {
+            if (check_collision(player, gold_blocks[i])) {
+                gold += 1
+                current_score.innerText = gold
+            }
+        }
+        
+
 
                 
 
@@ -283,6 +331,11 @@
         for (let i=0; i<blocks.length; i++) {
             blocks[i].px += blocks[i].vx
             blocks[i].py += blocks[i].vy
+        }
+            
+        for (let i=0; i<gold_blocks.length; i++) {
+            gold_blocks[i].px += gold_blocks[i].vx
+            gold_blocks[i].py += gold_blocks[i].vy
         }
 
 
@@ -308,11 +361,8 @@
             left_wall.py += 550
             floor.py += 550
             level += 1
-            if (spawn_rate > 1500) {
-                spawn_rate -= 500
-            }
 
-            
+            gold_blocks = []
             blocks = []
         }
 
@@ -320,7 +370,7 @@
         draw()
         window.requestAnimationFrame(main_loop);
     }
-    window.requestAnimationFrame(main_loop);
+    // window.requestAnimationFrame(main_loop);
 
 
     // function for calculating the overlap between two rectangles
@@ -360,17 +410,35 @@
     document.body.onkeyup = function(e) {
 
         // detect space bar hit, call create_block, push the block onto the new array
-        if (e.keyCode == 32) {
+        if (e.keyCode == 32 || e.keyCode == 38) {
             player.vy = -4.3
+            console.log(gold)
         }
         if (player.vx == 0){
-            if (e.keyCode == 65) {
+            if (e.keyCode == 65 || e.keyCode == 37) {
                 player.vx = -4.3
-            } else if (e.keyCode == 68) {
+            } else if (e.keyCode == 68 || e.keyCode == 39) {
                 player.vx = 4.3
             }
         }
     }
+       //start game button triggers clock and speech recognition 
+       start_game.onclick = function() {
+            
+            let theme_song = document.querySelector('#theme_song')
+            theme_song.play()
+
+            game_minutes = 0
+            game_seconds = 0
+            game_win = 0
+            game_loss = 0
+            start_clock()
+            // start_listening.onclick()
+            draw()
+            game_running = true
+            window.requestAnimationFrame(main_loop);
+            this.disabled = true
+        }
 
     // //speech recognition function
     // start_listening.onclick = function () {

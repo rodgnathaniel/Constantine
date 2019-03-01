@@ -9,23 +9,8 @@ import json
 
 
 def boat_view(request):
-    wins = 0
-    losses = 0
-    average_time = 0
-    game_count = 0
-    if request.user.is_authenticated:
-        games = request.user.game_set.all()
-        for game in games:
-            game_count += 1
-            average_time += game.time
-            if game.won:
-                wins += 1
-            else:
-                losses += 1
-        if average_time != 0:
-            average_time /= game_count
-    context = {'wins':wins, 'losses':losses, 'average_time':average_time}
-    return render(request, "boat/boat.html", context)
+
+    return render(request, "boat/boat.html", {})
     
 
 def level_2_view(request):
@@ -38,8 +23,28 @@ def level_3_view(request):
     return render(request, "boat/boat_level_3.html", {})
 
 def boating_game_view(request):
+        # wins = 0
+    # losses = 0
+    average_time = 0
+    gold = 0
+    game_count = 0
+    high_score = 0 
+    if request.user.is_authenticated:
+        games = request.user.game_set.all()
+        for game in games:
+            game_count += 1
+            average_time += game.time
+            gold += game.gold
+            # if game.won:
+            #     wins += 1
+            # else:
+            #     losses += 1
+        if average_time != 0:
+            average_time /= game_count
+    context = {'average_time':average_time, 'gold':gold}
+    return render(request, "boat/boating_game.html", context)
 
-    return render(request, "boat/boating_game.html", {})
+ 
     
 
 def instructions_view(request):
@@ -68,8 +73,9 @@ def save_game(request):
     data = json.loads(request.body)
     game_time = data['game_time']
     won = data['won']
+    gold_collected = data['gold_collected']
     player = request.user
-    game = Game(time=game_time, won=won, player=player)
+    game = Game(gold=gold_collected, time=game_time, won=won, player=player)
     game.save()
     return HttpResponse('ok')
 
