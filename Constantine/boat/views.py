@@ -24,8 +24,6 @@ import json
 
 
 def boating_game_view(request):
-        # wins = 0
-    # losses = 0
     average_time = 0
     gold = 0
     game_count = 0
@@ -36,10 +34,6 @@ def boating_game_view(request):
             game_count += 1
             average_time += game.time
             gold += game.gold
-            # if game.won:
-            #     wins += 1
-            # else:
-            #     losses += 1
         if average_time != 0:
             average_time /= game_count
     context = {'average_time':average_time, 'gold':gold}
@@ -52,14 +46,15 @@ def instructions_view(request):
 
 
 def scores_view(request):
-    game_times = []
-    games = Game.objects.all()
-    for game in games:
-        game_times.append(game.time)
-    game_times = sorted(game_times)
-    fastest_game = game_times[8000]
+    all_scores = []
+    high_score = 0
+    top_3 = Game.objects.order_by('-score')[:3]
+    # for game in games:
+    #     all_scores.append(game.score)
+    # all_scores.sort()
+    # high_score = all_scores[]
 
-    context = {'fastest_game':fastest_game}
+    context = {'top_3':top_3}
 
     return render(request, "boat/scores.html", context)
             

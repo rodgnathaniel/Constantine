@@ -49,7 +49,7 @@
         <span class="user_text">Ahoy Captain {{ request.user }}!</span>
         <span id="current_score" class="user_text">Current Score</span>
         <!-- <span class="user_text">Average Time: {{ average_time }}</span> -->
-        <span class="user_text">Gold: {{ gold }}</span>
+        <!-- <span class="user_text">Gold: {{ gold }}</span> -->
     </div>
  
 
@@ -63,9 +63,13 @@
 #####################################################################################################################################-->
 <script type="text/javascript">
 
-
     // information for database
+    let level = 4
     var game_time = 0
+    let gold = 0
+    let current_score = document.querySelector('#current_score')
+    let score = 0
+    
 
 
     //sound affects 
@@ -93,10 +97,8 @@
     let level_display = document.querySelector('#level_display')
     level_display.textContent = 'Level 1'
 
-    let current_score = document.querySelector('#current_score')
-    let score = 0
 
-
+    //declare canvas
     let cnv = document.querySelector('#cnv');
     cnv.backgroundColor = 'red';
     let width = cnv.width
@@ -107,7 +109,7 @@
     var long_boat = document.querySelector("#long_boat");
     var scorbunny = document.querySelector("#scorbunny");
 
-
+    //user sprite
     let player = {
         px: 325,
         py: 550,
@@ -117,24 +119,26 @@
         height: 40
     };
 
+    //walls inside canvas
     let left_wall = {
         px: 0,
-        py: -9000,
+        py: -9000000,
         vx: 0,
         vy: 0,
         width: 150,
-        height: 10000
+        height: 10000000
     }
 
     let right_wall = {
         px: cnv.width - 150,
-        py: -9000,
+        py: -9000000,
         vx: 0,
         vy: .0,
         width: 150,
-        height: 10000
+        height: 10000000
     }
 
+    //canvas floor
     let floor = {
         px: 0,
         py: 610,    
@@ -144,7 +148,7 @@
         height: 40
     }
 
-    let gold = 0
+
 
 
 
@@ -164,7 +168,6 @@
                     game_level: game_level,
                     game_score: game_score,
                     gold_collected: gold_collected,
-              
                 }, {
                     headers: {
                         "X-CSRFToken": "{{ csrf_token }}"
@@ -174,6 +177,7 @@
             })
     }
 
+    //function to define enemies 
     function create_block() {
         let random_px = chance.integer({ min: 150, max: 470 })
         let random_vy = chance.floating({ min: .9, max: 2.1 })
@@ -187,6 +191,7 @@
         }
         return new_block
     }
+    //function to define gold
     function create_gold() {
         let random_px = chance.integer({ min: 150, max: 485 })
         let random_vy = chance.floating({ min: .9, max: 2.1 })
@@ -205,6 +210,8 @@
     let gold_blocks = []
     let time = 1000000
     let time_2 = 1000000
+    
+    //spawn enemies and gold with timers
     setInterval(function() {
         if(time > 0) {
             time--;
@@ -214,40 +221,37 @@
 
     setInterval(function() {
         if(time > 0) {
-            time--;
+            time_2--;
         }
         gold_blocks.push(create_gold())
     },3000)
-
-    let level = 1
-
-
 
 
     //function for drawing objects on canvas
     function draw() {
         //clear canvas each time function is called
         //ctx.clearRect(0, 0, cnv.width, cnv.height)
-        
-        ctx.fillStyle = `hsl(128,100%,${level*3}%)`
-        ctx.fillRect(0, 0, cnv.width, cnv.height)
 
         
-                        
+        ctx.fillStyle = `hsl(220,100%,${level*4}%)`
+        ctx.fillRect(0, 0, cnv.width, cnv.height)
+
+ 
+
         ctx.beginPath();
         ctx.rect(left_wall.px, left_wall.py, left_wall.width, left_wall.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgb(160,82,45)';
+        ctx.fillStyle = 'rgb(255,255,240)';
         ctx.fill()
         
         ctx.beginPath();
         ctx.rect(right_wall.px, right_wall.py, right_wall.width, right_wall.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgb(160,82,45)';
+        ctx.fillStyle = 'rgb(255,255,240)';
         ctx.fill()
 
         ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
-
+               
         // ctx.beginPath();
         // ctx.rect(player.px, player.py, player.width, player.height);
         // ctx.lineWidth = 3;
@@ -258,7 +262,7 @@
             ctx.beginPath();
             ctx.rect(blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
             ctx.lineWidth = 3;
-            ctx.fillStyle = 'rgb(70,130,180)';
+            ctx.fillStyle = 'rgb(102,51,153)';
             ctx.fill()
         }
 
@@ -326,6 +330,9 @@
                 blocks = [] 
                 gold_blocks = []
                 gold = 0
+                score = 0
+                current_score.innerText = score
+                document.location.reload()
             }
         }
    
@@ -355,20 +362,25 @@
 
         //shift objects and change levels
         if (player.py >= 600) {
-            cnv.classList.remove("cnv2");
-            cnv.classList.add("cnv");
+
             player.py -= 550
             right_wall.py -= 550
             left_wall.py -= 550
             floor.py -= 550
+            for (let i=0; i<blocks.length; i++) {
+                blocks[i].py -= 550
+            }
+            
+            for (let i=0; i<gold_blocks.length; i++) {
+                gold_blocks[i].py -= 550
+            }
             level -= 1
-            if (level < 1) {
-                level = 1
+            if (level < 4) {
+                level = 4
             }
         }
         if (player.py <= 0) {
-            cnv.classList.remove("cnv");
-            cnv.classList.add("cnv2");
+
             player.py += 550
             right_wall.py += 550
             left_wall.py += 550
@@ -425,7 +437,6 @@
     document.body.onkeyup = function(e) {
         if (e.keyCode == 32 || e.keyCode == 38 || e.keyCode == 87) {
             player.vy = -4.3
-            console.log(gold)
         }
         if (player.vx == 0){
             if (e.keyCode == 65 || e.keyCode == 37) {
@@ -436,73 +447,64 @@
         }
     }
 
-       //start game button triggers clock, speech recognition, and animation
-       start_game.onclick = function() {
-            
-            let theme_song = document.querySelector('#theme_song')
-            theme_song.play()
+    //start game button triggers clock, speech recognition, and animation
+    start_game.onclick = function() {
+        
+        let theme_song = document.querySelector('#theme_song')
+        theme_song.play()
 
-            game_minutes = 0
-            game_seconds = 0
-            game_win = 0
-            game_loss = 0
-            start_clock()
-            // start_listening.onclick()
-            draw()
-            game_running = true
-            window.requestAnimationFrame(main_loop);
-            this.disabled = true
+        game_minutes = 0
+        game_seconds = 0
+        game_win = 0
+        game_loss = 0
+        start_clock()
+        start_listening.onclick()
+        draw()
+        game_running = true
+        window.requestAnimationFrame(main_loop);
+        this.disabled = true
+    }
+
+    //speech recognition function
+    start_listening.onclick = function () {
+        if ('webkitSpeechRecognition' in window) {
+            var speechRecognizer = new webkitSpeechRecognition();
+
+            //set rules for speech recognition 
+            speechRecognizer.continuous = true;
+            speechRecognizer.interimResults = true;
+            speechRecognizer.lang = 'en-US';
+
+            //start speech recognition function 
+            speechRecognizer.start();
+
+            //function to process speech recognition results 
+            speechRecognizer.onresult = function(event) {
+                var last = event.results.length - 1;
+                var command = event.results[last][0].transcript;
+
+                //display results on screen 
+                speech_results.textContent = 'Voice Input: ' + command + '.';
+
+                //dom manipulation based on commands 
+                command = command.toLowerCase()
+                if (command === 'up' || command[0] == 'u') {
+                    player.vy = -4.3
+                    draw()
+                    start_listening.onclick()
+                } else if (command === 'left' || command[0] == 'left') {
+                    player.vx = -4.3
+                    draw()
+                    start_listening.onclick()
+                } else if (command === 'right' || command[0] == 'r') {
+                    player.vx = 4.3
+                    draw()
+                    start_listening.onclick()
+                }else {
+                    start_listening.onclick()
+                }
+            }
         }
-
-    // //speech recognition function
-    // start_listening.onclick = function () {
-    //     if ('webkitSpeechRecognition' in window) {
-    //         var speechRecognizer = new webkitSpeechRecognition();
-
-    //         //set rules for speech recognition 
-    //         speechRecognizer.continuous = true;
-    //         speechRecognizer.interimResults = true;
-    //         speechRecognizer.lang = 'en-US';
-
-    //         //start speech recognition function 
-    //         speechRecognizer.start();
-
-    //         //function to process speech recognition results 
-    //         speechRecognizer.onresult = function(event) {
-    //             var last = event.results.length - 1;
-    //             var command = event.results[last][0].transcript;
-
-    //             //display results on screen 
-    //             speech_results.textContent = 'Voice Input: ' + command + '.';
-
-    //             //dom manipulation based on commands 
-    //             command = command.toLowerCase()
-    //             if (command === 'north' || command[0] == 'n') {
-    //                 boat.vy = -1
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'south' || command[0] == 's') {
-    //                 boat.vy = 1
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'west' || command[0] == 'w') {
-    //                 boat.vx = -1
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'east' || command[0] == 'e') {
-    //                 boat.vx = 1
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'halt' || command[0] == 'h') {
-    //                 boat.vx = 0
-    //                 boat.vy = 0
-    //                 draw()
-    //                 start_listening.onclick()
-    //             }else {
-    //                 start_listening.onclick()
-    //             }
-    //         }
-    //     }
-    // };
+    };
 </script>
 {% endblock %}

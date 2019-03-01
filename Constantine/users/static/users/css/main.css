@@ -32,6 +32,7 @@ body{
 }
 
 #user_stats{
+    background-color: palevioletred;
     display: flex;
     align-items: flex-start;
     flex-direction:row;
@@ -194,6 +195,7 @@ a{
     -STOP WATCH-
 #####################################################*/
 #level_start_clock {
+    background-color: palegreen;
     display: flex;
     align-items: flex-start;
     flex-direction:row;
@@ -204,7 +206,7 @@ a{
 
 #stopwatch {
     color: black;
-    background-color: rgba(176,224,230,10);
+    /* background-color: rgba(176,224,230,10); */
     background-size:auto;
     display: flex;
     align-items:center;
@@ -266,27 +268,9 @@ a{
 #####################################################*/
 
 .cnv{
-    background-image:url(/static/mid_evil_map_5.png);   
+    /* background-image:url(/static/mid_evil_map_5.png);    */
     border: 1px solid black;
-    margin: .05% 9% 1% 9%;
-}
-
-.cnv_2{
-    background-image:url(/static/blue_web.jpg);   
-    border: 1px solid black;
-    margin: .05% 9% 1% 9%;
-}
-
-.cnv_loss{
-    background-color:rgba(205,92,92,.7);  
-    border: 1px solid black;
-    margin: .05% 9% 1% 9%;
-}
-
-.cnv_win{
-    background-image:url(https://ae01.alicdn.com/kf/HTB1g.KlOFXXXXbNXVXXq6xXFXXXp/Uang-koin-emas-bajak-laut-peta-keberuntungan-Dekorasi-Rumah-Canvas-Poster-Cetak.jpg);   
-    border: 1px solid black;
-    margin: .05% 9% 1% 9%;
+    margin: .05% 9% 1% 29%;
 }
 
 
