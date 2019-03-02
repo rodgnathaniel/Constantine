@@ -77,6 +77,7 @@
     //var theme_song;
 
     let game_running = false
+    let run_timer = false
 
 
     // declare speech recognition results and start button 
@@ -214,19 +215,21 @@
     let time_2 = 1000000
     
     //spawn enemies and gold with timers
-    setInterval(function() {
-        if(time > 0) {
-            time--;
-        }
-        blocks.push(create_block())
-    },2200)
+    if (run_timer = true) {
+        setInterval(function() {
+            if(time > 0) {
+                time--;
+            }
+            blocks.push(create_block())
+        },2200)
 
-    setInterval(function() {
-        if(time > 0) {
-            time_2--;
-        }
-        gold_blocks.push(create_gold())
-    },3200)
+        setInterval(function() {
+            if(time > 0) {
+                time_2--;
+            }
+            gold_blocks.push(create_gold())
+        },3200)
+    }
 
 
     //function for drawing objects on canvas
@@ -280,7 +283,9 @@
 
     }
     
+    //animation function
     function main_loop() {
+        //display level
         level_display.innerText = 'Level ' + level
 
         //equation to get players current score
@@ -318,6 +323,7 @@
         for (let i=0; i<blocks.length; i++) { 
             if (check_collision(player, blocks[i])) { //game lost
                 game_running = false
+                run_timer = false
                 start_game.disabled = false 
                 save_game()
                 stop_clock()
@@ -463,6 +469,7 @@
         start_listening.onclick()
         draw()
         game_running = true
+        run_timer = true
         window.requestAnimationFrame(main_loop);
         this.disabled = true
     }
