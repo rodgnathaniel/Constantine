@@ -22,6 +22,17 @@
     </div>
 
 
+    <!-- Display user and scores -->
+    <div id="user_stats">
+            <!-- <span id="current_score" class="user_text"></span> -->
+            <span class="user_text">Ahoy Captain {{ request.user }}!</span>
+         
+    
+            <!-- <span class="user_text">Average Time: {{ average_time }}</span> -->
+            <!-- <span class="user_text">Gold: {{ gold }}</span> -->
+        </div>
+
+
     <div id="level_start_clock">
         <!-- display level -->
         <span id="level_display"></span>
@@ -40,17 +51,14 @@
     </div>
 
 
+
+
+
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
 
 
-    <!-- Display user and scores -->
-    <div id="user_stats">
-        <span class="user_text">Ahoy Captain {{ request.user }}!</span>
-        <span id="current_score" class="user_text">Current Score</span>
-        <!-- <span class="user_text">Average Time: {{ average_time }}</span> -->
-        <!-- <span class="user_text">Gold: {{ gold }}</span> -->
-    </div>
+
  
 
     <!-- Load boat images to be drawn in canvas -->
@@ -286,7 +294,7 @@
     //animation function
     function main_loop() {
         //display level
-        level_display.innerText = 'Level ' + level
+        level_display.innerText = 'Level: ' + level + ' \nScore: ' + score
 
         //equation to get players current score
         game_time = date.getMinutes()*60 + date.getSeconds()
@@ -295,7 +303,7 @@
         } else {
             score = game_time * level
         }
-        current_score.innerText = score
+        // current_score.innerText = 'score: ' + score
         
 
         //check for collisions 
@@ -337,7 +345,7 @@
                 gold_blocks = []
                 gold = 0
                 score = 0
-                current_score.innerText = score
+                // current_score.innerText = score
                 document.location.reload()
             }
         }
