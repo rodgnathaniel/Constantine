@@ -18,12 +18,12 @@ import json
 #     return render(request, "boat/boat_level_2.html", {})
 
 
-# def level_3_view(request):
+def home_view(request):
 
-#     return render(request, "boat/boat_level_3.html", {})
+    return render(request, "boat/home.html", {})
 
 
-def boating_game_view(request):
+def iguana_game_view(request):
     average_time = 0
     gold = 0
     game_count = 0
@@ -37,7 +37,7 @@ def boating_game_view(request):
         if average_time != 0:
             average_time /= game_count
     context = {'average_time':average_time, 'gold':gold}
-    return render(request, "boat/boating_game.html", context)
+    return render(request, "boat/iguana_game.html", context)
 
 
 def instructions_view(request):

@@ -1,0 +1,381 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<!--#################################################################################################################################
+--------------------------HTML------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+
+    <!-- Setting up canvas -->
+    <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
+
+    <button id="computer_contact" style="display:none"></button>  
+    <button id="nes_contact" style="display:none"></button>  
+    <button id="start_listening" style="display:none"></button>   
+    <span id="speech_results" style="display:none"></span>
+
+    <div class="modal_content">
+        <button class="close" id="close_computer">+</button>
+        <a href="{% url 'login' %}">
+            <button class="modal_btn" >Login</button>
+        </a>
+        <a href="{% url 'register' %}">
+            <button class="modal_btn">Register</button>
+        </a>
+    </div>
+
+    <div class="modal_game">
+        <button class="close" id="close_nes">+</button>
+        <a href="{% url 'boat:iguana' %}">
+            <button class="modal_btn">Iguana Jump</button>
+        </a>
+            <!-- <a href="{% url 'register' %}">
+                <button class="modal_btn">Register</button>
+            </a> -->
+    </div>
+ 
+
+    <!-- Load boat images to be drawn in canvas -->
+    <image id="scorbunny" src="{% static 'boat/player.png' %}" style="display:none"/>
+    <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
+    <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
+
+
+<!--#################################################################################################################################
+--------------------------JAVA-SCRIPT------------------------------------------------------------------------------------------------
+#####################################################################################################################################-->
+<script type="text/javascript">
+
+    var start_listening = document.querySelector('#start_listening');
+    var r = document.querySelector('#speech_results');
+
+    var computer_contact = document.querySelector('#computer_contact')
+    var nes_contact = document.querySelector('#nes_contact')
+
+    var close_computer = document.querySelector('#close_computer')
+    var close_nes = document.querySelector('#close_nes')
+    // var mdoal_login = document.querySelector('#modal_login')
+    // var mdoal_reg = document.querySelector('#modal_reg')
+
+
+
+
+
+    //declare canvas
+    let cnv = document.querySelector('#cnv');
+    cnv.backgroundColor = 'red';
+    let width = cnv.width
+    let height = cnv.height
+    let ctx = cnv.getContext('2d');
+
+    // // declare boat images 
+    // var grepa = document.querySelector("#grepa");
+    var scorbunny = document.querySelector("#scorbunny");
+    // var water = document.querySelector("#water");
+
+    // //user sprite
+    let player = {
+        px: 290,
+        py: 400,
+        vx: 0,
+        vy: 0,
+        width: 105,
+        height: 105
+    };
+
+    let ceiling = {
+        px: 135,
+        py: 0,    
+        vx: 0,
+        vy: 0,
+        width: 515,
+        height: 215
+    }
+
+    let computer = {
+        px: 0,
+        py: 0,    
+        vx: 0,
+        vy: 0,
+        width: 135,
+        height: 215
+    }
+
+    let tv = {
+        px: 545,
+        py: 215,    
+        vx: 0,
+        vy: 0,
+        width: 105,
+        height: 230
+    }
+
+    let nes = {
+        px: 545,
+        py: 485,    
+        vx: 0,
+        vy: 0,
+        width: 105,
+        height: 20
+    }
+
+    let left_wall = {
+        px: 0,
+        py: 0,    
+        vx: 0,
+        vy: 0,
+        width: 2,
+        height: 650
+    }
+
+    let right_wall = {
+        px: 648,
+        py: 0,    
+        vx: 0,
+        vy: 0,
+        width: 2,
+        height: 650
+    }
+
+    let floor = {
+        px: 0,
+        py: 645,    
+        vx: 0,
+        vy: 0,
+        width: 650,
+        height: 2
+    }
+    
+
+
+
+
+
+//-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
+
+
+    // //send users game data to database
+    // function save_game() {
+    //     game_time = date.getMinutes()*60 + date.getSeconds()
+    //     gold_collected = gold
+    //     game_level = level
+    //     game_score = score
+        
+    //     axios.post("{% url 'boat:save_game' %}",
+    //             {
+    //                 game_time: game_time,
+    //                 game_level: game_level,
+    //                 game_score: game_score,
+    //                 gold_collected: gold_collected,
+    //             }, {
+    //                 headers: {
+    //                     "X-CSRFToken": "{{ csrf_token }}"
+    //                 }
+    //             }
+    //         ).then(function(response) {
+    //         })
+    // }
+    computer_contact.onclick = function() {
+        document.querySelector(".modal_content").style.display = "flex";
+    }
+    nes_contact.onclick = function() {
+        document.querySelector(".modal_game").style.display = "flex";
+    }
+    close_computer.onclick = function() {
+        document.querySelector(".modal_content").style.display = "none";
+    }
+    close_nes.onclick = function() {
+        document.querySelector(".modal_game").style.display = "none";
+    }
+
+
+    //function for drawing objects on canvas
+    function draw() {
+        // clear canvas each time function is called
+        ctx.clearRect(0, 0, cnv.width, cnv.height)
+
+        // ctx.fillStyle = `hsl(220,100%,${level*4}%)`
+        // ctx.fillRect(0, 0, cnv.width, cnv.height)
+
+        ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
+               
+        ctx.beginPath();
+        ctx.rect(floor.px, floor.py, floor.width, floor.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(188,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(computer.px, computer.py, computer.width, computer.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(tv.px, tv.py, tv.width, tv.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(nes.px, nes.py, nes.width, nes.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(left_wall.px, left_wall.py, left_wall.width, left_wall.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(right_wall.px, right_wall.py, right_wall.width, right_wall.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(ceiling.px, ceiling.py, ceiling.width, ceiling.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+    }
+
+    draw()
+    window.requestAnimationFrame(main_loop);
+    
+    //animation function
+    function main_loop() {
+
+        // }
+        if (check_collision(player, ceiling)) {
+            player.py += 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, floor)) {
+            player.py -= 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, right_wall)) {
+            player.px -= 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, left_wall)) {
+            player.px += 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, computer)) {
+            computer_contact.onclick()
+            player.py += 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, tv)) {
+            player.px -= 5.3
+            // player.vy = -4.3
+        }
+        if (check_collision(player, nes)) {
+            nes_contact.onclick()
+            if  (player.py + player.height > nes.py) {
+                player.py += 3
+            } else {
+                player.px -= 5.3
+            }
+            // player.vy = -4.3
+        }
+ 
+
+        player.px += player.vx
+        player.py += player.vy
+
+
+
+
+
+        draw()
+        
+        // if (game_running) {
+        window.requestAnimationFrame(main_loop);
+        // }
+    }
+
+
+    // function for calculating the overlap between two rectangles
+    function check_collision(rect1, rect2) {
+        let x_overlap = Math.max(0, Math.min(rect1.px + rect1.width, rect2.px + rect2.width) - Math.max(rect1.px, rect2.px))
+        let y_overlap = Math.max(0, Math.min(rect1.py + rect1.height, rect2.py + rect2.height) - Math.max(rect1.py, rect2.py))
+        let overlapArea = x_overlap * y_overlap
+        return overlapArea != 0
+    }
+
+
+
+    //keyboard commands
+    document.body.onkeydown = function(e) {
+        if (e.keyCode == 32 || e.keyCode == 38 || e.keyCode == 87) {
+            player.py -= 25.3
+        }
+        if (player.vx == 0){
+            if (e.keyCode == 65 || e.keyCode == 37) {
+                player.px -= 15.3
+            } else if (e.keyCode == 68 || e.keyCode == 39) {
+                player.px += 15.3
+            } else if (e.keyCode == 40 || e.keyCode == 83) {
+                player.py += 15.3
+            }
+        }
+    }
+
+    //speech recognition function
+    start_listening.onclick = function () {
+        if ('webkitSpeechRecognition' in window) {
+            var speechRecognizer = new webkitSpeechRecognition();
+
+            //set rules for speech recognition 
+            speechRecognizer.continuous = true;
+            speechRecognizer.interimResults = true;
+            speechRecognizer.lang = 'en-US';
+
+            //start speech recognition function 
+            speechRecognizer.start();
+
+            //function to process speech recognition results 
+            speechRecognizer.onresult = function(event) {
+                var last = event.results.length - 1;
+                var command = event.results[last][0].transcript;
+
+                //display results on screen 
+                speech_results.textContent = 'Voice Input: ' + command + '.';
+
+                //dom manipulation based on commands 
+                command = command.toLowerCase()
+                if (command === 'up' || command[0] == 'u') {
+                    player.py -= 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'left' || command[0] == 'left') {
+                    player.px -= 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'right' || command[0] == 'r') {
+                    player.px += 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'down' || command[0] == 'd') {
+                    player.py += 15.3
+                    draw()
+                } else {
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                }
+            }
+        }
+    };
+    start_listening.onclick()
+</script>
+{% endblock %}
