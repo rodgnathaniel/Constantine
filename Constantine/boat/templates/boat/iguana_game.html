@@ -63,9 +63,9 @@
  
 
     <!-- Load boat images to be drawn in canvas -->
-    <image id="scorbunny" src="{% static 'boat/iguana.png' %}" style="display:none"/>
-    <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/>
-    <image id="water" src="{% static 'boat/snowman.png' %}" style="display:none"/>
+    <image id="iguana" src="{% static 'boat/iguana.png' %}" style="display:none"/>
+    <image id="avocado" src="{% static 'boat/avocado.png' %}" style="display:none"/>
+    <image id="snowman" src="{% static 'boat/snowman.png' %}" style="display:none"/>
 
 
 <!--#################################################################################################################################
@@ -117,9 +117,9 @@
     let ctx = cnv.getContext('2d');
 
     // declare boat images 
-    var grepa = document.querySelector("#grepa");
-    var scorbunny = document.querySelector("#scorbunny");
-    var water = document.querySelector("#water");
+    var avocado = document.querySelector("#avocado");
+    var iguana = document.querySelector("#iguana");
+    var snowman = document.querySelector("#snowman");
 
     //user sprite
     let player = {
@@ -231,7 +231,7 @@
                 time--;
             }
             blocks.push(create_block())
-        },2200)
+        },{{mode.snowman_delay}})
 
         setInterval(function() {
             if(time > 0) {
@@ -265,7 +265,7 @@
         ctx.fillStyle = 'rgb(255,255,240)';
         ctx.fill()
 
-        ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
+        ctx.drawImage(iguana, player.px, player.py, player.width, player.height);
                
         // ctx.beginPath();
         // ctx.rect(player.px, player.py, player.width, player.height);
@@ -274,7 +274,7 @@
         // ctx.fill()
 
         for (let i=0; i<blocks.length; i++) {
-            ctx.drawImage(water, blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
+            ctx.drawImage(snowman, blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
             // ctx.beginPath();
             // ctx.rect(blocks[i].px, blocks[i].py, blocks[i].width, blocks[i].height);
             // ctx.lineWidth = 3;
@@ -283,7 +283,7 @@
         }
 
         for (let i=0; i<gold_blocks.length; i++) {
-            ctx.drawImage(grepa, gold_blocks[i].px, gold_blocks[i].py, gold_blocks[i].width, gold_blocks[i].height);
+            ctx.drawImage(avocado, gold_blocks[i].px, gold_blocks[i].py, gold_blocks[i].width, gold_blocks[i].height);
         }
         ctx.beginPath();
         ctx.rect(floor.px, floor.py, floor.width, floor.height);

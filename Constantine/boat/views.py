@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse
 
-from .models import Game
+from .models import Game, Mode
 
 import json
 
@@ -19,11 +19,16 @@ import json
 
 
 def home_view(request):
-
-    return render(request, "boat/home.html", {})
+    modes = Mode.objects.all()
+    return render(request, "boat/home.html", {'modes': modes})
 
 
 def iguana_game_view(request):
+    if 'game_mode' in request.GET:
+        game_mode_id = request.GET['game_mode']
+        game_mode = Mode.objects.get(id=game_mode_id)
+    else:
+        game_mode = Mode.objects.all()[0]
     average_time = 0
     gold = 0
     game_count = 0
@@ -36,7 +41,7 @@ def iguana_game_view(request):
             gold += game.gold
         if average_time != 0:
             average_time /= game_count
-    context = {'average_time':average_time, 'gold':gold}
+    context = {'average_time':average_time, 'gold':gold, 'mode': game_mode}
     return render(request, "boat/iguana_game.html", context)
 
 

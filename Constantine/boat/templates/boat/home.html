@@ -28,12 +28,11 @@
 
     <div class="modal_game">
         <button class="close" id="close_nes">+</button>
-        <a href="{% url 'boat:iguana' %}">
-            <button class="modal_btn">Iguana Jump</button>
+        {% for mode in modes %}
+        <a href="{% url 'boat:iguana' %}?game_mode={{mode.id}}">
+            <button class="modal_btn">Iguana Jump - {{mode.name}}</button>
         </a>
-            <!-- <a href="{% url 'register' %}">
-                <button class="modal_btn">Register</button>
-            </a> -->
+        {% endfor %}
     </div>
 
     <div class="modal_logout">
