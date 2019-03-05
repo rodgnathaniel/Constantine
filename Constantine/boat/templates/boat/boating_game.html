@@ -81,7 +81,7 @@
         vx: 0,
         vy: 0,
         width: 135,
-        height: 90
+        height: 30
     }
     let left_wall = {
         px: 0,
@@ -206,31 +206,31 @@
 
         // }
         if (check_collision(player, ceiling)) {
-            player.py += 0.3
+            player.py += 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, floor)) {
-            player.py -= 0.3
+            player.py -= 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, right_wall)) {
-            player.px -= 0.3
+            player.px -= 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, left_wall)) {
-            player.px += 0.3
+            player.px += 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, computer)) {
-            player.py += 0.3
+            player.py += 25.3
             // player.vy = -4.3
         }
         if (check_collision(player, tv)) {
-            player.px -= 0.3
+            player.px -= 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, nes)) {
-            player.px -= 0.3
+            player.px -= 5.3
             // player.vy = -4.3
         }
  
@@ -267,11 +267,11 @@
         }
         if (player.vx == 0){
             if (e.keyCode == 65 || e.keyCode == 37) {
-                player.px -= 25.3
+                player.px -= 15.3
             } else if (e.keyCode == 68 || e.keyCode == 39) {
-                player.px += 25.3
+                player.px += 15.3
             } else if (e.keyCode == 40 || e.keyCode == 83) {
-                player.py += 25.3
+                player.py += 15.3
             }
         }
     }
