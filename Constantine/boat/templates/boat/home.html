@@ -37,7 +37,7 @@
  
 
     <!-- Load boat images to be drawn in canvas -->
-    <image id="scorbunny" src="{% static 'boat/player.png' %}" style="display:none"/>
+    <image id="hero" src="{% static 'boat/player.png' %}" style="display:none"/>
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
     <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
@@ -71,7 +71,7 @@
 
     // // declare boat images 
     // var grepa = document.querySelector("#grepa");
-    var scorbunny = document.querySelector("#scorbunny");
+    var hero = document.querySelector("#hero");
     // var water = document.querySelector("#water");
 
     // //user sprite
@@ -198,7 +198,7 @@
         // ctx.fillStyle = `hsl(220,100%,${level*4}%)`
         // ctx.fillRect(0, 0, cnv.width, cnv.height)
 
-        ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
+        ctx.drawImage(hero, player.px, player.py, player.width, player.height);
                
         ctx.beginPath();
         ctx.rect(floor.px, floor.py, floor.width, floor.height);
