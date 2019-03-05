@@ -10,8 +10,24 @@
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
 
+    <button id="computer_contact" style="display:none"></button>  
+    <!-- <button id="start_listening" style="display:none"></button>   -->
+    <button id="start_listening" style="display:none"></button>   
+    <span id="speech_results" style="display:none"></span>
 
+    <!-- <div class="modal_bg"> -->
+    <div class="modal_content">
+        <div class="close">+</div>
+        <a href="{% url 'login' %}">
+            <button class="modal_btn" >Login</button>
+        </a>
+        <a href="{% url 'register' %}">
+            <button class="modal_btn">Register</button>
+        </a>
+      
+    </div>
 
+    <!-- </div> -->
  
 
     <!-- Load boat images to be drawn in canvas -->
@@ -24,6 +40,15 @@
 --------------------------JAVA-SCRIPT------------------------------------------------------------------------------------------------
 #####################################################################################################################################-->
 <script type="text/javascript">
+
+    var start_listening = document.querySelector('#start_listening');
+    var r = document.querySelector('#speech_results');
+
+    var computer_contact = document.querySelector('#computer_contact')
+
+    // var mdoal_login = document.querySelector('#modal_login')
+    // var mdoal_reg = document.querySelector('#modal_reg')
+
 
 
 
@@ -50,7 +75,6 @@
         height: 105
     };
 
-
     let ceiling = {
         px: 135,
         py: 0,    
@@ -59,6 +83,7 @@
         width: 515,
         height: 215
     }
+
     let computer = {
         px: 0,
         py: 0,    
@@ -67,22 +92,25 @@
         width: 135,
         height: 215
     }
+
     let tv = {
-        px: 515,
+        px: 545,
         py: 215,    
         vx: 0,
         vy: 0,
-        width: 135,
+        width: 105,
         height: 230
     }
+
     let nes = {
-        px: 515,
+        px: 545,
         py: 445,    
         vx: 0,
         vy: 0,
-        width: 135,
+        width: 105,
         height: 30
     }
+
     let left_wall = {
         px: 0,
         py: 0,    
@@ -91,6 +119,7 @@
         width: 2,
         height: 650
     }
+
     let right_wall = {
         px: 648,
         py: 0,    
@@ -99,6 +128,7 @@
         width: 2,
         height: 650
     }
+
     let floor = {
         px: 0,
         py: 645,    
@@ -137,8 +167,9 @@
     //         ).then(function(response) {
     //         })
     // }
-
-
+    computer_contact.onclick = function() {
+        document.querySelector(".modal_content").style.display = "flex";
+    }
 
 
     //function for drawing objects on canvas
@@ -146,12 +177,8 @@
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
 
-        
         // ctx.fillStyle = `hsl(220,100%,${level*4}%)`
         // ctx.fillRect(0, 0, cnv.width, cnv.height)
-
- 
-
 
         ctx.drawImage(scorbunny, player.px, player.py, player.width, player.height);
                
@@ -198,6 +225,7 @@
         ctx.fill()
 
     }
+
     draw()
     window.requestAnimationFrame(main_loop);
     
@@ -222,7 +250,8 @@
             // player.vy = -4.3
         }
         if (check_collision(player, computer)) {
-            player.py += 25.3
+            computer_contact.onclick()
+            player.py += 5.3
             // player.vy = -4.3
         }
         if (check_collision(player, tv)) {
@@ -230,7 +259,11 @@
             // player.vy = -4.3
         }
         if (check_collision(player, nes)) {
-            player.px -= 5.3
+            if  (player.py + player.height > nes.py) {
+                player.py += 3
+            } else {
+                player.px -= 5.3
+            }
             // player.vy = -4.3
         }
  
@@ -245,7 +278,7 @@
         draw()
         
         // if (game_running) {
-            window.requestAnimationFrame(main_loop);
+        window.requestAnimationFrame(main_loop);
         // }
     }
 
@@ -276,48 +309,54 @@
         }
     }
 
+    //speech recognition function
+    start_listening.onclick = function () {
+        if ('webkitSpeechRecognition' in window) {
+            var speechRecognizer = new webkitSpeechRecognition();
 
+            //set rules for speech recognition 
+            speechRecognizer.continuous = true;
+            speechRecognizer.interimResults = true;
+            speechRecognizer.lang = 'en-US';
 
-    // //speech recognition function
-    // start_listening.onclick = function () {
-    //     if ('webkitSpeechRecognition' in window) {
-    //         var speechRecognizer = new webkitSpeechRecognition();
+            //start speech recognition function 
+            speechRecognizer.start();
 
-    //         //set rules for speech recognition 
-    //         speechRecognizer.continuous = true;
-    //         speechRecognizer.interimResults = true;
-    //         speechRecognizer.lang = 'en-US';
+            //function to process speech recognition results 
+            speechRecognizer.onresult = function(event) {
+                var last = event.results.length - 1;
+                var command = event.results[last][0].transcript;
 
-    //         //start speech recognition function 
-    //         speechRecognizer.start();
+                //display results on screen 
+                speech_results.textContent = 'Voice Input: ' + command + '.';
 
-    //         //function to process speech recognition results 
-    //         speechRecognizer.onresult = function(event) {
-    //             var last = event.results.length - 1;
-    //             var command = event.results[last][0].transcript;
-
-    //             //display results on screen 
-    //             speech_results.textContent = 'Voice Input: ' + command + '.';
-
-    //             //dom manipulation based on commands 
-    //             command = command.toLowerCase()
-    //             if (command === 'up' || command[0] == 'u') {
-    //                 player.vy = -4.3
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'left' || command[0] == 'left') {
-    //                 player.vx = -4.3
-    //                 draw()
-    //                 start_listening.onclick()
-    //             } else if (command === 'right' || command[0] == 'r') {
-    //                 player.vx = 4.3
-    //                 draw()
-    //                 start_listening.onclick()
-    //             }else {
-    //                 start_listening.onclick()
-    //             }
-    //         }
-    //     }
-    // };
+                //dom manipulation based on commands 
+                command = command.toLowerCase()
+                if (command === 'up' || command[0] == 'u') {
+                    player.py -= 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'left' || command[0] == 'left') {
+                    player.px -= 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'right' || command[0] == 'r') {
+                    player.px += 15.3
+                    draw()
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                } else if (command === 'down' || command[0] == 'd') {
+                    player.py += 15.3
+                    draw()
+                } else {
+                    start_listening.onclick()
+                    speechRecognizer.start();
+                }
+            }
+        }
+    };
+    start_listening.onclick()
 </script>
 {% endblock %}
