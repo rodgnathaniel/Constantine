@@ -282,6 +282,21 @@ a{
     /* justify-content: center;
     align-items: center; */
 }
+.modal_logout {
+    width: 250px;
+    height: 250px;
+    background-color: ivory;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    z-index:1;
+    border-radius: 12px;
+    display: none;
+    box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+    /* justify-content: center;
+    align-items: center; */
+}
 .modal_btn {
     font-size: 100%;
     font-family: 'Parisienne', cursive;

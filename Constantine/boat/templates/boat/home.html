@@ -12,6 +12,7 @@
 
     <button id="computer_contact" style="display:none"></button>  
     <button id="nes_contact" style="display:none"></button>  
+    <button id="bed_contact" style="display:none"></button>  
     <button id="start_listening" style="display:none"></button>   
     <span id="speech_results" style="display:none"></span>
 
@@ -34,6 +35,16 @@
                 <button class="modal_btn">Register</button>
             </a> -->
     </div>
+
+    <div class="modal_logout">
+        <button class="close" id="close_logout">+</button>
+        <a href="{% url 'logout' %}">
+            <button class="modal_btn">Logout</button>
+        </a>
+                <!-- <a href="{% url 'register' %}">
+                    <button class="modal_btn">Register</button>
+                </a> -->
+    </div>
  
 
     <!-- Load boat images to be drawn in canvas -->
@@ -52,9 +63,11 @@
 
     var computer_contact = document.querySelector('#computer_contact')
     var nes_contact = document.querySelector('#nes_contact')
+    var bed_contact = document.querySelector('#bed_contact')
 
     var close_computer = document.querySelector('#close_computer')
     var close_nes = document.querySelector('#close_nes')
+    var close_logout = document.querySelector('#close_logout')
     // var mdoal_login = document.querySelector('#modal_login')
     // var mdoal_reg = document.querySelector('#modal_reg')
 
@@ -120,6 +133,15 @@
         height: 20
     }
 
+    let bed = {
+        px: 75,
+        py: 525,    
+        vx: 0,
+        vy: 0,
+        width: 90,
+        height: 10
+    }
+
     let left_wall = {
         px: 0,
         py: 0,    
@@ -179,14 +201,25 @@
     computer_contact.onclick = function() {
         document.querySelector(".modal_content").style.display = "flex";
     }
+
     nes_contact.onclick = function() {
         document.querySelector(".modal_game").style.display = "flex";
     }
+
+    bed_contact.onclick = function() {
+        document.querySelector(".modal_logout").style.display = "flex";
+    }
+
     close_computer.onclick = function() {
         document.querySelector(".modal_content").style.display = "none";
     }
+
     close_nes.onclick = function() {
         document.querySelector(".modal_game").style.display = "none";
+    }
+
+    close_logout.onclick = function() {
+        document.querySelector(".modal_logout").style.display = "none";
     }
 
 
@@ -220,6 +253,12 @@
 
         ctx.beginPath();
         ctx.rect(nes.px, nes.py, nes.width, nes.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(bed.px, bed.py, bed.width, bed.height);
         ctx.lineWidth = 3;
         ctx.fillStyle = 'rgba(108,143,143,0)';
         ctx.fill()
@@ -266,6 +305,9 @@
         if (check_collision(player, left_wall)) {
             player.px += 5.3
             // player.vy = -4.3
+        }
+        if (check_collision(player, bed)) {
+            bed_contact.onclick()
         }
         if (check_collision(player, computer)) {
             computer_contact.onclick()
