@@ -21,6 +21,7 @@ class Game(models.Model):
 class Mode(models.Model):
     name = models.CharField(max_length=100)
     snowman_delay = models.IntegerField()
+    avocado_delay = models.IntegerField()
 
     def __str__(self):
         return self.name

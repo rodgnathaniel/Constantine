@@ -231,14 +231,14 @@
                 time--;
             }
             blocks.push(create_block())
-        },{{mode.snowman_delay}})
+        },{{ mode.snowman_delay }})
 
         setInterval(function() {
-            if(time > 0) {
+            if(time_2 > 0) {
                 time_2--;
             }
             gold_blocks.push(create_gold())
-        },3200)
+        },{{ mode.avocado_delay }})
     }
 
 
