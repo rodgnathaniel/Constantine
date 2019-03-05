@@ -268,7 +268,7 @@ a{
 #####################################################*/
 
 .cnv{
-    /* background-image:url(/static/mid_evil_map_5.png);    */
+    background-image:url(/static/room.png);   
     border: 1px solid black;
     margin: .05% 9% 1% 29%;
 }
