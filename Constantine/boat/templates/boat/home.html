@@ -8,7 +8,7 @@
 #####################################################################################################################################-->
 
     <!-- Setting up canvas -->
-    <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
+    <canvas id="cnv" class="cnv" width="600" height="370"></canvas>
 <!-- 
     <button id="computer_contact" style="display:none"></button>   -->
     <!-- <button id="nes_contact" style="display:none"></button>   -->
@@ -78,12 +78,12 @@
 
     // //user sprite
     let player = {
-        px: 290,
-        py: 400,
+        px: 170,
+        py: 220,
         vx: 0,
         vy: 0,
-        width: 105,
-        height: 105
+        width: 50,
+        height: 50
     };
 
     let ceiling = {
@@ -91,44 +91,72 @@
         py: 0,    
         vx: 0,
         vy: 0,
-        width: 650,
-        height: 185
+        width: 280,
+        height: 90
+    }
+    let ceiling2 = {
+        px: 280,
+        py: 0,    
+        vx: 0,
+        vy: 0,
+        width: 350,
+        height: 70
+    }
+    let stairs = {
+        px: 380,
+        py: 60,    
+        vx: 0,
+        vy: 0,
+        width: 35,
+        height: 75
+    }
+    let rail = {
+        px: 370,
+        py: 135,
+        width: 120,
+        height: 7.5
+    }
+    let rail2 = {
+        px: 370,
+        py: 75,
+        width: 7.5,
+        height: 60
     }
 
     let computer = {
         px: 0,
-        py: 200,    
+        py: 100,    
         vx: 0,
         vy: 0,
-        width: 40,
-        height: 15
+        width: 17,
+        height: 7
     }
 
     let tv = {
-        px: 545,
-        py: 315,    
+        px: 272,
+        py: 155,    
         vx: 0,
         vy: 0,
-        width: 105,
-        height: 100
+        width: 25,
+        height: 50
     }
 
     let nes = {
-        px: 545,
-        py: 485,    
-        vx: 0,
-        vy: 0,
-        width: 105,
-        height: 20
-    }
-
-    let bed = {
-        px: 75,
-        py: 525,    
+        px: 272,
+        py: 242,    
         vx: 0,
         vy: 0,
         width: 50,
         height: 10
+    }
+
+    let bed = {
+        px: 37,
+        py: 262,    
+        vx: 0,
+        vy: 0,
+        width: 25,
+        height: 5
     }
 
     let left_wall = {
@@ -137,24 +165,24 @@
         vx: 0,
         vy: 0,
         width: 2,
-        height: 650
+        height: 370
     }
 
     let right_wall = {
-        px: 648,
+        px: 598,
         py: 0,    
         vx: 0,
         vy: 0,
         width: 2,
-        height: 650
+        height: 370
     }
 
     let floor = {
         px: 0,
-        py: 645,    
+        py: 368,    
         vx: 0,
         vy: 0,
-        width: 650,
+        width: 600,
         height: 2
     }
     
@@ -270,6 +298,29 @@
         ctx.fillStyle = 'rgba(08,143,143,.0)';
         ctx.fill()
 
+        ctx.beginPath();
+        ctx.rect(ceiling2.px, ceiling2.py, ceiling2.width, ceiling2.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(08,143,143,.0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(stairs.px, stairs.py, stairs.width, stairs.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(08,143,143,.0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(rail.px, rail.py, rail.width, rail.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(08,143,143,.0)';
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.rect(rail2.px, rail2.py, rail2.width, rail2.height);
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(08,143,143,.0)';
+        ctx.fill()
     }
 
     draw()
@@ -281,6 +332,15 @@
         // }
         if (check_collision(player, ceiling)) {
             player.py += 5.3
+        }else if (check_collision(player, ceiling2)) {
+            player.py += 5.3
+        }else if (check_collision(player, rail)) {
+            player.py += 5.3
+        }else if (check_collision(player, rail2)) {
+            player.px -= 5.3
+        }else if (check_collision(player, stairs)) {
+            player.py = 220
+            player.px = 170
         }else if (check_collision(player, floor)) {
             player.py -= 5.3
         }else if (check_collision(player, right_wall)) {
@@ -330,15 +390,15 @@
     //keyboard commands
     document.body.onkeydown = function(e) {
         if (e.keyCode == 32 || e.keyCode == 38 || e.keyCode == 87) {
-            player.py -= 25.3
+            player.py -= 11.3
         }
         if (player.vx == 0){
             if (e.keyCode == 65 || e.keyCode == 37) {
-                player.px -= 15.3
+                player.px -= 11.3
             } else if (e.keyCode == 68 || e.keyCode == 39) {
-                player.px += 15.3
+                player.px += 11.3
             } else if (e.keyCode == 40 || e.keyCode == 83) {
-                player.py += 15.3
+                player.py += 11.3
             }
         }
     }
