@@ -56,7 +56,7 @@
 
 
     <!-- Setting up canvas -->
-    <canvas id="cnv" class="cnv3" width="650" height="650"></canvas>
+    <canvas id="cnv" class="cnv3" width="450" height="650"></canvas>
 
 
 
@@ -137,16 +137,16 @@
         py: -9000000,
         vx: 0,
         vy: 0,
-        width: 150,
+        width: 25,
         height: 10000000
     }
 
     let right_wall = {
-        px: cnv.width - 150,
+        px: cnv.width - 25,
         py: -9000000,
         vx: 0,
         vy: .0,
-        width: 150,
+        width: 25,
         height: 10000000
     }
 
@@ -191,7 +191,7 @@
 
     //function to define enemies 
     function create_block() {
-        let random_px = chance.integer({ min: 150, max: 470 })
+        let random_px = chance.integer({ min: 25, max: 400 })
         let random_vy = chance.floating({ min: .9, max: 2.1 })
         let new_block = {
             px: random_px,
@@ -205,7 +205,7 @@
     }
     //function to define gold
     function create_gold() {
-        let random_px = chance.integer({ min: 150, max: 485 })
+        let random_px = chance.integer({ min: 25, max: 410 })
         let random_vy = chance.floating({ min: .9, max: 2.1 })
         let gold = {
             px: random_px,
