@@ -17,33 +17,22 @@
     <span id="speech_results" style="display:none"></span>
 
     <div class="modal_content">
-        <button class="close" id="close_computer"></button>
-        <a href="{% url 'login' %}">
-            <button class="modal_btn">Login</button>
-        </a>
-        <a href="{% url 'register' %}">
-            <button class="modal_btn">Register</button>
-        </a>
+        <button class="close" id="close_computer" style="display:none"></button>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
     </div>
 
     <div class="modal_game">
         <button class="close" id="close_nes"></button>
         {% for mode in modes %}
-        <a href="{% url 'boat:iguana' %}?game_mode={{mode.id}}">
-            <button class="modal_btn">Iguana Jump - {{mode.name}}</button>
-        </a>
+        <a href="{% url 'boat:iguana' %}?game_mode={{mode.id}}">Iguana Jump - {{mode.name}}</a>
         {% endfor %}
-        <a href="{% url 'boat:constantine' %}">
-            <button class="modal_btn">Constantine</button>
-        </a>
+        <a href="{% url 'boat:constantine' %}">Constantine</a>
     </div>
 
     <div class="modal_logout">
-        <button class="close" id="close_logout"></button>
-        <a href="{% url 'logout' %}">
-            <button class="modal_btn">Logout</button>
-        </a>
-
+        <button class="close" id="close_logout" style="display:none"></button>
+        <a href="{% url 'logout' %}">Logout</a>
     </div>
  
 
