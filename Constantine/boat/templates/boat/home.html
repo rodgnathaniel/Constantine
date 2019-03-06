@@ -1,4 +1,4 @@
-{% extends "users/base.html" %}
+{% extends "users/home_base.html" %}
 {% load static %}
 {% block content %}
 
@@ -37,7 +37,9 @@
  
 
     <!-- Load boat images to be drawn in canvas -->
-    <image id="hero" src="{% static 'boat/player.png' %}" style="display:none"/>
+    <img id="hero" src="{% static 'boat/player.png' %}" style="display:none"/>
+    <img id="spook" src="{% static 'boat/spook3.png' %}" style="display:none"/>
+    <img id="spooky" src="{% static 'boat/spook.png' %}" style="display:none"/>
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
     <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
@@ -74,7 +76,11 @@
     // // declare boat images 
     // var grepa = document.querySelector("#grepa");
     var hero = document.querySelector("#hero");
+    var spook = document.querySelector("#spook");
+    var spooky = document.querySelector("#spooky");
     // var water = document.querySelector("#water");
+
+    var stair_collision = 0
 
     // //user sprite
     let player = {
@@ -111,9 +117,9 @@
         height: 75
     }
     let rail = {
-        px: 370,
+        px: 388,
         py: 135,
-        width: 120,
+        width: 105,
         height: 7.5
     }
     let rail2 = {
@@ -131,14 +137,30 @@
         width: 17,
         height: 7
     }
+    let computer_screen = {
+        px: 13,
+        py: 68,    
+        vx: 0,
+        vy: 0,
+        width: 36,
+        height: 18
+    }
 
     let tv = {
         px: 272,
         py: 155,    
         vx: 0,
         vy: 0,
-        width: 25,
+        width: 35,
         height: 50
+    }
+    let tv_screen = {
+        px: 277,
+        py: 176,    
+        vx: 0,
+        vy: 0,
+        width: 36,
+        height: 22
     }
 
     let nes = {
@@ -244,6 +266,14 @@
     function draw() {
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
+        if (stair_collision >= 3){
+            ctx.drawImage(spook, tv_screen.px, tv_screen.py, tv_screen.width, tv_screen.height);
+        }
+        if (stair_collision >= 5){
+            ctx.drawImage(spooky, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
+        }
+        
+        
 
         // ctx.fillStyle = `hsl(220,100%,${level*4}%)`
         // ctx.fillRect(0, 0, cnv.width, cnv.height)
@@ -319,10 +349,11 @@
         ctx.beginPath();
         ctx.rect(rail2.px, rail2.py, rail2.width, rail2.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
+        ctx.fillStyle = 'rgba(08,43,143,.0)';
         ctx.fill()
-    }
 
+ 
+    }
     draw()
     window.requestAnimationFrame(main_loop);
     
@@ -332,27 +363,37 @@
         // }
         if (check_collision(player, ceiling)) {
             player.py += 5.3
-        }else if (check_collision(player, ceiling2)) {
+        } else if (check_collision(player, ceiling2)) {
             player.py += 5.3
-        }else if (check_collision(player, rail)) {
-            player.py += 5.3
-        }else if (check_collision(player, rail2)) {
-            player.px -= 5.3
-        }else if (check_collision(player, stairs)) {
+        } else if (check_collision(player, rail)) {
+            if (player.px >= 478) {
+                player.px += 5.3
+            }else {
+                player.py += 5.3
+            }
+
+        } else if (check_collision(player, rail2)) {
+                player.px -= 5.3
+        } else if (check_collision(player, stairs)) {
             player.py = 220
             player.px = 170
-        }else if (check_collision(player, floor)) {
+            stair_collision += 1
+        } else if (check_collision(player, floor)) {
             player.py -= 5.3
-        }else if (check_collision(player, right_wall)) {
+        } else if (check_collision(player, right_wall)) {
             player.px -= 5.3
-        }else if (check_collision(player, left_wall)) {
+        } else if (check_collision(player, left_wall)) {
             player.px += 5.3
-        }else if (check_collision(player, bed)) {
+        } else if (check_collision(player, bed)) {
             bed_contact()
-        }else if (check_collision(player, computer)) {
+        } else if (check_collision(player, computer)) {
             computer_contact()
-        }else if (check_collision(player, tv)) {
-            player.px -= 5.3
+        } else if (check_collision(player, tv)) {
+            if (player.vx > 290) {
+                player.px += 5.3
+            }else {
+                player.px -= 5.3
+            }
         }else if (check_collision(player, nes)) {
             nes_contact()
         }else {
@@ -361,19 +402,11 @@
             close_logout.onclick()  
         }
  
-
         player.px += player.vx
         player.py += player.vy
 
-
-
-
-
         draw()
-        
-        // if (game_running) {
         window.requestAnimationFrame(main_loop);
-        // }
     }
 
 
