@@ -8,14 +8,10 @@ import json
 
 
 
-# def boat_view(request):
+def boat_view(request):
 
-#     return render(request, "boat/boat.html", {})
+    return render(request, "boat/boat.html", {})
     
-
-# def level_2_view(request):
-
-#     return render(request, "boat/boat_level_2.html", {})
 
 
 def home_view(request):

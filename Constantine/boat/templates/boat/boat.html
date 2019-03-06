@@ -153,22 +153,22 @@
 //-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
 
 
-        //send users game data to database
-        function save_game(won) {
-            game_time = date.getMinutes()*60 + date.getSeconds()
+        // //send users game data to database
+        // function save_game(won) {
+        //     game_time = date.getMinutes()*60 + date.getSeconds()
 
-            axios.post("{% url 'boat:save_game' %}",
-                    {
-                        game_time: game_time,
-                        won: won
-                    }, {
-                        headers: {
-                            "X-CSRFToken": "{{ csrf_token }}"
-                        }
-                    }
-                ).then(function(response) {
-                })
-        }
+        //     axios.post("{% url 'boat:save_game' %}",
+        //             {
+        //                 game_time: game_time,
+        //                 won: won
+        //             }, {
+        //                 headers: {
+        //                     "X-CSRFToken": "{{ csrf_token }}"
+        //                 }
+        //             }
+        //         ).then(function(response) {
+        //         })
+        // }
 
         function preload() {
             theme_song = loadSound("boat/test.mp3");
@@ -252,13 +252,13 @@
                 date.setHours(0, 0, 0, 0)
                 speech_results.textContent = 'GREAT JOB'
 
-                setInterval(function() {
-                    if(time > 0) {
-                    time--;
-                    } else {
-                    location.href="{% url 'boat:level_2' %}"
-                    }
-                },1000)
+                // setInterval(function() {
+                //     if(time > 0) {
+                //     time--;
+                //     } else {
+                //     location.href="{ url 'boat:level_2' %}"
+                //     }
+                // },1000)
             }
        
 

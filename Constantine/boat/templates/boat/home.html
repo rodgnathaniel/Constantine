@@ -9,17 +9,17 @@
 
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="650" height="650"></canvas>
-
-    <button id="computer_contact" style="display:none"></button>  
-    <button id="nes_contact" style="display:none"></button>  
-    <button id="bed_contact" style="display:none"></button>  
+<!-- 
+    <button id="computer_contact" style="display:none"></button>   -->
+    <!-- <button id="nes_contact" style="display:none"></button>   -->
+    <!-- <button id="bed_contact" style="display:none"></button>   -->
     <button id="start_listening" style="display:none"></button>   
     <span id="speech_results" style="display:none"></span>
 
     <div class="modal_content">
-        <button class="close" id="close_computer">+</button>
+        <button class="close" id="close_computer"></button>
         <a href="{% url 'login' %}">
-            <button class="modal_btn" >Login</button>
+            <button class="modal_btn">Login</button>
         </a>
         <a href="{% url 'register' %}">
             <button class="modal_btn">Register</button>
@@ -27,22 +27,23 @@
     </div>
 
     <div class="modal_game">
-        <button class="close" id="close_nes">+</button>
+        <button class="close" id="close_nes"></button>
         {% for mode in modes %}
         <a href="{% url 'boat:iguana' %}?game_mode={{mode.id}}">
             <button class="modal_btn">Iguana Jump - {{mode.name}}</button>
         </a>
         {% endfor %}
+        <a href="{% url 'boat:constantine' %}">
+            <button class="modal_btn">Constantine</button>
+        </a>
     </div>
 
     <div class="modal_logout">
-        <button class="close" id="close_logout">+</button>
+        <button class="close" id="close_logout"></button>
         <a href="{% url 'logout' %}">
             <button class="modal_btn">Logout</button>
         </a>
-                <!-- <a href="{% url 'register' %}">
-                    <button class="modal_btn">Register</button>
-                </a> -->
+
     </div>
  
 
@@ -97,30 +98,30 @@
     };
 
     let ceiling = {
-        px: 135,
-        py: 0,    
-        vx: 0,
-        vy: 0,
-        width: 515,
-        height: 215
-    }
-
-    let computer = {
         px: 0,
         py: 0,    
         vx: 0,
         vy: 0,
-        width: 135,
-        height: 215
+        width: 650,
+        height: 185
+    }
+
+    let computer = {
+        px: 0,
+        py: 200,    
+        vx: 0,
+        vy: 0,
+        width: 40,
+        height: 15
     }
 
     let tv = {
         px: 545,
-        py: 215,    
+        py: 315,    
         vx: 0,
         vy: 0,
         width: 105,
-        height: 230
+        height: 100
     }
 
     let nes = {
@@ -137,7 +138,7 @@
         py: 525,    
         vx: 0,
         vy: 0,
-        width: 90,
+        width: 50,
         height: 10
     }
 
@@ -197,15 +198,15 @@
     //         ).then(function(response) {
     //         })
     // }
-    computer_contact.onclick = function() {
+    var computer_contact = function() {
         document.querySelector(".modal_content").style.display = "flex";
     }
 
-    nes_contact.onclick = function() {
+    var nes_contact = function() {
         document.querySelector(".modal_game").style.display = "flex";
     }
 
-    bed_contact.onclick = function() {
+    var bed_contact = function() {
         document.querySelector(".modal_logout").style.display = "flex";
     }
 
@@ -235,31 +236,31 @@
         ctx.beginPath();
         ctx.rect(floor.px, floor.py, floor.width, floor.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(188,143,143,0)';
+        ctx.fillStyle = 'rgba(188,143,143,.0)';
         ctx.fill()
 
         ctx.beginPath();
         ctx.rect(computer.px, computer.py, computer.width, computer.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fillStyle = 'rgba(108,143,143,.0)';
         ctx.fill()
 
         ctx.beginPath();
         ctx.rect(tv.px, tv.py, tv.width, tv.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fillStyle = 'rgba(108,143,143,.0)';
         ctx.fill()
 
         ctx.beginPath();
         ctx.rect(nes.px, nes.py, nes.width, nes.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fillStyle = 'rgba(108,143,143,.0)';
         ctx.fill()
 
         ctx.beginPath();
         ctx.rect(bed.px, bed.py, bed.width, bed.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fillStyle = 'rgba(108,143,143,.0)';
         ctx.fill()
 
         ctx.beginPath();
@@ -277,7 +278,7 @@
         ctx.beginPath();
         ctx.rect(ceiling.px, ceiling.py, ceiling.width, ceiling.height);
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
+        ctx.fillStyle = 'rgba(08,143,143,.0)';
         ctx.fill()
 
     }
@@ -291,40 +292,24 @@
         // }
         if (check_collision(player, ceiling)) {
             player.py += 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, floor)) {
+        }else if (check_collision(player, floor)) {
             player.py -= 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, right_wall)) {
+        }else if (check_collision(player, right_wall)) {
             player.px -= 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, left_wall)) {
+        }else if (check_collision(player, left_wall)) {
             player.px += 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, bed)) {
-            bed_contact.onclick()
-        }
-        if (check_collision(player, computer)) {
-            computer_contact.onclick()
-            player.py += 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, tv)) {
+        }else if (check_collision(player, bed)) {
+            bed_contact()
+        }else if (check_collision(player, computer)) {
+            computer_contact()
+        }else if (check_collision(player, tv)) {
             player.px -= 5.3
-            // player.vy = -4.3
-        }
-        if (check_collision(player, nes)) {
-            nes_contact.onclick()
-            if  (player.py + player.height > nes.py) {
-                player.py += 3
-            } else {
-                player.px -= 5.3
-            }
-            // player.vy = -4.3
+        }else if (check_collision(player, nes)) {
+            nes_contact()
+        }else {
+            close_computer.onclick() 
+            close_nes.onclick()
+            close_logout.onclick()  
         }
  
 
@@ -411,6 +396,7 @@
                     player.py += 15.3
                     draw()
                 } else {
+                    // close all modals?
                     start_listening.onclick()
                     speechRecognizer.start();
                 }
