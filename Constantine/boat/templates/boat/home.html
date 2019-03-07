@@ -44,6 +44,7 @@
     <img id="blue" src="{% static 'boat/blue.png' %}" style="display:none"/>
     <img id="duskball" src="{% static 'boat/duskball.png' %}" style="display:none"/>
     <img id="spook5" src="{% static 'boat/spook5.png' %}" style="display:none"/>
+    <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
     <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
@@ -81,6 +82,7 @@
     var spook4 = document.querySelector("#spook4");
     var spook5 = document.querySelector("#spook5");
     var blue = document.querySelector("#blue");
+    var lucario_img = document.querySelector("#lucario");
     // var water = document.querySelector("#water");
 
     var stair_collision = 0
@@ -89,7 +91,6 @@
     var duskball_collision = 0
     var duskball_is = false
     var haunted_painting_is = false
-    lucario = false
     var painting_collision = 0
     var haunted_collision = 0
 
@@ -252,6 +253,13 @@
         width: 600,
         height: 2
     }
+
+    let lucario = {
+        py: 300,
+        px: 520,
+        width: 50,
+        height: 60
+    }
     
 
 
@@ -335,9 +343,7 @@
         }
 
         if (haunted_collision >= 1) {
-            if (lucario = false) {
-                ctx.drawImage(lucario, lucario.px, lucario.py, lucario.width, lucario.height);
-            }
+                ctx.drawImage(lucario_img, lucario.px, lucario.py, lucario.width, lucario.height);
         }
         
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
@@ -416,12 +422,11 @@
                 duskball_is = false
             }
         }else if (check_collision(player, haunted_painting)) {
-            if (haunted_painting_is && lucario) {
+            if (haunted_painting_is) {
                 player.py = 220
                 player.px = 170
                 haunted_collision += 1   
                 haunted_painting_is = false
-                lucario = false
             }
         // }else if (check_collision(player, haunted_painting)) {
         //     player.py = 300
