@@ -9,10 +9,11 @@
 
     <!-- Setting up canvas -->
     <canvas id="cnv" class="cnv" width="600" height="370"></canvas>
-<!-- 
-    <button id="computer_contact" style="display:none"></button>   -->
-    <!-- <button id="nes_contact" style="display:none"></button>   -->
-    <!-- <button id="bed_contact" style="display:none"></button>   -->
+
+
+    <audio src="{% static 'boat/sound/n_song.mp3' %}" id="theme_song"></audio>
+
+
     <button id="start_listening" style="display:none"></button>   
     <span id="speech_results" style="display:none"></span>
 
@@ -45,6 +46,8 @@
     <img id="duskball" src="{% static 'boat/duskball.png' %}" style="display:none"/>
     <img id="spook5" src="{% static 'boat/spook5.png' %}" style="display:none"/>
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
+
+    <button id="music" style="display:none"></button>
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
     <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
@@ -83,6 +86,7 @@
     var spook5 = document.querySelector("#spook5");
     var blue = document.querySelector("#blue");
     var lucario_img = document.querySelector("#lucario");
+    var music = document.querySelector("#music");
     // var water = document.querySelector("#water");
 
     var stair_collision = 0
@@ -93,6 +97,14 @@
     var haunted_painting_is = false
     var painting_collision = 0
     var haunted_collision = 0
+
+
+    let theme_song = document.querySelector('#theme_song') 
+    var play_music = function(){
+        theme_song.play()
+        play_music.disabled = true
+    }
+
 
     // //user sprite
     let player = {
@@ -320,6 +332,7 @@
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
         if (stair_collision >= 1){
+            play_music()
             ctx.drawImage(spook, tv_screen.px, tv_screen.py, tv_screen.width, tv_screen.height);
         }
         if (stair_collision >= 2){
@@ -342,7 +355,7 @@
             }
         }
 
-        if (haunted_collision >= 1) {
+        if (haunted_collision >= 1 && stair_collision === 1) {
                 ctx.drawImage(lucario_img, lucario.px, lucario.py, lucario.width, lucario.height);
         }
         
