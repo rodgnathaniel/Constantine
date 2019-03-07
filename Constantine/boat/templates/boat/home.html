@@ -66,10 +66,6 @@
     // var mdoal_login = document.querySelector('#modal_login')
     // var mdoal_reg = document.querySelector('#modal_reg')
 
-
-
-
-
     //declare canvas
     let cnv = document.querySelector('#cnv');
     cnv.backgroundColor = 'red';
@@ -91,6 +87,9 @@
     var cabnet_collision = 0
     var rail2_collision = 0
     var duskball_collision = 0
+    var duskball_is = false
+    var haunted_painting_is = false
+    lucario = false
     var painting_collision = 0
     var haunted_collision = 0
 
@@ -312,124 +311,49 @@
     function draw() {
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
-        if (stair_collision >= 3){
+        if (stair_collision >= 1){
             ctx.drawImage(spook, tv_screen.px, tv_screen.py, tv_screen.width, tv_screen.height);
         }
-        if (stair_collision >= 5){
+        if (stair_collision >= 2){
             ctx.drawImage(spooky, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
         }
-        if (stair_collision >= 6){
-            if (cabnet_collision >= 10){
-                if (rail2_collision >= 10){
-                    ctx.drawImage(duskball, dusk_ball.px, dusk_ball.py, dusk_ball.width, dusk_ball.height);
-                }
+        if (stair_collision >= 3 && cabnet_collision >= 10 && rail2_collision >= 10) {
+            duskball_is = true
+            if (duskball_collision >= 1){
+                dusk_ball.px = 320
+                dusk_ball.py = 70
             }
+            ctx.drawImage(duskball, dusk_ball.px, dusk_ball.py, dusk_ball.width, dusk_ball.height);
         }
         if (painting_collision >= 10){
             if (duskball_collision >= 2){
+                haunted_painting_is = true
                 ctx.drawImage(spook4, tv_screen.px, tv_screen.py, tv_screen.width, tv_screen.height);
                 ctx.drawImage(blue, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
                 ctx.drawImage(spook5, haunted_painting.px, haunted_painting.py, haunted_painting.width, haunted_painting.height);
             }
         }
+
+        if (haunted_collision >= 1) {
+            if (lucario = false) {
+                ctx.drawImage(lucario, lucario.px, lucario.py, lucario.width, lucario.height);
+            }
+        }
         
-
-        // ctx.fillStyle = `hsl(220,100%,${level*4}%)`
-        // ctx.fillRect(0, 0, cnv.width, cnv.height)
-
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
-               
-        ctx.beginPath();
-        ctx.rect(floor.px, floor.py, floor.width, floor.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(188,143,143,.0)';
-        ctx.fill()
 
-        ctx.beginPath();
-        ctx.rect(computer.px, computer.py, computer.width, computer.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(tv.px, tv.py, tv.width, tv.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(nes.px, nes.py, nes.width, nes.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(bed.px, bed.py, bed.width, bed.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(left_wall.px, left_wall.py, left_wall.width, left_wall.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(right_wall.px, right_wall.py, right_wall.width, right_wall.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(108,143,143,0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(ceiling.px, ceiling.py, ceiling.width, ceiling.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(cabnet.px, cabnet.py, cabnet.width, cabnet.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,13,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(ceiling3.px, ceiling3.py, ceiling3.width, ceiling3.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(ceiling2.px, ceiling2.py, ceiling2.width, ceiling2.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(painting.px, painting.py, painting.width, painting.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,03,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(stairs.px, stairs.py, stairs.width, stairs.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(rail.px, rail.py, rail.width, rail.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,143,143,.0)';
-        ctx.fill()
-
-        ctx.beginPath();
-        ctx.rect(rail2.px, rail2.py, rail2.width, rail2.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(08,43,143,.0)';
-        ctx.fill()
-
- 
+        let objects = [floor, computer, computer_screen, tv, tv_screen, nes, left_wall, right_wall, ceiling, cabnet, ceiling2, ceiling3, bed, painting, rail, rail2, stairs]
+        let debug = false
+        if (debug) {
+            for (let i=0; i<objects.length; ++i) {
+                ctx.fillStyle = 'rgba(188,143,143,0.7)';
+                ctx.fillRect(objects[i].px, objects[i].py, objects[i].width, objects[i].height);
+            }
+        }
+        // ctx.fillStyle = 'rgba(188,143,143,0.7)';
+        // ctx.fillRect(haunted_painting.px, haunted_painting.py, haunted_painting.width, haunted_painting.height);
+        // ctx.fillStyle = 'rgba(188,143,143,0.7)';
+        // ctx.fillRect(painting.px, painting.py, painting.width, painting.height);
     }
     draw()
     window.requestAnimationFrame(main_loop);
@@ -483,17 +407,29 @@
         }else if (check_collision(player, nes)) {
             nes_contact()
         }else if (check_collision(player, dusk_ball)) {
-            player.py = 300
-            player.px = 520
-            stair_collision = 0
-            duskball_collision += 1
+            console.log(duskball_is)
+            if (duskball_is) {
+                player.py = 300
+                player.px = 520
+                stair_collision = 0
+                duskball_collision += 1
+                duskball_is = false
+            }
+        }else if (check_collision(player, haunted_painting)) {
+            if (haunted_painting_is && lucario) {
+                player.py = 220
+                player.px = 170
+                haunted_collision += 1   
+                haunted_painting_is = false
+                lucario = false
+            }
         // }else if (check_collision(player, haunted_painting)) {
         //     player.py = 300
         //     player.px = 520
         //     haunted_collision += 1
 
            
-        }else {
+        } else {
             close_computer.onclick() 
             close_nes.onclick()
             close_logout.onclick()  
@@ -576,12 +512,12 @@
                     draw()
                 } else {
                     // close all modals?
-                    start_listening.onclick()
-                    speechRecognizer.start();
+                    // start_listening.onclick()
+                    // speechRecognizer.start();
                 }
             }
         }
     };
-    start_listening.onclick()
+    // start_listening.onclick()
 </script>
 {% endblock %}
