@@ -12,6 +12,8 @@
 
 
     <audio src="{% static 'boat/sound/n_song.mp3' %}" id="theme_song"></audio>
+    <audio src="{% static 'boat/sound/teleport.wav' %}" id="teleport"></audio>
+    <audio src="{% static 'boat/sound/collision_sound.mp3' %}" id="collision"></audio>
 
 
     <button id="start_listening" style="display:none"></button>   
@@ -33,6 +35,7 @@
 
     <div class="modal_logout">
         <button class="close" id="close_logout" style="display:none"></button>
+        <a id="save_game" href="#">Save Game</a>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
 
@@ -53,7 +56,7 @@
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
     <img id="windows" src="{% static 'boat/windows.png' %}" style="display:none"/>
 
-    <button id="music" style="display:none"></button>
+    <!-- <button id="music" style="display:none"></button> -->
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
     <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
@@ -92,7 +95,7 @@
     var blue = document.querySelector("#blue");
     var lucario_img = document.querySelector("#lucario");
     var windows = document.querySelector("#windows");
-    var music = document.querySelector("#music");
+    // var music = document.querySelector("#music");
     // var water = document.querySelector("#water");
 
     var stair_collision = 1
@@ -101,11 +104,11 @@
     var duskball_collision = 0
     var painting_collision = 0
     var haunted_collision = 1
-    var lucario_computer_collision = 0
+    var lucario_collision = 0
 
     var duskball_is = false
     var haunted_painting_is = false
-    var lucario_is = false
+    var lucario_is = true
 
 
 
@@ -116,6 +119,15 @@
         play_music.disabled = true
     }
 
+    let teleport = document.querySelector('#teleport') 
+    let collision = document.querySelector('#collision') 
+    var teleport_sound = function(){
+        teleport.play()
+     
+    }
+    var collision_sound = function(){
+        collision.play()
+    }
 
     // //user sprite
     let player = {
@@ -294,27 +306,28 @@
 //-----------------------JS-FUNCTIONS------------------------------------------------------------------------------------------------------- 
 
 
-    // //send users game data to database
-    // function save_game() {
-    //     game_time = date.getMinutes()*60 + date.getSeconds()
-    //     gold_collected = gold
-    //     game_level = level
-    //     game_score = score
-        
-    //     axios.post("{% url 'boat:save_game' %}",
-    //             {
-    //                 game_time: game_time,
-    //                 game_level: game_level,
-    //                 game_score: game_score,
-    //                 gold_collected: gold_collected,
-    //             }, {
-    //                 headers: {
-    //                     "X-CSRFToken": "{{ csrf_token }}"
-    //                 }
-    //             }
-    //         ).then(function(response) {
-    //         })
-    // }
+    //send users game data to database
+    function save_game() {        
+        axios.post("{% url 'boat:save_game' %}",
+                {
+                    duskball_is: duskball_is,
+                    haunted_painting_is: haunted_painting_is,
+                    lucario_is: lucario_is,
+                    stair_collision: stair_collision,
+                    cabnet_collision: cabnet_collision,
+                    rail2_collision: rail2_collision,   
+                    duskball_collision: rail2_collision,
+                    painting_collision: rail2_collision,
+                    haunted_collision: rail2_collision,
+                    lucario_collision: lucario_collision,
+                }, {
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    }
+                }
+            ).then(function(response) {
+            })
+    }
     var computer_contact = function() {
         document.querySelector(".modal_content").style.display = "flex";
     }
@@ -358,7 +371,6 @@
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
         if (stair_collision >= 1){
-            play_music()
             ctx.drawImage(spook, tv_screen.px, tv_screen.py, tv_screen.width, tv_screen.height);
         }
         if (stair_collision >= 2){
@@ -385,7 +397,7 @@
                 lucario_is = true
                 ctx.drawImage(lucario_img, lucario.px, lucario.py, lucario.width, lucario.height);
         }
-        if (lucario_computer_collision >= 1) {
+        if (lucario_collision >= 1) {
             ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
         }
         
@@ -412,18 +424,25 @@
 
         // }
         if (check_collision(player, ceiling)) {
+            collision_sound()
             player.py += 5.3
+   
         } else if (check_collision(player, cabnet)) {
+            collision_sound()
             cabnet_collision += 1
             player.py += 5.3
         } else if (check_collision(player, ceiling3)) {
+            collision_sound()
             player.py += 5.3
         } else if (check_collision(player, ceiling2)) {
+            collision_sound()
             player.py += 5.3
         } else if (check_collision(player, painting)) {
+            collision_sound()
             painting_collision += 1
             player.py += 5.3
         } else if (check_collision(player, rail)) {
+            collision_sound()
             if (player.px >= 478) {
                 player.px += 5.3
             }else {
@@ -431,31 +450,41 @@
             }
 
         } else if (check_collision(player, rail2)) {
+            collision_sound()
             rail2_collision += 1
             player.px -= 5.3
         } else if (check_collision(player, stairs)) {
+            play_music()
+            teleport_sound()
             player.py = 220
             player.px = 170
             stair_collision += 1
+  
         } else if (check_collision(lucario, stairs)) {
-            lucario_computer_collision += 1
+           
+            lucario_collision += 1
             lucario.py = 220
             lucario.px = 170
             lucario.vy = -25
             lucario_is = false
+            teleport_sound()
             
          
         } else if (check_collision(player, floor)) {
+            collision_sound()
             player.py -= 5.3
         } else if (check_collision(player, right_wall)) {
+            collision_sound()
             player.px -= 5.3
         } else if (check_collision(player, left_wall)) {
+            collision_sound()
             player.px += 5.3
         } else if (check_collision(player, bed)) {
             bed_contact()
         } else if (check_collision(player, computer)) {
             computer_contact()
         } else if (check_collision(player, tv)) {
+            collision_sound()
             if (player.vx > 290) {
                 player.px += 5.3
             }else {
@@ -464,8 +493,8 @@
         }else if (check_collision(player, nes)) {
             nes_contact()
         }else if (check_collision(player, dusk_ball)) {
-            console.log(duskball_is)
             if (duskball_is) {
+                teleport_sound()
                 player.py = 300
                 player.px = 520
                 stair_collision = 0
@@ -474,6 +503,7 @@
             }
         }else if (check_collision(player, haunted_painting)) {
             if (haunted_painting_is) {
+                teleport_sound()
                 player.py = 220
                 player.px = 170
                 haunted_collision += 1   
