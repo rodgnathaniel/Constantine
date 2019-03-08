@@ -8,6 +8,7 @@
 #####################################################################################################################################-->
 
     <!-- Setting up canvas -->
+    <span class="user_text">Welcome {{ request.user }}</span>
     <canvas id="cnv" class="cnv" width="600" height="370"></canvas>
 
 
@@ -19,11 +20,13 @@
     <button id="start_listening" style="display:none"></button>   
     <span id="speech_results" style="display:none"></span>
 
+
     <div class="modal_content">
         <button class="close" id="close_computer" style="display:none"></button>
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'register' %}">Register</a>
     </div>
+
 
     <div class="modal_game">
         <button class="close" id="close_nes"></button>
@@ -33,19 +36,30 @@
         <a href="{% url 'boat:constantine' %}">Constantine</a>
     </div>
 
+
     <div class="modal_logout">
         <button class="close" id="close_logout" style="display:none"></button>
-        <a id="save_game" href="#">Save Game</a>
+        <a id="save" href="#">Save Game</a>
+        <a id="load" href="#">Load Game</a>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
+
 
     <div class="modal_lucario">
         <button class="close" id="close_lucario" style="display:none"></button>
         <span>I need your help..</span>
         <button id="help" >Help Lucario</button>
     </div>
+
+    <div class="modal_load">
+        <button class="close" id="close_load"></button>
+        {% for state in save_states %}
+        <a href="{% url 'boat:iguana' %}?save_state={{mode.id}}"> - {{save_state.id}}</a>
+        {% endfor %}
+    </div>
  
 
+    <!-- load images to be drawn -->
     <img id="hero" src="{% static 'boat/player.png' %}" style="display:none"/>
     <img id="spook" src="{% static 'boat/spook3.png' %}" style="display:none"/>
     <img id="spooky" src="{% static 'boat/spook.png' %}" style="display:none"/>
@@ -55,10 +69,6 @@
     <img id="spook5" src="{% static 'boat/spook5.png' %}" style="display:none"/>
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
     <img id="windows" src="{% static 'boat/windows.png' %}" style="display:none"/>
-
-    <!-- <button id="music" style="display:none"></button> -->
-    <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
-    <!-- <image id="room" src="{% static 'boat/room.png' %}" style="display:none"/>  -->
 
 
 <!--#################################################################################################################################
@@ -70,13 +80,16 @@
     var r = document.querySelector('#speech_results');
 
 
+    //buttons
     var close_computer = document.querySelector('#close_computer')
     var close_nes = document.querySelector('#close_nes')
     var close_logout = document.querySelector('#close_logout')
     var close_lucario = document.querySelector('#close_lucario')
+    var close_load = document.querySelector('#close_load')
     var help = document.querySelector('#help')
-    // var mdoal_login = document.querySelector('#modal_login')
-    // var mdoal_reg = document.querySelector('#modal_reg')
+    var save = document.querySelector('#save')
+    var load = document.querySelector('#load')
+
 
     //declare canvas
     let cnv = document.querySelector('#cnv');
@@ -85,8 +98,8 @@
     let height = cnv.height
     let ctx = cnv.getContext('2d');
 
-    // // declare boat images 
-    // var grepa = document.querySelector("#grepa");
+
+    // // declare images 
     var hero = document.querySelector("#hero");
     var spook = document.querySelector("#spook");
     var spooky = document.querySelector("#spooky");
@@ -95,15 +108,15 @@
     var blue = document.querySelector("#blue");
     var lucario_img = document.querySelector("#lucario");
     var windows = document.querySelector("#windows");
-    // var music = document.querySelector("#music");
-    // var water = document.querySelector("#water");
 
-    var stair_collision = 1
+
+    //game data 
+    var stair_collision = 0
     var cabnet_collision = 0
     var rail2_collision = 0
     var duskball_collision = 0
     var painting_collision = 0
-    var haunted_collision = 1
+    var haunted_collision = 0
     var lucario_collision = 0
 
     var duskball_is = false
@@ -112,24 +125,25 @@
 
 
 
-
+    //declare sounds
     let theme_song = document.querySelector('#theme_song') 
+    let teleport = document.querySelector('#teleport') 
+    let collision = document.querySelector('#collision') 
+
+    //functions to play sounds
     var play_music = function(){
         theme_song.play()
         play_music.disabled = true
     }
-
-    let teleport = document.querySelector('#teleport') 
-    let collision = document.querySelector('#collision') 
     var teleport_sound = function(){
         teleport.play()
-     
     }
     var collision_sound = function(){
         collision.play()
     }
 
-    // //user sprite
+
+    //user sprite
     let player = {
         px: 170,
         py: 220,
@@ -138,6 +152,16 @@
         width: 50,
         height: 50
     };
+
+    let lucario = {
+        py: 300,
+        px: 520,
+        vx: 0,
+        vy: 0,
+        width: 50,
+        height: 60
+    }
+
     let dusk_ball = {
         px: 50,
         py: 285,
@@ -148,61 +172,59 @@
     let ceiling = {
         px: 0,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 100,
         height: 90
     }
+
     let cabnet = {
         px: 100,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 70,
         height: 90
     }
+
     let ceiling3 = {
         px: 170,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 115,
         height: 90
     }
+
     let ceiling2 = {
         px: 280,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 240,
         height: 70
     }
+
     let painting = {
         px: 525,
         py: 0,
         width: 85,
         height: 50
     }
+
     let haunted_painting = {
         px: 552,
         py: 30,
         width: 55,
         height: 31
     }
+
     let stairs = {
         px: 380,
         py: 60,    
-        vx: 0,
-        vy: 0,
         width: 35,
         height: 75
     }
+
     let rail = {
         px: 388,
         py: 135,
         width: 105,
         height: 7.5
     }
+
     let rail2 = {
         px: 370,
         py: 75,
@@ -213,16 +235,13 @@
     let computer = {
         px: 0,
         py: 100,    
-        vx: 0,
-        vy: 0,
         width: 17,
         height: 7
     }
+
     let computer_screen = {
         px: 13,
         py: 68,    
-        vx: 0,
-        vy: 0,
         width: 36,
         height: 18
     }
@@ -230,8 +249,6 @@
     let tv = {
         px: 272,
         py: 155,    
-        vx: 0,
-        vy: 0,
         width: 35,
         height: 50
     }
@@ -256,8 +273,6 @@
     let bed = {
         px: 37,
         py: 242,    
-        vx: 0,
-        vy: 0,
         width: 25,
         height: 5
     }
@@ -265,8 +280,6 @@
     let left_wall = {
         px: 0,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 2,
         height: 370
     }
@@ -274,8 +287,6 @@
     let right_wall = {
         px: 598,
         py: 0,    
-        vx: 0,
-        vy: 0,
         width: 2,
         height: 370
     }
@@ -283,19 +294,8 @@
     let floor = {
         px: 0,
         py: 368,    
-        vx: 0,
-        vy: 0,
         width: 600,
         height: 2
-    }
-
-    let lucario = {
-        py: 300,
-        px: 520,
-        vx: 0,
-        vy: 0,
-        width: 50,
-        height: 60
     }
     
 
@@ -357,12 +357,23 @@
     close_lucario.onclick = function() {
         document.querySelector(".modal_lucario").style.display = "none";
     }
+    close_load.onclick = function() {
+        document.querySelector(".modal_load").style.display = "none";
+    }
     help.onclick = function() {
         close_lucario.onclick()
         help.disabled = true
         computer_contact.disabled = true
         lucario.py -= 235
         lucario.vx = -.6
+    }
+    save.onclick = function(){
+        save_game()
+        document.location.reload()
+    }
+    load.onclick = function(){
+        close_logout.onclick()
+        document.querySelector(".modal_load").style.display = "flex";
     }
 
 
@@ -411,10 +422,6 @@
                 ctx.fillRect(objects[i].px, objects[i].py, objects[i].width, objects[i].height);
             }
         }
-        // ctx.fillStyle = 'rgba(188,143,143,0.7)';
-        // ctx.fillRect(haunted_painting.px, haunted_painting.py, haunted_painting.width, haunted_painting.height);
-        // ctx.fillStyle = 'rgba(188,143,143,0.7)';
-        // ctx.fillRect(painting.px, painting.py, painting.width, painting.height);
     }
     draw()
     window.requestAnimationFrame(main_loop);
@@ -513,17 +520,13 @@
             if (lucario_is) {
                 lucario_contact()
             }
-            
-        // }else if (check_collision(player, haunted_painting)) {
-        //     player.py = 300
-        //     player.px = 520
-        //     haunted_collision += 1
-
            
         } else {
             close_computer.onclick() 
             close_nes.onclick()
-            close_logout.onclick()  
+            close_logout.onclick()
+            close_lucario.onclick()
+            close_load.onclick()  
         }
  
         player.px += player.vx
@@ -605,13 +608,9 @@
                     player.py += 15.3
                     draw()
                 } else {
-                    // close all modals?
-                    // start_listening.onclick()
-                    // speechRecognizer.start();
                 }
             }
         }
     };
-    // start_listening.onclick()
 </script>
 {% endblock %}
