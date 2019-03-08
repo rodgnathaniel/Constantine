@@ -54,7 +54,7 @@
     <div class="modal_load">
         <button class="close" id="close_load"></button>
         {% for state in save_states %}
-        <a href="{% url 'boat:iguana' %}?save_state={{mode.id}}"> - {{save_state.id}}</a>
+        <a href="{% url 'boat:iguana' %}?save_state={{state.id}}"> - {{ request.user }} : {{ state.id }}</a>
         {% endfor %}
     </div>
  
@@ -121,7 +121,7 @@
 
     var duskball_is = false
     var haunted_painting_is = false
-    var lucario_is = true
+    var lucario_is = false
     var computer_on = false
 
 
