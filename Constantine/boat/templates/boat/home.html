@@ -35,9 +35,14 @@
         <button class="close" id="close_logout" style="display:none"></button>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
+
+    <div class="modal_lucario">
+        <button class="close" id="close_lucario" style="display:none"></button>
+        <span>I need your help..</span>
+        <button id="help" >Help Lucario</button>
+    </div>
  
 
-    <!-- Load boat images to be drawn in canvas -->
     <img id="hero" src="{% static 'boat/player.png' %}" style="display:none"/>
     <img id="spook" src="{% static 'boat/spook3.png' %}" style="display:none"/>
     <img id="spooky" src="{% static 'boat/spook.png' %}" style="display:none"/>
@@ -46,6 +51,7 @@
     <img id="duskball" src="{% static 'boat/duskball.png' %}" style="display:none"/>
     <img id="spook5" src="{% static 'boat/spook5.png' %}" style="display:none"/>
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
+    <img id="windows" src="{% static 'boat/windows.png' %}" style="display:none"/>
 
     <button id="music" style="display:none"></button>
     <!-- <image id="grepa" src="{% static 'boat/avocado.png' %}" style="display:none"/> -->
@@ -60,13 +66,12 @@
     var start_listening = document.querySelector('#start_listening');
     var r = document.querySelector('#speech_results');
 
-    var computer_contact = document.querySelector('#computer_contact')
-    var nes_contact = document.querySelector('#nes_contact')
-    var bed_contact = document.querySelector('#bed_contact')
 
     var close_computer = document.querySelector('#close_computer')
     var close_nes = document.querySelector('#close_nes')
     var close_logout = document.querySelector('#close_logout')
+    var close_lucario = document.querySelector('#close_lucario')
+    var help = document.querySelector('#help')
     // var mdoal_login = document.querySelector('#modal_login')
     // var mdoal_reg = document.querySelector('#modal_reg')
 
@@ -86,17 +91,23 @@
     var spook5 = document.querySelector("#spook5");
     var blue = document.querySelector("#blue");
     var lucario_img = document.querySelector("#lucario");
+    var windows = document.querySelector("#windows");
     var music = document.querySelector("#music");
     // var water = document.querySelector("#water");
 
-    var stair_collision = 0
+    var stair_collision = 1
     var cabnet_collision = 0
     var rail2_collision = 0
     var duskball_collision = 0
+    var painting_collision = 0
+    var haunted_collision = 1
+    var lucario_computer_collision = 0
+
     var duskball_is = false
     var haunted_painting_is = false
-    var painting_collision = 0
-    var haunted_collision = 0
+    var lucario_is = false
+
+
 
 
     let theme_song = document.querySelector('#theme_song') 
@@ -269,6 +280,8 @@
     let lucario = {
         py: 300,
         px: 520,
+        vx: 0,
+        vy: 0,
         width: 50,
         height: 60
     }
@@ -313,6 +326,9 @@
     var bed_contact = function() {
         document.querySelector(".modal_logout").style.display = "flex";
     }
+    var lucario_contact = function() {
+        document.querySelector(".modal_lucario").style.display = "flex";
+    }
 
     close_computer.onclick = function() {
         document.querySelector(".modal_content").style.display = "none";
@@ -324,6 +340,16 @@
 
     close_logout.onclick = function() {
         document.querySelector(".modal_logout").style.display = "none";
+    }
+    close_lucario.onclick = function() {
+        document.querySelector(".modal_lucario").style.display = "none";
+    }
+    help.onclick = function() {
+        close_lucario.onclick()
+        help.disabled = true
+        computer_contact.disabled = true
+        lucario.py -= 235
+        lucario.vx = -.6
     }
 
 
@@ -356,7 +382,11 @@
         }
 
         if (haunted_collision >= 1 && stair_collision === 1) {
+                lucario_is = true
                 ctx.drawImage(lucario_img, lucario.px, lucario.py, lucario.width, lucario.height);
+        }
+        if (lucario_computer_collision >= 1) {
+            ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
         }
         
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
@@ -407,6 +437,14 @@
             player.py = 220
             player.px = 170
             stair_collision += 1
+        } else if (check_collision(lucario, stairs)) {
+            lucario_computer_collision += 1
+            lucario.py = 220
+            lucario.px = 170
+            lucario.vy = -25
+            lucario_is = false
+            
+         
         } else if (check_collision(player, floor)) {
             player.py -= 5.3
         } else if (check_collision(player, right_wall)) {
@@ -441,6 +479,11 @@
                 haunted_collision += 1   
                 haunted_painting_is = false
             }
+        }else if (check_collision(player, lucario)) {
+            if (lucario_is) {
+                lucario_contact()
+            }
+            
         // }else if (check_collision(player, haunted_painting)) {
         //     player.py = 300
         //     player.px = 520
@@ -455,6 +498,9 @@
  
         player.px += player.vx
         player.py += player.vy
+
+        lucario.px += lucario.vx
+        lucario.py += lucario.vy
 
         draw()
         window.requestAnimationFrame(main_loop);
