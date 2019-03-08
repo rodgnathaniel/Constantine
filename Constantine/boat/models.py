@@ -16,6 +16,8 @@ class State(models.Model):
     haunted_collision   = models.IntegerField()
     lucario_collision   = models.IntegerField()
 
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 
 class Game(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE)

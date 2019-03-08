@@ -47,16 +47,23 @@
 
     <div class="modal_lucario">
         <button class="close" id="close_lucario" style="display:none"></button>
-        <span>I need your help..</span>
-        <button id="help" >Help Lucario</button>
+        <span>{{ request.user }}, I need your help...</span>
+        <a href="#" id="help">Help Lucario</a>
     </div>
 
     <div class="modal_load">
         <button class="close" id="close_load"></button>
-        {% for state in save_states %}
-        <a href="{% url 'boat:iguana' %}?save_state={{state.id}}"> - {{ request.user }} : {{ state.id }}</a>
+        {% for state in states %}
+        <a href="{% url 'boat:home' %}?game_state={{state.id}}"> - {{ request.user }} : {{ state.id }}</a>
         {% endfor %}
     </div>
+
+    <div class="lucario_mission">
+        <button class="close" id="close_mission"></button>
+        <pre id="mission_display"></pre>
+        <a href="#" id="accept">Accept</a>
+    </div>
+
  
 
     <!-- load images to be drawn -->
@@ -66,6 +73,7 @@
     <img id="spook4" src="{% static 'boat/spook4.png' %}" style="display:none"/>
     <img id="blue" src="{% static 'boat/blue.png' %}" style="display:none"/>
     <img id="duskball" src="{% static 'boat/duskball.png' %}" style="display:none"/>
+    <img id="moonball" src="{% static 'boat/moon_ball.png' %}" style="display:none"/>
     <img id="spook5" src="{% static 'boat/spook5.png' %}" style="display:none"/>
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
     <img id="windows" src="{% static 'boat/windows.png' %}" style="display:none"/>
@@ -89,6 +97,7 @@
     var help = document.querySelector('#help')
     var save = document.querySelector('#save')
     var load = document.querySelector('#load')
+    var accept = document.querySelector('#accept')
 
 
     //declare canvas
@@ -108,21 +117,37 @@
     var blue = document.querySelector("#blue");
     var lucario_img = document.querySelector("#lucario");
     var windows = document.querySelector("#windows");
+    var moonball = document.querySelector("#moonball");
 
 
     //game data 
-    var stair_collision = 0
-    var cabnet_collision = 0
-    var rail2_collision = 0
-    var duskball_collision = 0
-    var painting_collision = 0
-    var haunted_collision = 0
-    var lucario_collision = 0
+    {% if game_state %}
+        let stair_collision = {{ game_state.stair_collision }}
+        let cabnet_collision = {{ game_state.cabnet_collision }}
+        let rail2_collision = {{ game_state.rail2_collision }}
+        let duskball_collision = {{ game_state.duskball_collision }}
+        let painting_collision = {{ game_state.painting_collision }}
+        let haunted_collision = {{ game_state.haunted_collision }}
+        let lucario_collision = {{ game_state.lucario_collision }}
 
-    var duskball_is = false
-    var haunted_painting_is = false
-    var lucario_is = false
-    var computer_on = false
+        let duskball_is = {{ game_state.duskball_is }}
+        let haunted_painting_is = {{ game_state.haunted_painting_is }}
+        let lucario_is = {{ game_state.lucario_is }}
+        let computer_on = {{ game_state.computer_on }}
+    {% else %}
+        let stair_collision = 0
+        let cabnet_collision = 0
+        let rail2_collision = 0
+        let duskball_collision = 0
+        let painting_collision = 0
+        let haunted_collision = 0
+        let lucario_collision = 0
+
+        let duskball_is = false
+        let haunted_painting_is = false
+        let lucario_is = false
+        let computer_on = false
+    {% endif %}
 
 
 
@@ -362,6 +387,9 @@
     close_load.onclick = function() {
         document.querySelector(".modal_load").style.display = "none";
     }
+    close_mission.onclick = function() {
+        document.querySelector(".lucario_mission").style.display = "none";
+    }
     help.onclick = function() {
         close_lucario.onclick()
         help.disabled = true
@@ -378,6 +406,7 @@
         document.querySelector(".modal_load").style.display = "flex";
     }
     var lucario_mission = function(){
+        document.querySelector(".lucario_mission").style.display = "flex";
     }
 
 
@@ -412,9 +441,14 @@
                 lucario_is = true
                 ctx.drawImage(lucario_img, lucario.px, lucario.py, lucario.width, lucario.height);
         }
+        if (lucario_collision > 0 && haunted_collision != 1 && stair_collision < 1 || stair_collision > 1) {
+                lucario_is = false
+        }
         if (lucario_collision >= 1) {
             ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
             computer_on = true
+        } else {
+            
         }
         
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
@@ -536,6 +570,7 @@
             close_logout.onclick()
             close_lucario.onclick()
             close_load.onclick()  
+            close_mission.onclick()
         }
  
         player.px += player.vx
@@ -621,5 +656,8 @@
             }
         }
     };
+
+
+      
 </script>
 {% endblock %}

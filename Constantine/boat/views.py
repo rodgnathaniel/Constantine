@@ -16,10 +16,13 @@ def boat_view(request):
 
 def home_view(request):
     modes = Mode.objects.all()
-    state = State.objects.all()
-    # game_state_id = request.GET['game_state']
-    # game_state = State.objects.get(id=game_state_id)
-    context = {'modes': modes, 'state':state}
+    states = State.objects.all()
+    if 'game_state' in request.GET:
+        game_state_id = request.GET['game_state']
+        game_state = State.objects.get(id=game_state_id)
+    else:
+        game_state = None
+    context = {'modes': modes, 'states': states, 'game_state': game_state}
     return render(request, "boat/home.html", context)
 
 
