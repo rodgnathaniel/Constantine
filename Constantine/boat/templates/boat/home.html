@@ -119,9 +119,16 @@
     var windows = document.querySelector("#windows");
     var moonball = document.querySelector("#moonball");
 
+    function convertBoolean(t) {
+        return t == 'True'
+    }
+
 
     //game data 
     {% if game_state %}
+
+        let True = true
+        let False = false
         let stair_collision = {{ game_state.stair_collision }}
         let cabnet_collision = {{ game_state.cabnet_collision }}
         let rail2_collision = {{ game_state.rail2_collision }}
@@ -135,6 +142,7 @@
         let lucario_is = {{ game_state.lucario_is }}
         let computer_on = {{ game_state.computer_on }}
     {% else %}
+    
         let stair_collision = 0
         let cabnet_collision = 0
         let rail2_collision = 0
