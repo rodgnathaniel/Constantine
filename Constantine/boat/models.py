@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 class State(models.Model):
     player              = models.ForeignKey(User, on_delete=models.CASCADE)
-    duskball_is         = models.BooleanField(default=False)
-    haunted_painting_is = models.BooleanField(default=False)
-    lucario_is          = models.BooleanField(default=False)
-    computer_on         = models.BooleanField(default=False)
+    duskball_is         = models.BooleanField()
+    haunted_painting_is = models.BooleanField()
+    lucario_is          = models.BooleanField()
+    computer_on         = models.BooleanField()
     stair_collision     = models.IntegerField()
     cabnet_collision    = models.IntegerField()
     rail2_collision     = models.IntegerField()  

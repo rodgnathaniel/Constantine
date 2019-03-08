@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse
 
-from .models import Game, Mode
+from .models import Game, Mode, State
 
 import json
 
@@ -75,19 +75,19 @@ def save_game(request):
 def save_state(request):
     
     data = json.loads(request.body)
-    duskball_is = data['duskball_is'],
-    haunted_painting_is = data['haunted_painting_is'],
-    lucario_is = data['lucario_is'],
-    computer_on = data['computer_on'],
-    stair_collision = data['stair_collision'],
-    cabnet_collision = data['cabnet_collision'],
-    rail2_collision = data['rail2_collision'],   
-    duskball_collision = data['rail2_collision'],
-    painting_collision = data['rail2_collision'],
-    haunted_collision = data['rail2_collision'],
-    lucario_collision = data['lucario_collision'],
+    duskball_is = data['duskball_is']
+    haunted_painting_is = data['haunted_painting_is']
+    lucario_is = data['lucario_is']
+    computer_on = data['computer_on']
+    stair_collision = data['stair_collision']
+    cabnet_collision = data['cabnet_collision']
+    rail2_collision = data['rail2_collision']
+    duskball_collision = data['rail2_collision']
+    painting_collision = data['rail2_collision']
+    haunted_collision = data['rail2_collision']
+    lucario_collision = data['lucario_collision']
     player = request.user
-    state = State(duskball=duskball_is, haunted_painting=haunted_painting_is, lucario=lucario_is, computer=computer_on, stair_collision=stair_collision, cabnet_collision=cabnet_collision, rail2_collision=rail2_collision, duskball_collision=duskball_collision, painting_collision=painting_collision, haunted_collision=haunted_collision, lucario_collision=lucario_collision, player=player)
+    state = State(duskball_is=duskball_is, haunted_painting_is=haunted_painting_is, lucario_is=lucario_is, computer_on=computer_on, stair_collision=stair_collision, cabnet_collision=cabnet_collision, rail2_collision=rail2_collision, duskball_collision=duskball_collision, painting_collision=painting_collision, haunted_collision=haunted_collision, lucario_collision=lucario_collision, player=player)
     state.save()
     return HttpResponse('hi')
 
