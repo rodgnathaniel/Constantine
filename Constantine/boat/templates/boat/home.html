@@ -111,17 +111,18 @@
 
 
     //game data 
-    var stair_collision = 0
+    var stair_collision = 1
     var cabnet_collision = 0
     var rail2_collision = 0
-    var duskball_collision = 0
+    var duskball_collision = 2
     var painting_collision = 0
-    var haunted_collision = 0
+    var haunted_collision = 1
     var lucario_collision = 0
 
     var duskball_is = false
     var haunted_painting_is = false
     var lucario_is = true
+    var computer_on = false
 
 
 
@@ -372,8 +373,10 @@
         document.location.reload()
     }
     load.onclick = function(){
-        close_logout.onclick()
+        document.querySelector(".modal_logout").style.display = "none";
         document.querySelector(".modal_load").style.display = "flex";
+    }
+    var lucario_mission = function(){
     }
 
 
@@ -410,6 +413,7 @@
         }
         if (lucario_collision >= 1) {
             ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
+            computer_on = true
         }
         
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
@@ -472,7 +476,7 @@
             lucario_collision += 1
             lucario.py = 220
             lucario.px = 170
-            lucario.vy = -25
+            lucario.vy = -15
             lucario_is = false
             teleport_sound()
             
@@ -489,7 +493,11 @@
         } else if (check_collision(player, bed)) {
             bed_contact()
         } else if (check_collision(player, computer)) {
-            computer_contact()
+            if (computer_on) {
+                lucario_mission()
+            } else {
+                computer_contact()
+            }
         } else if (check_collision(player, tv)) {
             collision_sound()
             if (player.vx > 290) {
