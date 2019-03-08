@@ -1,9 +1,7 @@
 from django.contrib import admin
 
-from .models import Title
-from .models import Game
-from .models import Mode
+from .models import State, Game, Mode
 
-admin.site.register(Title)
+admin.site.register(State)
 admin.site.register(Game)
 admin.site.register(Mode)

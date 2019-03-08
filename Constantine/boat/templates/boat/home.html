@@ -309,11 +309,12 @@
 
     //send users game data to database
     function save_game() {        
-        axios.post("{% url 'boat:save_game' %}",
+        axios.post("{% url 'boat:save_state' %}",
                 {
                     duskball_is: duskball_is,
                     haunted_painting_is: haunted_painting_is,
                     lucario_is: lucario_is,
+                    computer_on: computer_on,
                     stair_collision: stair_collision,
                     cabnet_collision: cabnet_collision,
                     rail2_collision: rail2_collision,   
