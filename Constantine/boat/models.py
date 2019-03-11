@@ -14,6 +14,7 @@ class State(models.Model):
     bookshelf_is        = models.BooleanField()
     bear_is             = models.BooleanField()
     move_ball_down      = models.BooleanField()
+    ball_gone           = models.BooleanField()
     stair_collision     = models.IntegerField()
     cabnet_collision    = models.IntegerField()
     rail2_collision     = models.IntegerField()  
