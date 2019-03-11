@@ -64,6 +64,12 @@
         <a href="#" id="accept">Accept</a>
     </div>
 
+    <div class="scroll_modal">
+        <button class="close" id="close_scroll"></button>
+        <pre id="scroll_display">(...when the haunted painting fell off the 
+        wall this scroll fell from behind it...)</pre>
+    </div>
+
  
 
     <!-- load images to be drawn -->
@@ -78,6 +84,7 @@
     <img id="lucario" src="{% static 'boat/lucario.png' %}" style="display:none"/>
     <img id="windows" src="{% static 'boat/windows.png' %}" style="display:none"/>
     <img id="bear" src="{% static 'boat/Teddy_bear.png' %}" style="display:none"/>
+    <img id="scroll" src="{% static 'boat/scroll.png' %}" style="display:none"/>
 
 
 <!--#################################################################################################################################
@@ -120,6 +127,7 @@
     var windows = document.querySelector("#windows");
     var moonball = document.querySelector("#moonball");
     var bear = document.querySelector("#bear");
+    var scroll = document.querySelector("#scroll");
 
     function convertBoolean(t) {
         return t == 'True'
@@ -172,7 +180,7 @@
         let move_ball_down = false
         let ball_gone = false
     {% endif %}
-        let piano_count = 0
+        let scroll_is = false
 
 
 
@@ -367,6 +375,12 @@
         width: 55,
         height: 31
     }
+    let scroll_ = {
+        px: 560,
+        py: 105,
+        width: 45,
+        height: 55
+    }
 
     //objects that load application operations on contact
     let computer = { 
@@ -450,6 +464,9 @@
     var lucario_mission = function(){
         document.querySelector(".lucario_mission").style.display = "flex"; //modal for lucarios mission on computer
     }
+    var read_scroll = function(){
+        document.querySelector(".scroll_modal").style.display = "flex"; //modal for scroll
+    }
 
     load.onclick = function(){
         document.querySelector(".modal_logout").style.display = "none"; 
@@ -479,6 +496,9 @@
     close_mission.onclick = function() {
         document.querySelector(".lucario_mission").style.display = "none";//close lucarios mission modal
     }
+    close_scroll.onclick = function() {
+        document.querySelector(".scroll_modal").style.display = "none";//close scroll
+    }
 
     accept.onclick = function(){
         document.querySelector(".lucario_mission").style.display = "none"; //accept lucarios mission 
@@ -506,6 +526,10 @@
     function draw() {
         // clear canvas each time function is called
         ctx.clearRect(0, 0, cnv.width, cnv.height)
+
+        if (ball_gone) {
+            ctx.drawImage(scroll, scroll_.px, scroll_.py, scroll_.width, scroll_.height);
+        }
 
         //draw users character
         ctx.drawImage(hero, player.px, player.py, player.width, player.height);
@@ -564,6 +588,7 @@
         if (move_ball_down) {
             ctx.drawImage(bear, teddy_bear.px, teddy_bear.py, teddy_bear.width, teddy_bear.height);
         }
+    
 
         //draw collision objects for debugging purposes
         let objects = [right_corner, left_corner, floor, computer, computer_screen, tv, tv_screen, nes, left_wall, right_wall, ceiling, cabnet, bookshelf, ceiling2, bed, painting, rail, rail2, stairs]
@@ -793,6 +818,9 @@
             lucario.py = 5000
             lucario.px = 5000
             haunted_painting.py = 60
+
+        } if (check_collision(player, scroll_)) {
+            read_scroll()
 
 
 
