@@ -143,29 +143,36 @@
         let haunted_painting_is = {{ game_state.haunted_painting_is }}
         let lucario_is = {{ game_state.lucario_is }}
         let computer_on = {{ game_state.computer_on }}
+        let poke_ball_is = {{ game_state.poke_ball_is }}
+        let left_corner_is = {{ game_state.left_corner_is }}
+        let right_corner_is = {{ game_state.right_corner_is }}
+        let bookshelf_is = {{ game_state.bookshelf_is }}
+        let bear_is = {{ game_state.bear_is }} 
+        let move_ball_down = {{ game_state.move_ball_down }}
+        let ball_gone = {{ game_state.ball_gone }}
     {% else %}
 
-        let stair_collision = 1
+        let stair_collision = 0
         let cabnet_collision = 0
         let rail2_collision = 0
         let duskball_collision = 0
         let painting_collision = 0
-        let haunted_collision = 1
+        let haunted_collision = 0
         let lucario_collision = 0
 
         let duskball_is = false
         let haunted_painting_is = false
-        let lucario_is = true
+        let lucario_is = false
         let computer_on = false
-    {% endif %}
         let poke_ball_is = false
-        let poke_ball_contact = 0
         let left_corner_is = false
         let right_corner_is = false
         let bookshelf_is = false
         let bear_is = false 
-        let move_ball = false
-        let left_corner_contact = 0
+        let move_ball_down = false
+        let ball_gone = false
+    {% endif %}
+
 
 
 
@@ -241,8 +248,10 @@
         height: 90
     }
     let teddy_bear = {
-        px: 370,
-        py: 280,
+        px: 340,
+        py: 220,
+        vx: 0,
+        vy: 0,
         width: 30,
         height: 30
     }
@@ -393,6 +402,13 @@
                     haunted_painting_is: haunted_painting_is,
                     lucario_is: lucario_is,
                     computer_on: computer_on,
+                    poke_ball_is: poke_ball_is,
+                    left_corner_is: left_corner_is,
+                    right_corner_is: right_corner_is,
+                    bookshelf_is: bookshelf_is,
+                    bear_is: bear_is, 
+                    move_ball_down: move_ball_down,
+                    ball_gone: ball_gone,
                     stair_collision: stair_collision,
                     cabnet_collision: cabnet_collision,
                     rail2_collision: rail2_collision,   
@@ -462,6 +478,7 @@
     accept.onclick = function(){
         document.querySelector(".lucario_mission").style.display = "none"; //accept lucarios mission 
         poke_ball_is = true
+        console.log(poke_ball_is)
     }
 
     //makes
@@ -540,13 +557,13 @@
         if (poke_ball_is) {
             ctx.drawImage(moonball, moon_ball.px, moon_ball.py, moon_ball.width, computer_screen.height);
         }
-        if (move_ball) {
+        if (move_ball_down) {
             ctx.drawImage(bear, teddy_bear.px, teddy_bear.py, teddy_bear.width, teddy_bear.height);
         }
 
         //draw collision objects for debugging purposes
         let objects = [right_corner, left_corner, floor, computer, computer_screen, tv, tv_screen, nes, left_wall, right_wall, ceiling, cabnet, bookshelf, ceiling2, bed, painting, rail, rail2, stairs]
-        let debug = true
+        let debug = false
         if (debug) {
             for (let i=0; i<objects.length; ++i) {
                 ctx.fillStyle = 'rgba(188,143,143,0.7)';
@@ -608,7 +625,6 @@
             lucario.py = 220
             lucario.px = 170
             lucario.vy = -15
-            lucario_is = false
             teleport_sound()
             
         } else if (check_collision(player, floor)) {
@@ -668,12 +684,13 @@
             }
 
         }else if (check_collision(player, moon_ball)) {
+            collision_sound()
             if (left_corner_is){
-                moon_ball.px -= 20
+                moon_ball.px -= 10
             } else if (right_corner_is){
-                moon_ball.px += 20
+                moon_ball.px += 10
             } else if (bear_is){
-                moon_ball.py += 20
+                moon_ball.py += 10
             } else if (bookshelf_is){
                 moon_ball.py -= 20
             }
@@ -714,43 +731,52 @@
             bear_is = true
 
         }else if (moon_ball.px >= 600) {
-            move_ball = true
+            move_ball_down = true
             moon_ball.px = 175
             moon_ball.py = 175
 
-        // } else if (check_collision(moon_ball, ceiling)) {
-        //     collision_sound()
-        //     moon_ball.py += 5.3
+        } else if (check_collision(moon_ball, ceiling)) {
+            collision_sound()
+            moon_ball.py += 5.3
    
-        // } else if (check_collision(moon_ball, cabnet)) {
-        //     collision_sound()
-        //     moon_ball.py += 5.3
+        } else if (check_collision(moon_ball, cabnet)) {
+            collision_sound()
+            moon_ball.py += 5.3
 
-        // } else if (check_collision(moon_ball, ceiling2)) {
-        //     collision_sound()
-        //     moon_ball.py += 5.3
+        } else if (check_collision(moon_ball, ceiling2)) {
+            collision_sound()
+            moon_ball.py += 5.3
 
-        // } else if (check_collision(moon_ball, painting)) {
-        //     collision_sound()
-        //     moon_ball.py += 5.3
+        } else if (check_collision(moon_ball, painting)) {
+            collision_sound()
+            moon_ball.py += 5.3
 
-        // } else if (check_collision(moon_ball, rail)) {
-        //     collision_sound()
-        //     if (moon_ball.px >= 478) {
-        //         moon_ball.px += 5.3
-        //     }else {
-        //         moon_ball.py += 5.3
-        //     }
+        } else if (check_collision(moon_ball, rail)) {
+            collision_sound()
+            if (moon_ball.px >= 478) {
+                moon_ball.px += 5.3
+            }else {
+                moon_ball.py += 5.3
+            }
 
-        // } else if (check_collision(moon_ball, rail2)) {
-        //     collision_sound()
-        //     moon_ball.px -= 5.3
 
-        // } else if (check_collision(moon_ball, stairs)) {
-        //     play_music()
-        //     teleport_sound()
-        //     moon_ball.py = 220
-        //     moon_ball.px = 170
+        } else if (check_collision(moon_ball, rail2)) {
+            collision_sound()
+            moon_ball.px -= 5.3
+        
+
+        } else if (check_collision(moon_ball, stairs)) {
+            play_music()
+            teleport_sound()
+            teddy_bear.vy = -10
+            move_ball_down = false
+            poke_ball_is = false
+            teddy_bear.py = 2320
+            teddy_bear.px = 1730
+            moon_ball.py = 2320
+            moon_ball.px = 1730
+            stair_collision = 0
+            ball_gone = true
         // } else if (check_collision(moon_ball, floor)) {
         //     collision_sound()
         //     moon_ball.py -= 5.3

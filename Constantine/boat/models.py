@@ -8,6 +8,12 @@ class State(models.Model):
     haunted_painting_is = models.BooleanField()
     lucario_is          = models.BooleanField()
     computer_on         = models.BooleanField()
+    poke_ball_is        = models.BooleanField()
+    left_corner_is      = models.BooleanField()
+    right_corner_is     = models.BooleanField()
+    bookshelf_is        = models.BooleanField()
+    bear_is             = models.BooleanField()
+    move_ball_down      = models.BooleanField()
     stair_collision     = models.IntegerField()
     cabnet_collision    = models.IntegerField()
     rail2_collision     = models.IntegerField()  
@@ -15,8 +21,7 @@ class State(models.Model):
     painting_collision  = models.IntegerField()
     haunted_collision   = models.IntegerField()
     lucario_collision   = models.IntegerField()
-
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp           = models.DateTimeField(auto_now_add=True)
 
 
 class Game(models.Model):
