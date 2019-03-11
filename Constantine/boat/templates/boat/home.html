@@ -478,8 +478,6 @@
     accept.onclick = function(){
         document.querySelector(".lucario_mission").style.display = "none"; //accept lucarios mission 
         poke_ball_is = true
-        console.log(lucario_is)
-        console.log(poke_ball_is)
     }
 
     //makes
@@ -626,7 +624,6 @@
             lucario.py = 220
             lucario.px = 170
             lucario.vy = -15
-            lucario_is = true
             teleport_sound()
             
         } else if (check_collision(player, floor)) {
@@ -724,9 +721,6 @@
             bookshelf_is = true
             
 
-            console.log('right', right_corner_is)
-            console.log('left',left_corner_is)
-
         }else if (check_collision(player, teddy_bear)) {
             left_corner_is = false
             right_corner_is = false 
@@ -771,7 +765,7 @@
         } else if (check_collision(moon_ball, stairs)) {
             play_music()
             teleport_sound()
-            teddy_bear.vy = -10
+            collision_sound()
             move_ball_down = false
             poke_ball_is = false
             teddy_bear.py = 2320
@@ -780,6 +774,14 @@
             moon_ball.px = 1730
             stair_collision = 0
             ball_gone = true
+        } else if (ball_gone) {
+            teddy_bear.py = 2320
+            teddy_bear.px = 1730
+            lucario.py = 5000
+            lucario.px = 5000
+            haunted_painting.py = 60
+        
+            // haunted_painting.py += haunted_painting.height
         // } else if (check_collision(moon_ball, floor)) {
         //     collision_sound()
         //     moon_ball.py -= 5.3
