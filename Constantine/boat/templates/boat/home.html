@@ -15,7 +15,7 @@
     <audio src="{% static 'boat/sound/n_song.mp3' %}" id="theme_song"></audio>
     <audio src="{% static 'boat/sound/teleport.wav' %}" id="teleport"></audio>
     <audio src="{% static 'boat/sound/collision_sound.mp3' %}" id="collision"></audio>
-
+    <audio src="{% static 'boat/sound/piano.mp3' %}" id="piano"></audio>
 
     <button id="start_listening" style="display:none"></button>   
     <span id="speech_results" style="display:none"></span>
@@ -172,6 +172,7 @@
         let move_ball_down = false
         let ball_gone = false
     {% endif %}
+        let piano_count = 0
 
 
 
@@ -180,6 +181,7 @@
     let theme_song = document.querySelector('#theme_song') 
     let teleport = document.querySelector('#teleport') 
     let collision = document.querySelector('#collision') 
+    let piano = document.querySelector('#piano') 
 
     //functions to play sounds
     var play_music = function(){
@@ -191,6 +193,9 @@
     }
     var collision_sound = function(){
         collision.play()
+    }
+    var piano_sound = function(){
+        piano.play()
     }
 
 
@@ -755,6 +760,12 @@
             }else {
                 moon_ball.py += 5.3
             }
+ 
+
+        } else if (check_collision(moon_ball, left_wall)) {
+            collision_sound()
+            moon_ball.px += 5.3
+
 
 
         } else if (check_collision(moon_ball, rail2)) {
@@ -766,6 +777,7 @@
             play_music()
             teleport_sound()
             collision_sound()
+            piano_sound()
             move_ball_down = false
             poke_ball_is = false
             teddy_bear.py = 2320
@@ -774,32 +786,14 @@
             moon_ball.px = 1730
             stair_collision = 0
             ball_gone = true
+
         } else if (ball_gone) {
             teddy_bear.py = 2320
             teddy_bear.px = 1730
             lucario.py = 5000
             lucario.px = 5000
             haunted_painting.py = 60
-        
-            // haunted_painting.py += haunted_painting.height
-        // } else if (check_collision(moon_ball, floor)) {
-        //     collision_sound()
-        //     moon_ball.py -= 5.3
 
-        // // } else if (check_collision(player, right_wall)) {
-        // //     collision_sound()
-        // //     player.px -= 5.3
-
-        // } else if (check_collision(moon_ball, left_wall)) {
-        //     collision_sound()
-        //     moon_ball.px += 5.3
-        // } else if (check_collision(moon_ball, tv)) {
-        //     collision_sound()
-        //     if (moon_ball.px > 290) {
-        //         moon_ball.px += 5.3
-        //     }else {
-        //         moon_ball.px -= 5.3
-        //     }
 
 
         } else {
