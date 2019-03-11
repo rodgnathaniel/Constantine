@@ -185,6 +185,7 @@
                     }
                 }
             ).then(function(response) {
+                document.location.reload()
             })
     }
 
@@ -224,7 +225,7 @@
     let time_3 = 2000
     
     //spawn enemies and gold with timers
-    if (run_timer = true) {
+    function startSpawningStuff() {
         setInterval(function() {
             if(time > 0) {
                 time--;
@@ -348,7 +349,8 @@
                 gold_blocks = []
                 gold = 0
                 score = 0
-                document.location.reload()
+        
+                
             }
         }
    
@@ -482,6 +484,7 @@
         run_timer = true
         window.requestAnimationFrame(main_loop);
         this.disabled = true
+        startSpawningStuff()
     }
 
     //speech recognition function

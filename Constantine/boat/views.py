@@ -16,12 +16,14 @@ def boat_view(request):
 
 def home_view(request):
     modes = Mode.objects.all()
-    states = State.objects.all()
-    if 'game_state' in request.GET:
+    states = []
+    if request.user.is_authenticated:
+        states = request.user.state_set.all()
+    game_state = None
+    if 'game_state' in request.GET: # check if the url has the query parameter
         game_state_id = request.GET['game_state']
-        game_state = State.objects.get(id=game_state_id)
-    else:
-        game_state = None
+        if request.user.state_set.filter(id=game_state_id).exists(): # check if the user has a game state with that id
+            game_state = request.user.state_set.get(id=game_state_id) # go get the game state with that id
     context = {'modes': modes, 'states': states, 'game_state': game_state}
     return render(request, "boat/home.html", context)
 
