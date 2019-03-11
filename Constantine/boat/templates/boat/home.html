@@ -478,6 +478,7 @@
     accept.onclick = function(){
         document.querySelector(".lucario_mission").style.display = "none"; //accept lucarios mission 
         poke_ball_is = true
+        console.log(lucario_is)
         console.log(poke_ball_is)
     }
 
@@ -543,11 +544,11 @@
         }
 
         //make lucario dissapear 
-        if (lucario_collision > 0 && haunted_collision != 1 && stair_collision < 1 || stair_collision > 1) {
-                lucario_is = false
+        // if (lucario_collision > 0 && haunted_collision != 1 && stair_collision < 1 || stair_collision > 1) {
+        //         lucario_is = false
 
         //turn computer on once player decides to help lucario
-        }
+        // }
         if (lucario_collision >= 1) {
             ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
             computer_on = true
@@ -625,6 +626,7 @@
             lucario.py = 220
             lucario.px = 170
             lucario.vy = -15
+            lucario_is = true
             teleport_sound()
             
         } else if (check_collision(player, floor)) {
@@ -681,6 +683,7 @@
         }else if (check_collision(player, lucario)) {
             if (lucario_is) {
                 lucario_contact()
+                lucario_is = true
             }
 
         }else if (check_collision(player, moon_ball)) {

@@ -25,6 +25,10 @@ class State(models.Model):
     timestamp           = models.DateTimeField(auto_now_add=True)
 
 
+    # def __str__(self):
+    #     return self.player
+
+
 class Game(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE)
     time   = models.IntegerField() # the duration of the game in seconds
