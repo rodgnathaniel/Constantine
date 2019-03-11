@@ -6,7 +6,7 @@
 <!--#################################################################################################################################
 --------------------------HTML------------------------------------------------------------------------------------------------
 #####################################################################################################################################-->
-    <audio src="{% static 'boat/sound/pirates_.wav' %}" id="theme_song"></audio>
+    <audio src="{% static 'boat/sound/hero.mp3' %}" id="theme_song"></audio>
 
     <!-- Manual button to start game / voice recognition -->
     <button id="start_listening" style="display:none"></button>   
@@ -123,7 +123,7 @@
     //user sprite
     let player = {
         px: 160,
-        py: 350,
+        py: 300,
         vx: 0,
         vy: 0,
         width: 40,
@@ -326,8 +326,8 @@
                 date.setHours(0, 0, 0, 0)
                 player.vx = 0
                 player.vy = 0
-                player.px = 325
-                player.py = 550
+                player.px = 160
+                player.py = 300
                 level = 1
                 blocks = [] 
                 gold_blocks = []

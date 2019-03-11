@@ -463,7 +463,7 @@ a{
     flex-direction: column;
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
 }
-.scroll_modal pre, #accept{
+.scroll_modal pre{
     color: black;
     padding-top: 0%;
     padding-bottom: 3%;
@@ -552,4 +552,12 @@ a{
     width:20%;
     height: 3.5%;
     box-shadow: 0 0 10px 0 rgba(143,188,143,.7);
+}
+.alert-success {
+    text-align: center;
+    font-size: 90%;
+    font-family: 'Parisienne', cursive;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
