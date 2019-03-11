@@ -93,6 +93,7 @@ def save_state(request):
     bear_is = data['bear_is']
     move_ball_down = data['move_ball_down']
     ball_gone = data['ball_gone']
+    scroll_is = data['scroll_is']
     stair_collision = data['stair_collision']
     cabnet_collision = data['cabnet_collision']
     rail2_collision = data['rail2_collision']
@@ -101,7 +102,7 @@ def save_state(request):
     haunted_collision = data['rail2_collision']
     lucario_collision = data['lucario_collision']
     player = request.user
-    state = State(ball_gone=ball_gone, move_ball_down=move_ball_down, bear_is=bear_is, poke_ball_is=poke_ball_is, left_corner_is=left_corner_is, right_corner_is=right_corner_is, bookshelf_is=bookshelf_is, duskball_is=duskball_is, haunted_painting_is=haunted_painting_is, lucario_is=lucario_is, computer_on=computer_on, stair_collision=stair_collision, cabnet_collision=cabnet_collision, rail2_collision=rail2_collision, duskball_collision=duskball_collision, painting_collision=painting_collision, haunted_collision=haunted_collision, lucario_collision=lucario_collision, player=player)
+    state = State(scroll_is=scroll_is, ball_gone=ball_gone, move_ball_down=move_ball_down, bear_is=bear_is, poke_ball_is=poke_ball_is, left_corner_is=left_corner_is, right_corner_is=right_corner_is, bookshelf_is=bookshelf_is, duskball_is=duskball_is, haunted_painting_is=haunted_painting_is, lucario_is=lucario_is, computer_on=computer_on, stair_collision=stair_collision, cabnet_collision=cabnet_collision, rail2_collision=rail2_collision, duskball_collision=duskball_collision, painting_collision=painting_collision, haunted_collision=haunted_collision, lucario_collision=lucario_collision, player=player)
     state.save()
     return HttpResponse('hi')
 

@@ -60,14 +60,25 @@
 
     <div class="lucario_mission">
         <button class="close" id="close_mission"></button>
-        <pre id="mission_display"></pre>
-        <a href="#" id="accept">Accept</a>
+        <pre id="mission_display">Lucario_is_trapped_and_needs_your_help</pre>
+        <a href="#" id="accept">ok</a>
     </div>
 
     <div class="scroll_modal">
         <button class="close" id="close_scroll"></button>
         <pre id="scroll_display">(...when the haunted painting fell off the 
-        wall this scroll fell from behind it...)</pre>
+        wall this scroll fell from behind it...)
+
+        {{ request.user }}, I see you have found the 
+        scroll.
+        Congratulations. 
+        Lucario came here to help you lift a 
+        curse from your home but he is 
+        now locked away. This curse is not 
+        binded by the laws of time and space;
+        sadly, you are.
+    
+        </pre>
     </div>
 
  
@@ -158,6 +169,7 @@
         let bear_is = {{ game_state.bear_is }} 
         let move_ball_down = {{ game_state.move_ball_down }}
         let ball_gone = {{ game_state.ball_gone }}
+        let scroll_is = {{ game_state.scroll_is }}
     {% else %}
 
         let stair_collision = 0
@@ -179,8 +191,9 @@
         let bear_is = false 
         let move_ball_down = false
         let ball_gone = false
-    {% endif %}
         let scroll_is = false
+    {% endif %}
+     
 
 
 
@@ -428,6 +441,7 @@
                     bear_is: bear_is, 
                     move_ball_down: move_ball_down,
                     ball_gone: ball_gone,
+                    scroll_is: scroll_is,
                     stair_collision: stair_collision,
                     cabnet_collision: cabnet_collision,
                     rail2_collision: rail2_collision,   
@@ -587,6 +601,13 @@
         }
         if (move_ball_down) {
             ctx.drawImage(bear, teddy_bear.px, teddy_bear.py, teddy_bear.width, teddy_bear.height);
+        
+        } if (ball_gone) {
+            teddy_bear.py = 2320
+            teddy_bear.px = 1730
+            lucario.py = 5000
+            lucario.px = 5000
+            haunted_painting.py = 60
         }
     
 
@@ -812,14 +833,9 @@
             stair_collision = 0
             ball_gone = true
 
-        } else if (ball_gone) {
-            teddy_bear.py = 2320
-            teddy_bear.px = 1730
-            lucario.py = 5000
-            lucario.px = 5000
-            haunted_painting.py = 60
+        
 
-        } if (check_collision(player, scroll_)) {
+        } else if (check_collision(player, scroll_)) {
             read_scroll()
 
 
@@ -831,6 +847,7 @@
             close_lucario.onclick()
             close_load.onclick()  
             close_mission.onclick()
+            close_scroll.onclick()
         }
  
         player.px += player.vx

@@ -15,6 +15,7 @@ class State(models.Model):
     bear_is             = models.BooleanField()
     move_ball_down      = models.BooleanField()
     ball_gone           = models.BooleanField()
+    scroll_is           = models.BooleanField()
     stair_collision     = models.IntegerField()
     cabnet_collision    = models.IntegerField()
     rail2_collision     = models.IntegerField()  
