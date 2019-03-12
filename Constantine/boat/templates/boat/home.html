@@ -178,8 +178,8 @@
         let duskball_collision = 0
         let painting_collision = 0
         let haunted_collision = 0
-        let lucario_collision = 0
 
+        let lucario_collision = false
         let duskball_is = false
         let haunted_painting_is = false
         let lucario_is = false
@@ -590,7 +590,7 @@
 
         //turn computer on once player decides to help lucario
         // }
-        if (lucario_collision >= 1) {
+        if (lucario_collision) {
             ctx.drawImage(windows, computer_screen.px, computer_screen.py, computer_screen.width, computer_screen.height);
             computer_on = true
         }
@@ -671,7 +671,8 @@
   
         } else if (check_collision(lucario, stairs)) {
            
-            lucario_collision += 1
+            lucario_collision = true
+            computer_on = true
             lucario.py = 220
             lucario.px = 170
             lucario.vy = -15

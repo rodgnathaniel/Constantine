@@ -22,7 +22,7 @@ class State(models.Model):
     duskball_collision  = models.IntegerField()
     painting_collision  = models.IntegerField()
     haunted_collision   = models.IntegerField()
-    lucario_collision   = models.IntegerField()
+    lucario_collision   = models.BooleanField()
     timestamp           = models.DateTimeField(auto_now_add=True)
 
 
