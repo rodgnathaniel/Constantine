@@ -247,7 +247,7 @@
     }
     let moon_ball = {
         px: 300,
-        py: 350,
+        py: 3550,
         width: 22,
         height: 22
     }
@@ -275,7 +275,7 @@
     }
     let teddy_bear = {
         px: 340,
-        py: 220,
+        py: 2220,
         vx: 0,
         vy: 0,
         width: 30,
@@ -516,6 +516,8 @@
 
     accept.onclick = function(){
         document.querySelector(".lucario_mission").style.display = "none"; //accept lucarios mission 
+        moon_ball.px = 300
+        moon_ball.py = 350  
         poke_ball_is = true
     }
 
@@ -596,9 +598,9 @@
         }
 
         //draw pokeball once player accepts to help lucario via computer
-        if (poke_ball_is) {
-            ctx.drawImage(moonball, moon_ball.px, moon_ball.py, moon_ball.width, computer_screen.height);
-        }
+        // if (poke_ball_is) {
+        ctx.drawImage(moonball, moon_ball.px, moon_ball.py, moon_ball.width, computer_screen.height);
+        // }
         if (move_ball_down) {
             ctx.drawImage(bear, teddy_bear.px, teddy_bear.py, teddy_bear.width, teddy_bear.height);
         
@@ -766,6 +768,7 @@
             right_corner_is = true
 
         }else if (check_collision(player, bookshelf)) {
+            collision_sound()
             player.py += 5.3
             left_corner_is = false
             bear_is = false
@@ -783,6 +786,8 @@
             move_ball_down = true
             moon_ball.px = 175
             moon_ball.py = 175
+            teddy_bear.px = 340
+            teddy_bear.py = 220
 
         } else if (check_collision(moon_ball, ceiling)) {
             collision_sound()
@@ -892,7 +897,7 @@
     }
 
     //speech recognition function
-    start_listening.onclick = function () {
+    start_listening = function () {
         if ('webkitSpeechRecognition' in window) {
             var speechRecognizer = new webkitSpeechRecognition();
 
@@ -915,28 +920,38 @@
                 //dom manipulation based on commands 
                 command = command.toLowerCase()
                 if (command === 'up' || command[0] == 'u') {
-                    player.py -= 15.3
+                    player.py -= 45.3
                     draw()
-                    start_listening.onclick()
-                    speechRecognizer.start();
-                } else if (command === 'left' || command[0] == 'left') {
-                    player.px -= 15.3
+                    start_listening()
+                } else if (command === 'left' || command[0] == 'l') {
+                    player.px -= 45.3
                     draw()
-                    start_listening.onclick()
-                    speechRecognizer.start();
+                    start_listening()
                 } else if (command === 'right' || command[0] == 'r') {
-                    player.px += 15.3
+                    player.px += 45.3
                     draw()
-                    start_listening.onclick()
-                    speechRecognizer.start();
+                    start_listening()
                 } else if (command === 'down' || command[0] == 'd') {
-                    player.py += 15.3
+                    player.py += 45.3
                     draw()
+                    start_listening()
+                } else if (command === 'come') {
+                    player.py = 100
+                    player.px = 0
+                    draw()
+                    start_listening()
+                } else if (command === 'bed') {
+                    player.py = 220
+                    player.px = 40
+                    draw()
+                    start_listening()
                 } else {
+                    start_listening()
                 }
             }
         }
     };
+    start_listening()
   
 </script>
 {% endblock %}
